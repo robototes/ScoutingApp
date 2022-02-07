@@ -9,6 +9,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.scorescape.app.scouting.MainActivity
 import com.scorescape.app.scouting.R
 import com.scorescape.app.scouting.components.BasicInputField
 import com.scorescape.app.scouting.components.LargeHeaderBar
@@ -61,7 +62,7 @@ fun TemplateSaveView(navController: NavController) {
                 text = stringResource(id = R.string.template_save_button_export_text),
                 icon = painterResource(id = R.drawable.ic_document_export),
                 contentDescription = stringResource(id = R.string.ic_document_export_content_desc),
-                onClick = { viewModel.exportTemplateToJSON() },
+                onClick = { viewModel.requestFilePicker(navController.context as MainActivity) },
                 color = MaterialTheme.colors.primaryVariant
             )
         }
