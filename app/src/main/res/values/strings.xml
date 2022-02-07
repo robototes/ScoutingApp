@@ -1,0 +1,71 @@
+<resources>
+
+    <string name="app_name">Scorescape</string>
+
+    <string name="ic_user_avatar_content_desc">Profile image</string>
+    <string name="ic_settings_content_desc">Settings icon</string>
+    <string name="ic_play_button_content_desc">Play button</string>
+    <string name="ic_server_wired_content_desc">Server icon</string>
+    <string name="ic_pit_stand_content_desc">Stand icon</string>
+    <string name="ic_user_blank_content_desc">User icon</string>
+    <string name="ic_checkmark_outline_content_desc">Checkmark</string>
+    <string name="ic_arrow_back_content_desc">Back button</string>
+    <string name="ic_edit_pen_content_desc">Edit icon</string>
+    <string name="ic_calendar_panel_content_desc">Calendar icon</string>
+    <string name="ic_add_circle_content_desc">Add value</string>
+    <string name="ic_subtract_circle_content_desc">Subtract value</string>
+    <string name="ic_arrow_forward_content_desc">Forward arrow</string>
+    <string name="ic_save_icon_content_desc">Save item</string>
+    <string name="ic_plus_item_content_desc">Plus icon</string>
+    <string name="ic_drag_indicator_content_desc">Draggable content</string>
+    <string name="ic_text_format_center_content_desc">Center text</string>
+    <string name="ic_trash_can_content_desc">Trash can</string>
+    <string name="ic_document_export_content_desc">Export document</string>
+    <string name="ic_view_eye_content_desc">View item</string>
+
+    <string name="home_page_default_device_name">Device name</string>
+    <string name="home_page_subtitle_text">Created by Team 2412</string>
+    <string name="home_page_button_start_text">Start a match</string>
+    <string name="home_page_button_create_text">Create a template</string>
+    <string name="home_page_button_pit_text">Record pit data</string>
+    <string name="home_page_device_edit_dialog_title">Scout name</string>
+    <string name="home_page_device_edit_dialog_hint">Enter device name</string>
+    <string name="home_page_device_edit_dialog_save_button">Save changes</string>
+    <string name="home_page_template_type_dialog_title">Choose template type</string>
+    <string name="home_page_template_type_dialog_match">Match template</string>
+    <string name="home_page_template_type_dialog_pit">Pit data template</string>
+
+    <string name="template_config_header_title">Create a new\nmatch template</string>
+    <string name="template_config_game_name_hint">Game name</string>
+    <string name="template_config_game_year_hint">Game year</string>
+    <string name="template_config_auto_duration">Autonomous duration</string>
+    <string name="template_config_tele_duration">Tele-op duration   </string>
+    <string name="template_config_end_duration">Endgame duration   </string>
+    <string name="template_config_start_editing_button">Start editing</string>
+
+    <string name="template_editor_header_title">Template editor</string>
+    <string name="template_editor_add_item">Add item</string>
+    <string name="template_editor_score_bar_placeholder">Score bar</string>
+    <string name="template_editor_rating_bar_placeholder">Rating bar</string>
+    <string name="template_editor_text_field_placeholder">Text field</string>
+    <string name="template_editor_text_field_hint">Match notes…</string>
+    <string name="template_editor_note_text_placeholder">Text note</string>
+    <string name="template_editor_note_text_hint">Note to your scouts…</string>
+    <string name="template_editor_checkbox_placeholder">Checkbox</string>
+    <string name="template_editor_checkbox_hint">Checkbox criteria</string>
+    <string name="template_editor_auto_header">Auto</string>
+    <string name="template_editor_tele_header">Tele-op</string>
+    <string name="template_editor_endgame_header">Endgame</string>
+
+    <string name="template_editor_edit_dialog_header">Edit item label</string>
+    <string name="template_editor_edit_dialog_field_hint">Label text</string>
+    <string name="template_editor_edit_dialog_close_button">Save changes</string>
+    <string name="template_editor_edit_dialog_discard_button">Delete item</string>
+
+    <string name="template_save_header_title">Finalize your\ntemplate</string>
+    <string name="template_save_file_name_input_hint">Template file name</string>
+    <string name="template_save_path_disclaimer_placeholder">Template will be saved to ~/Documents/Scorescape/%1$s</string>
+    <string name="template_save_button_preview_text">Preview template</string>
+    <string name="template_save_button_export_text">Export to JSON</string>
+
+</resources>

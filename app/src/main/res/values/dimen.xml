@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Ideal for 720dp smallest width -->
+    <dimen name="h1_text_size">65sp</dimen>
+    <dimen name="h2_text_size">55sp</dimen>
+    <dimen name="h3_text_size">45sp</dimen>
+    <dimen name="h4_text_size">40sp</dimen>
+    <dimen name="h5_text_size">30sp</dimen>
+    <dimen name="subtitle1_text_size">30sp</dimen>
+    <dimen name="subtitle2_text_size">25sp</dimen>
+    <dimen name="body1_text_size">19sp</dimen>
+    <dimen name="body2_text_size">22sp</dimen>
+    <dimen name="button_text_size">20sp</dimen>
+    <dimen name="button_large_text_size">25sp</dimen>
+
+</resources>
