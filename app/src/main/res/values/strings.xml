@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">Scorescape</string>
+    <string name="app_name">Scouting</string>
 
     <string name="ic_user_avatar_content_desc">Profile image</string>
     <string name="ic_settings_content_desc">Settings icon</string>
@@ -22,6 +22,7 @@
     <string name="ic_trash_can_content_desc">Trash can</string>
     <string name="ic_document_export_content_desc">Export document</string>
     <string name="ic_view_eye_content_desc">View item</string>
+    <string name="ic_save_file_content_desc">Save file</string>
 
     <string name="home_page_default_device_name">Device name</string>
     <string name="home_page_subtitle_text">Created by Team 2412</string>
@@ -67,5 +68,10 @@
     <string name="template_save_path_disclaimer_placeholder">Template will be saved to ~/Documents/Scorescape/%1$s</string>
     <string name="template_save_button_preview_text">Preview template</string>
     <string name="template_save_button_export_text">Export to JSON</string>
+
+    <string name="template_preview_header_title">Preview template</string>
+
+    <string name="start_match_header_title">Start a match</string>
+    <string name="start_match_choose_template_title">Choose a template</string>
 
 </resources>

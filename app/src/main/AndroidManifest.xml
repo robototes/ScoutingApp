@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.scorescape.app.scouting">
+    package="com.scouting.app">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scorescape">
         <activity
-            android:name=".MainActivity"
+            android:name="com.scouting.app.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Scorescape">
