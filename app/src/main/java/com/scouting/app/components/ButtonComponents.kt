@@ -1,7 +1,9 @@
 package com.scouting.app.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,16 +98,22 @@ fun SmallButton(
     contentDescription: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    color: Color
+    color: Color,
+    outlineStyle: Boolean? = false
 ) {
     Button(
         modifier = modifier
             .height(50.dp)
-            .clip(MaterialTheme.shapes.medium),
+            .clip(MaterialTheme.shapes.medium)
+            .border(
+                width = if (outlineStyle == true) 2.5.dp else 0.dp,
+                color = color,
+                shape = MaterialTheme.shapes.medium
+            ),
         onClick = onClick,
         elevation = ButtonDefaults.elevation(0.dp),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = color
+            backgroundColor = if (outlineStyle == true) Color.Transparent else color
         )
     ) {
         Row(

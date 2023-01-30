@@ -2,24 +2,37 @@ package com.scouting.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.core.net.toFile
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.scouting.app.theme.ScorescapeTheme
+import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
+import com.scouting.app.view.FinishMatchView
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.scouting.app.view.HomePageView
+import com.scouting.app.view.InMatchView
+import com.scouting.app.view.SettingsView
 import com.scouting.app.view.StartMatchView
 import com.scouting.app.view.TemplateConfigView
 import com.scouting.app.view.TemplateEditorView
 import com.scouting.app.view.TemplatePreviewView
 import com.scouting.app.view.TemplateSaveView
+import com.scouting.app.viewmodel.InMatchViewModel
+import com.scouting.app.viewmodel.SettingsViewModel
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStreamReader
+import java.nio.charset.Charset
 
 object NavDestination {
     const val HomePage = "home"
@@ -28,7 +41,10 @@ object NavDestination {
     const val TemplateEditor = "template-editor"
     const val TemplateSave = "template-save"
     const val TemplatePreview = "template-preview"
+    const val InMatch = "in-match"
+    const val FinishMatch = "finish-match"
     const val RecordPitDataConfig = "pit-data-config"
+    const val Settings = "settings"
 }
 
 class MainActivity : ComponentActivity() {
@@ -38,7 +54,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ScorescapeTheme {
+            ScoutingTheme {
                 NavigationHost()
             }
         }
@@ -52,26 +68,35 @@ class MainActivity : ComponentActivity() {
             startDestination = NavDestination.HomePage,
             modifier = Modifier.fillMaxSize(),
             builder = {
-                composable(route = NavDestination.HomePage) {
-                    HomePageView(navController = navigationController)
+                composable(NavDestination.HomePage) {
+                    HomePageView(navigationController)
                 }
-                composable(route = NavDestination.CreateTemplateConfig) {
-                    TemplateConfigView(navController = navigationController)
+                composable(NavDestination.CreateTemplateConfig) {
+                    TemplateConfigView(navigationController)
                 }
-                composable(route = "${NavDestination.TemplateEditor}/{type}") {
+                composable("${NavDestination.TemplateEditor}/{type}") {
                     TemplateEditorView(
                         navController = navigationController,
                         type = it.arguments?.getString("type", "match")!!
                     )
                 }
-                composable(route = NavDestination.TemplateSave) {
-                    TemplateSaveView(navController = navigationController)
+                composable(NavDestination.TemplateSave) {
+                    TemplateSaveView(navigationController)
                 }
-                composable(route = NavDestination.TemplatePreview) {
-                    TemplatePreviewView(navController = navigationController)
+                composable(NavDestination.TemplatePreview) {
+                    TemplatePreviewView(navigationController)
                 }
-                composable(route  = NavDestination.StartMatchConfig) {
-                    StartMatchView(navController = navigationController)
+                composable(NavDestination.StartMatchConfig) {
+                    StartMatchView(navigationController)
+                }
+                composable(NavDestination.InMatch) {
+                    InMatchView(navigationController)
+                }
+                composable(NavDestination.Settings) {
+                    SettingsView(navigationController)
+                }
+                composable(NavDestination.FinishMatch) {
+                    FinishMatchView(navigationController)
                 }
             }
         )
@@ -79,10 +104,25 @@ class MainActivity : ComponentActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
-        if (requestCode == 2412 && resultCode == RESULT_OK && resultCode != RESULT_CANCELED) {
-            resultData?.data?.let { contentResolver.openOutputStream(it) }?.let {
-                navigationController.context.getViewModel(TemplateEditorViewModel::class.java)
-                    .writeTemplateToFile(it)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                2412 -> {
+                    resultData?.data?.let { contentResolver.openOutputStream(it) }?.let {
+                        getViewModel(TemplateEditorViewModel::class.java)
+                            .writeTemplateToFile(it)
+                    }
+                }
+                24122 -> {
+                    resultData?.data?.let {
+                        getViewModel(SettingsViewModel::class.java)
+                            .processFilePickerResult(
+                                fileContent = BufferedReader(
+                                    InputStreamReader(contentResolver.openInputStream(it))
+                                ).readText(),
+                                context = this
+                            )
+                    }
+                }
             }
         }
     }

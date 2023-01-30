@@ -11,6 +11,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.SmallButton
 import com.scouting.app.viewmodel.HomePageViewModel
@@ -18,8 +20,8 @@ import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.DialogScaffold
 
 @Composable
-fun DeviceNameDialog(viewModel: HomePageViewModel) {
-    val context = LocalContext.current
+fun DeviceNameDialog(viewModel: HomePageViewModel, navController: NavController) {
+    val context = navController.context
     if (viewModel.showingDeviceEditDialog) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_user_avatar),
@@ -49,7 +51,7 @@ fun DeviceNameDialog(viewModel: HomePageViewModel) {
                     onClick = {
                         viewModel.apply {
                             showingDeviceEditDialog = false
-                            applyDeviceNameChange(context)
+                            applyDeviceNameChange(context as MainActivity)
                         }
                     },
                     color = MaterialTheme.colors.primaryVariant,

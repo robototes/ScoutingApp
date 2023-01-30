@@ -32,10 +32,17 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     .padding(vertical = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var textFieldValue by remember {
+                var textFieldValueLabel by remember {
                     mutableStateOf(
                         TextFieldValue(viewModel.let {
                             it.currentListResource[it.currentEditItemIndex].text
+                        })
+                    )
+                }
+                var textFieldValueSaveKey by remember {
+                    mutableStateOf(
+                        TextFieldValue(viewModel.let {
+                            it.currentListResource[it.currentEditItemIndex].saveKey
                         })
                     )
                 }
@@ -43,9 +50,21 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     icon = painterResource(id = R.drawable.ic_text_format_center),
                     contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
                     hint = stringResource(id = R.string.template_editor_edit_dialog_field_hint),
-                    textFieldValue = textFieldValue,
+                    textFieldValue = textFieldValueLabel,
                     onValueChange = {
-                        textFieldValue = it
+                        textFieldValueLabel = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp, vertical = 10.dp)
+                )
+                BasicInputField(
+                    icon = painterResource(id = R.drawable.ic_save_file),
+                    contentDescription = stringResource(id = R.string.ic_save_file_content_desc),
+                    hint = stringResource(id = R.string.template_editor_edit_dialog_save_key_hint),
+                    textFieldValue = textFieldValueSaveKey,
+                    onValueChange = {
+                        textFieldValueSaveKey = it
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -62,7 +81,10 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                         contentDescription = stringResource(id = R.string.ic_checkmark_outline_content_desc),
                         onClick = {
                             viewModel.apply {
-                                currentListResource[currentEditItemIndex].text = textFieldValue.text
+                                currentListResource[currentEditItemIndex].apply {
+                                    text = textFieldValueLabel.text
+                                    saveKey = textFieldValueSaveKey.text
+                                }
                                 showingEditDialog = false
                             }
                         },

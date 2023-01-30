@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.scouting.app.MainActivity
 import com.scouting.app.NavDestination
 import com.scouting.app.R
 import com.scouting.app.components.LargeButton
@@ -60,57 +61,65 @@ fun HomePageView(navController: NavController) {
                     painter = painterResource(id = R.drawable.ic_settings),
                     contentDescription = stringResource(id = R.string.ic_settings_content_desc),
                     modifier = Modifier.clickable {
-
+                        navController.navigate(NavDestination.Settings)
                     }
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.1F))
-            Text(
-                text = stringResource(id = R.string.app_name),
-                style = MaterialTheme.typography.h1,
-                fontSize = 80.sp
-            )
-            Text(
-                text = stringResource(id = R.string.home_page_subtitle_text),
-                style = MaterialTheme.typography.subtitle1
-            )
-            Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.6F))
-            LargeButton(
-                text = stringResource(id = R.string.home_page_button_start_text),
-                icon = painterResource(id = R.drawable.ic_play_button),
-                contentDescription = stringResource(id = R.string.ic_play_button_content_desc),
-                onClick = {
-                    navController.navigate(NavDestination.StartMatchConfig)
-                },
-                color = MaterialTheme.colors.primaryVariant,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            LargeButton(
-                text = stringResource(id = R.string.home_page_button_create_text),
-                icon = painterResource(id = R.drawable.ic_server_wired),
-                contentDescription = stringResource(id = R.string.ic_server_wired_content_desc),
-                onClick = {
-                     viewModel.showingTemplateTypeDialog = true
-                },
-                color = MaterialTheme.colors.secondaryVariant,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            LargeButton(
-                text = stringResource(id = R.string.home_page_button_pit_text),
-                icon = painterResource(id = R.drawable.ic_pit_stand),
-                contentDescription = stringResource(id = R.string.ic_pit_stand_content_desc),
-                onClick = { /*TODO*/ },
-                color = MaterialTheme.colors.secondary,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-        }
-        LocalContext.current.apply {
-            LaunchedEffect(key1 = true) {
-                viewModel.restoreDeviceName(this@apply)
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        style = MaterialTheme.typography.h1,
+                        fontSize = 80.sp
+                    )
+                    Text(
+                        text = stringResource(id = R.string.home_page_subtitle_text),
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                }
+                Column {
+                    LargeButton(
+                        text = stringResource(id = R.string.home_page_button_start_text),
+                        icon = painterResource(id = R.drawable.ic_play_button),
+                        contentDescription = stringResource(id = R.string.ic_play_button_content_desc),
+                        onClick = {
+                            navController.navigate(NavDestination.StartMatchConfig)
+                        },
+                        color = MaterialTheme.colors.primaryVariant,
+                        modifier = Modifier.padding(bottom = 20.dp)
+                    )
+                    LargeButton(
+                        text = stringResource(id = R.string.home_page_button_create_text),
+                        icon = painterResource(id = R.drawable.ic_server_wired),
+                        contentDescription = stringResource(id = R.string.ic_server_wired_content_desc),
+                        onClick = {
+                            viewModel.showingTemplateTypeDialog = true
+                        },
+                        color = MaterialTheme.colors.secondaryVariant,
+                        modifier = Modifier.padding(bottom = 20.dp)
+                    )
+                    LargeButton(
+                        text = stringResource(id = R.string.home_page_button_pit_text),
+                        icon = painterResource(id = R.drawable.ic_pit_stand),
+                        contentDescription = stringResource(id = R.string.ic_pit_stand_content_desc),
+                        onClick = { /*TODO*/ },
+                        color = MaterialTheme.colors.secondary,
+                        modifier = Modifier.padding(bottom = 20.dp)
+                    )
+                }
             }
         }
-        DeviceNameDialog(viewModel = viewModel)
-        TemplateTypeDialog(viewModel = viewModel, navController = navController)
+        navController.context.apply {
+            LaunchedEffect(key1 = true) {
+                viewModel.restoreDeviceName(this@apply as MainActivity)
+            }
+        }
+        DeviceNameDialog(viewModel, navController)
+        TemplateTypeDialog(viewModel, navController)
     }
 }
 

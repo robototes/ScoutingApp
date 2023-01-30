@@ -58,7 +58,8 @@
     <string name="template_editor_tele_header">Tele-op</string>
     <string name="template_editor_endgame_header">Endgame</string>
 
-    <string name="template_editor_edit_dialog_header">Edit item label</string>
+    <string name="template_editor_edit_dialog_header">Edit item</string>
+    <string name="template_editor_edit_dialog_save_key_hint">Save key (CSV column label)</string>
     <string name="template_editor_edit_dialog_field_hint">Label text</string>
     <string name="template_editor_edit_dialog_close_button">Save changes</string>
     <string name="template_editor_edit_dialog_discard_button">Delete item</string>
@@ -72,6 +73,30 @@
     <string name="template_preview_header_title">Preview template</string>
 
     <string name="start_match_header_title">Start a match</string>
-    <string name="start_match_choose_template_title">Choose a template</string>
+    <string name="start_match_match_number_text">Match number</string>
+    <string name="start_match_team_number_text">Team number</string>
+    <string name="start_match_alliance_selection_text">Alliance</string>
+    <string name="start_match_alliance_label_red">RED</string>
+    <string name="start_match_alliance_label_blue">BLUE</string>
+    <string name="start_match_begin_button_text">Start</string>
+
+    <string name="in_match_header_match_number_format">Qualification #%1$s</string>
+    <string name="in_match_header_team_number_format">Monitoring team %1$s</string>
+    <string name="in_match_header_alliance_red">Red alliance</string>
+    <string name="in_match_header_alliance_blue">Blue alliance</string>
+    <string name="in_match_stage_autonomous_label">AUTO</string>
+    <string name="in_match_stage_teleoperated_label">TELEOP</string>
+    <string name="in_match_stage_endgame_label">ENDGAME</string>
+    <string name="in_match_stage_move_on_format">Move to %1$s</string>
+    <string name="in_match_stage_finish_scout_text">Finish match</string>
+
+    <string name="finish_match_header_title">Finalize match</string>
+    <string name="finish_match_name_confirmation">Confirm your name</string>
+    <string name="finish_match_name_confirmation_hint">Your name</string>
+    <string name="finish_match_done_button_text">Save match data</string>
+
+    <string name="settings_header_title">Preferences</string>
+    <string name="settings_choose_default_template_title">Choose default match template</string>
+    <string name="settings_choose_default_template_subtitle">This template will be used for scouting all matches</string>
 
 </resources>

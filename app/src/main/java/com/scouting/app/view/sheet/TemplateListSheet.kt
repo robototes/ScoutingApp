@@ -31,7 +31,7 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
             BorderedCard(
                 modifier = Modifier.clickable {
                     viewModel.currentListResource.add(
-                        TemplateItem("", TemplateTypes.SCORE_BAR, UUID.randomUUID().toString())
+                        TemplateItem("", TemplateTypes.SCORE_BAR, UUID.randomUUID().toString(), null, "")
                     )
                 }
             ) {
@@ -46,7 +46,7 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
             BorderedCard(
                 modifier = Modifier.clickable {
                     viewModel.currentListResource.add(
-                        TemplateItem("", TemplateTypes.RATING_BAR, UUID.randomUUID().toString())
+                        TemplateItem("", TemplateTypes.RATING_BAR, UUID.randomUUID().toString(), null, "")
                     )
                 }
             ) {
@@ -61,7 +61,7 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
         BorderedCard(
             modifier = Modifier.clickable {
                 viewModel.currentListResource.add(
-                    TemplateItem("", TemplateTypes.TEXT_FIELD, UUID.randomUUID().toString())
+                    TemplateItem("", TemplateTypes.TEXT_FIELD, UUID.randomUUID().toString(), null, "")
                 )
             }
         ) {
@@ -87,7 +87,7 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
         BorderedCard(
             modifier = Modifier.clickable {
                 viewModel.autoListItems.add(
-                    TemplateItem("", TemplateTypes.PLAIN_TEXT, UUID.randomUUID().toString())
+                    TemplateItem("", TemplateTypes.PLAIN_TEXT, UUID.randomUUID().toString(), null, "")
                 )
             }
         ) {
@@ -116,7 +116,8 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
                             TemplateTypes.CHECK_BOX,
                             UUID
                                 .randomUUID()
-                                .toString()
+                                .toString(),
+                            null, ""
                         )
                     )
                 }

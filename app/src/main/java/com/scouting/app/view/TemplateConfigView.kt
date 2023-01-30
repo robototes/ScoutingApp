@@ -49,34 +49,6 @@ fun TemplateConfigView(navController: NavController) {
                 },
                 modifier = Modifier.padding(start = 30.dp)
             )
-            Column(
-                modifier = Modifier.padding(start = 30.dp, end = 40.dp, top = 45.dp)
-            ) {
-                LabeledCounter(
-                    text = stringResource(id = R.string.template_config_auto_duration),
-                    onValueChange = {
-                        viewModel.autoDuration = it
-                    },
-                    incrementStep = 5,
-                    modifier = Modifier.padding(bottom = 30.dp)
-                )
-                LabeledCounter(
-                    text = stringResource(id = R.string.template_config_tele_duration),
-                    onValueChange = {
-                        viewModel.teleOpDuration = it
-                    },
-                    incrementStep = 5,
-                    modifier = Modifier.padding(bottom = 30.dp)
-                )
-                LabeledCounter(
-                    text = stringResource(id = R.string.template_config_end_duration),
-                    onValueChange = {
-                        viewModel.endgameDuration = it
-                    },
-                    incrementStep = 5,
-                    modifier = Modifier.padding(bottom = 30.dp)
-                )
-            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

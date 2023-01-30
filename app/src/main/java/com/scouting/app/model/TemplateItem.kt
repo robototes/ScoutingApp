@@ -11,5 +11,8 @@ data class TemplateItem(
     // Require unique key separate from index to allow drag and drop
     @Expose
     var id: String,
-    var itemState: MutableState<*>? = null
+    var itemState: MutableState<*>? = null,
+    var saveKey: String,
+    var saveKey2: String? = null,
+    var saveKey3: String? = null
 )

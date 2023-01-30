@@ -42,6 +42,10 @@ fun typography() = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = dimensionResource(id = R.dimen.h5_text_size).value.sp
     ),
+    h6 = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 25.sp
+    ),
     subtitle1 = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = dimensionResource(id = R.dimen.subtitle1_text_size).value.sp

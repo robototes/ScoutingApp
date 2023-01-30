@@ -74,7 +74,13 @@ fun TemplateEditorView(
                     pagerState = pagerState
                 )
                 if (type == "match") {
-                    viewModel.apply { currentListResource = autoListItems }
+                    viewModel.apply {
+                        currentListResource = when (currentSelectedTab.value) {
+                            0 -> autoListItems
+                            1 -> teleListItems
+                            else -> endgameListItems
+                        }
+                    }
                     HorizontalPager(
                         count = 3,
                         state = pagerState

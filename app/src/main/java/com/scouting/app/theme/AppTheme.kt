@@ -34,7 +34,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun ScorescapeTheme(
+fun ScoutingTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

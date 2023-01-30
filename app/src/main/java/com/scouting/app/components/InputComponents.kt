@@ -13,9 +13,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.scouting.app.R
+import com.scouting.app.theme.ErrorRed
 import com.scouting.app.theme.NeutralGrayMedium
+import com.scouting.app.theme.PrimaryBlue
 
 @Composable
 fun BasicInputField(
@@ -25,7 +28,8 @@ fun BasicInputField(
     enabled: Boolean = true,
     textFieldValue: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = TextAlign.Start
 ) {
     TextField(
         enabled = enabled,
@@ -35,7 +39,8 @@ fun BasicInputField(
             Text(
                 text = hint,
                 style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onBackground
+                color = MaterialTheme.colors.onBackground,
+                textAlign = textAlign
             )
         },
         colors = TextFieldDefaults.textFieldColors(
@@ -142,21 +147,46 @@ fun LabeledCounter(
 }
 
 @Composable
+fun LabeledTriCounter(
+    text1: String,
+    text2: String,
+    text3: String,
+    onValueChange1: (Int) -> Unit,
+    onValueChange2: (Int) -> Unit,
+    onValueChange3: (Int) -> Unit
+) {
+
+}
+
+@Composable
 fun RatingBar(
     values: Int,
     onValueChange: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    customTextValues: List<String>? = null,
+    allianceSelectionColor: Boolean? = false
 ) {
     var currentlySelected by remember { mutableStateOf(0) }
     Row(modifier = modifier) {
         repeat(values) { index ->
             Card(
                 shape = MaterialTheme.shapes.medium,
-                backgroundColor = if (index == currentlySelected)
-                    MaterialTheme.colors.primary else NeutralGrayMedium,
+                backgroundColor = if (index == currentlySelected) {
+                    if (allianceSelectionColor == true) {
+                        when (index) {
+                            0 -> ErrorRed
+                            1 -> PrimaryBlue
+                            else -> PrimaryBlue
+                        }
+                    } else {
+                        MaterialTheme.colors.primary
+                    }
+                } else {
+                    NeutralGrayMedium
+                },
                 elevation = 0.dp,
                 modifier = Modifier
-                    .size(50.dp)
+                    //.size(50.dp)
                     .padding(end = 10.dp)
                     .clickable {
                         currentlySelected = index
@@ -165,9 +195,15 @@ fun RatingBar(
             ) {
                 Row(horizontalArrangement = Arrangement.Center) {
                     Text(
-                        text = (index + 1).toString(),
+                        text = if (customTextValues == null) {
+                            (index + 1).toString()
+                        } else {
+                            customTextValues[index]
+                        },
                         style = MaterialTheme.typography.body2,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .align(Alignment.CenterVertically)
                     )
                 }
             }
@@ -192,5 +228,47 @@ fun LabeledRatingBar(
             style = MaterialTheme.typography.body2
         )
         RatingBar(values = values, onValueChange = onValueChange)
+    }
+}
+
+@Composable
+fun SettingsPreference(
+    title: String,
+    subtitle: String,
+    icon: Painter? = null,
+    contentDescription: String? = null,
+    onClickAction: (() -> Unit) = {},
+    endContent: (@Composable () -> Unit)? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClickAction.invoke() }
+            .padding(horizontal = 30.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(0.6F)
+        ) {
+            icon?.let {
+                Icon(
+                    painter = it,
+                    contentDescription = contentDescription
+                )
+            }
+            Column {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.body2
+                )
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.body1
+                )
+            }
+        }
+        endContent?.invoke()
     }
 }

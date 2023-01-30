@@ -5,5 +5,6 @@ enum class TemplateTypes {
     RATING_BAR,
     CHECK_BOX,
     TEXT_FIELD,
-    PLAIN_TEXT
+    PLAIN_TEXT,
+    TRI_SCORING
 }

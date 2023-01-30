@@ -28,10 +28,6 @@ class TemplateEditorViewModel : ViewModel() {
         TextFieldValue("${gameNameTextValue.text}${gameYearTextValue.text}.json")
     )
 
-    var autoDuration by mutableStateOf(0)
-    var teleOpDuration by mutableStateOf(0)
-    var endgameDuration by mutableStateOf(0)
-
     var autoListItems = mutableStateListOf<TemplateItem>()
     var teleListItems = mutableStateListOf<TemplateItem>()
     var endgameListItems = mutableStateListOf<TemplateItem>()
@@ -69,10 +65,7 @@ class TemplateEditorViewModel : ViewModel() {
                 title = finalFileName.text,
                 autoTemplateItems = autoListItems,
                 teleTemplateItems = teleListItems,
-                endTemplateItems = endgameListItems,
-                autoDuration = autoDuration,
-                teleDuration = teleOpDuration,
-                endDuration = endgameDuration
+                endTemplateItems = endgameListItems
             )
         } else {
             TemplateFormatPit(

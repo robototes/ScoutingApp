@@ -116,3 +116,16 @@ fun TabLayout(
         }
     }
 }
+
+@Composable
+fun SpacedRow(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 30.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        content.invoke()
+    }
+}
