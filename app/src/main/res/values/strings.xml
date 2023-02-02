@@ -39,12 +39,9 @@
     <string name="template_config_header_title">Create a new\nmatch template</string>
     <string name="template_config_game_name_hint">Game name</string>
     <string name="template_config_game_year_hint">Game year</string>
-    <string name="template_config_auto_duration">Autonomous duration</string>
-    <string name="template_config_tele_duration">Tele-op duration   </string>
-    <string name="template_config_end_duration">Endgame duration   </string>
     <string name="template_config_start_editing_button">Start editing</string>
 
-    <string name="template_editor_header_title">Template editor</string>
+    <string name="template_editor_header_title">Template Editor</string>
     <string name="template_editor_add_item">Add item</string>
     <string name="template_editor_score_bar_placeholder">Score bar</string>
     <string name="template_editor_rating_bar_placeholder">Rating bar</string>
@@ -56,19 +53,40 @@
     <string name="template_editor_checkbox_hint">Checkbox criteria</string>
     <string name="template_editor_auto_header">Auto</string>
     <string name="template_editor_tele_header">Tele-op</string>
-    <string name="template_editor_endgame_header">Endgame</string>
+    <string name="template_editor_label_1_preview">Counter 1</string>
+    <string name="template_editor_label_2_preview">Counter 2</string>
+    <string name="template_editor_label_3_preview">Counter 3</string>
 
     <string name="template_editor_edit_dialog_header">Edit item</string>
     <string name="template_editor_edit_dialog_save_key_hint">Save key (CSV column label)</string>
+    <string name="template_editor_edit_dialog_save_key_2_hint">Second save key</string>
+    <string name="template_editor_edit_dialog_save_key_3_hint">Third save key</string>
     <string name="template_editor_edit_dialog_field_hint">Label text</string>
+    <string name="template_editor_edit_dialog_field_2_hint">Second label text</string>
+    <string name="template_editor_edit_dialog_field_3_hint">Third label text</string>
     <string name="template_editor_edit_dialog_close_button">Save changes</string>
     <string name="template_editor_edit_dialog_discard_button">Delete item</string>
 
+
     <string name="template_save_header_title">Finalize your\ntemplate</string>
     <string name="template_save_file_name_input_hint">Template file name</string>
-    <string name="template_save_path_disclaimer_placeholder">Template will be saved to ~/Documents/Scorescape/%1$s</string>
+    <string name="template_save_path_disclaimer_placeholder">Template will be saved to ~/Downloads/%1$s</string>
     <string name="template_save_button_preview_text">Preview template</string>
     <string name="template_save_button_export_text">Export to JSON</string>
+
+    <string name="template_edit_csv_header_title">Edit CSV save order</string>
+    <string name="template_edit_csv_header_subtitle">You can edit the order that the data for each item will appear in the CSV file produced after scouting each match. The easiest way to differentiate different values is to set their save key in the template editor</string>
+    <string name="template_edit_csv_save_key_prefix">Save key</string>
+    <string name="template_edit_csv_item_type_prefix">Item type</string>
+    <string name="template_edit_csv_save_type_prefix">Data type</string>
+    <string name="template_edit_csv_item_text_field_prefix">Text field</string>
+    <string name="template_edit_csv_item_checkbox_prefix">Checkbox</string>
+    <string name="template_edit_csv_item_tri_scoring_prefix">Tri-counter</string>
+    <string name="template_edit_csv_item_counter_prefix">Counter</string>
+    <string name="template_edit_csv_type_string">String</string>
+    <string name="template_edit_csv_type_int">Integer</string>
+    <string name="template_edit_csv_type_boolean">Boolean</string>
+    <string name="template_edit_csv_save_header_move_on_button">Finalize template</string>
 
     <string name="template_preview_header_title">Preview template</string>
 
@@ -86,7 +104,6 @@
     <string name="in_match_header_alliance_blue">Blue alliance</string>
     <string name="in_match_stage_autonomous_label">AUTO</string>
     <string name="in_match_stage_teleoperated_label">TELEOP</string>
-    <string name="in_match_stage_endgame_label">ENDGAME</string>
     <string name="in_match_stage_move_on_format">Move to %1$s</string>
     <string name="in_match_stage_finish_scout_text">Finish match</string>
 
@@ -98,5 +115,9 @@
     <string name="settings_header_title">Preferences</string>
     <string name="settings_choose_default_template_title">Choose default match template</string>
     <string name="settings_choose_default_template_subtitle">This template will be used for scouting all matches</string>
+    <string name="settings_choose_default_output_location_title">Choose default match output file</string>
+    <string name="settings_choose_default_output_location_subtitle">Select the file where data from each match will be saved</string>
+    <string name="settings_choose_default_output_location_dialog_title">Match data output filename</string>
+    <string name="settings_choose_default_output_location_dialog_subtitle">All match output data will be saved to a single file, in the ~/Android/data/com.scouting.app/Documents directory</string>
 
 </resources>

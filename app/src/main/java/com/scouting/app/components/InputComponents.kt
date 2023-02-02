@@ -153,9 +153,34 @@ fun LabeledTriCounter(
     text3: String,
     onValueChange1: (Int) -> Unit,
     onValueChange2: (Int) -> Unit,
-    onValueChange3: (Int) -> Unit
+    onValueChange3: (Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        val onValueChangeItems = listOf(onValueChange1, onValueChange2, onValueChange3)
+        val textItems = listOf(text1, text2, text3)
+        onValueChangeItems.forEachIndexed { index, item ->
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.33F)
+                    .weight(1F)
+                    .padding(vertical = 20.dp, horizontal = 15.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = textItems[index],
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.padding(bottom = 15.dp)
+                )
+                CounterBar(onValueChange = item)
+            }
+        }
+    }
 }
 
 @Composable

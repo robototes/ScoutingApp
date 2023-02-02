@@ -1,8 +1,10 @@
 package com.scouting.app.components
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +24,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.scouting.app.theme.NeutralGrayLight
 import com.scouting.app.theme.NeutralGrayMedium
+import java.lang.Integer.max
+import java.lang.Integer.min
 
 @Composable
 fun SheetHandle() {
@@ -87,29 +91,36 @@ fun TabLayout(
     items: List<String>,
     selection: MutableState<Int>,
     onSelectionChange: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: Int
 ) {
     Row(
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
             .background(color = MaterialTheme.colors.background)
+            .fillMaxWidth()
             .padding(horizontal = 10.dp)
     ) {
+
         items.forEachIndexed { index, text ->
             Column(
                 modifier = Modifier
+                    .fillMaxWidth(if (index == 0) 0.5F else 1F) // really bad practice sorry team
                     .padding(horizontal = 10.dp, vertical = 10.dp)
                     .clip(MaterialTheme.shapes.medium)
-                    .background(
-                        if (selection.value == index) MaterialTheme.colors.primary else NeutralGrayLight
+                    .border(
+                        width = if (selection.value == index) 2.dp else 0.dp,
+                        shape = MaterialTheme.shapes.medium,
+                        color = if (selection.value == index) MaterialTheme.colors.onBackground else Color.Transparent
                     )
                     .clickable {
                         onSelectionChange(index)
-                    }
+                    },
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.body1,
+                    style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
                 )
             }

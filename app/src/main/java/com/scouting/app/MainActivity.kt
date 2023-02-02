@@ -1,7 +1,11 @@
 package com.scouting.app
 
+import android.content.ContentResolver
 import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -16,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
+import com.scouting.app.view.EditCSVOrderView
 import com.scouting.app.view.FinishMatchView
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.scouting.app.view.HomePageView
@@ -24,7 +29,6 @@ import com.scouting.app.view.SettingsView
 import com.scouting.app.view.StartMatchView
 import com.scouting.app.view.TemplateConfigView
 import com.scouting.app.view.TemplateEditorView
-import com.scouting.app.view.TemplatePreviewView
 import com.scouting.app.view.TemplateSaveView
 import com.scouting.app.viewmodel.InMatchViewModel
 import com.scouting.app.viewmodel.SettingsViewModel
@@ -45,6 +49,7 @@ object NavDestination {
     const val FinishMatch = "finish-match"
     const val RecordPitDataConfig = "pit-data-config"
     const val Settings = "settings"
+    const val EditCSVOrder = "edit-csv"
 }
 
 class MainActivity : ComponentActivity() {
@@ -83,9 +88,6 @@ class MainActivity : ComponentActivity() {
                 composable(NavDestination.TemplateSave) {
                     TemplateSaveView(navigationController)
                 }
-                composable(NavDestination.TemplatePreview) {
-                    TemplatePreviewView(navigationController)
-                }
                 composable(NavDestination.StartMatchConfig) {
                     StartMatchView(navigationController)
                 }
@@ -97,6 +99,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(NavDestination.FinishMatch) {
                     FinishMatchView(navigationController)
+                }
+                composable(NavDestination.EditCSVOrder) {
+                    EditCSVOrderView(navigationController)
                 }
             }
         )
@@ -112,6 +117,7 @@ class MainActivity : ComponentActivity() {
                             .writeTemplateToFile(it)
                     }
                 }
+
                 24122 -> {
                     resultData?.data?.let {
                         getViewModel(SettingsViewModel::class.java)

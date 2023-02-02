@@ -18,6 +18,7 @@ import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LargeHeaderBar
+import com.scouting.app.components.SettingsPreference
 
 @Composable
 fun TemplateSaveView(navController: NavController) {
@@ -48,18 +49,11 @@ fun TemplateSaveView(navController: NavController) {
             modifier = Modifier.padding(start = 30.dp)
         )
         Row(
-            modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 45.dp, top = 40.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 30.dp, end = 45.dp, top = 40.dp),
+            horizontalArrangement = Arrangement.End
         ) {
-            MediumButton(
-                text = stringResource(id = R.string.template_save_button_preview_text),
-                icon = painterResource(id = R.drawable.ic_view_eye),
-                contentDescription = stringResource(id = R.string.ic_view_eye_content_desc),
-                onClick = {
-                    navController.navigate(NavDestination.TemplatePreview)
-                },
-                color = MaterialTheme.colors.secondary
-            )
             MediumButton(
                 text = stringResource(id = R.string.template_save_button_export_text),
                 icon = painterResource(id = R.drawable.ic_document_export),

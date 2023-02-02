@@ -18,6 +18,7 @@ fun DialogScaffold(
     icon: Painter,
     contentDescription: String,
     title: String,
+    subtitle: String? = null,
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -43,6 +44,14 @@ fun DialogScaffold(
                     text = title,
                     style = MaterialTheme.typography.h5,
                     modifier = Modifier.padding(start = 20.dp, top = 25.dp),
+                    color = MaterialTheme.colors.onBackground
+                )
+            }
+            subtitle?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.padding(start = 20.dp, top = 10.dp, end = 20.dp),
                     color = MaterialTheme.colors.onBackground
                 )
             }

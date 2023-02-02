@@ -56,7 +56,7 @@ fun FinishMatchView(navController: NavController) {
                     text = stringResource(id = R.string.finish_match_done_button_text),
                     icon = painterResource(id = R.drawable.ic_save_file),
                     contentDescription = stringResource(id = R.string.ic_save_file_content_desc),
-                    onClick = { /*TODO*/ },
+                    onClick = { viewModel.saveMatchDataToFile(context) },
                     color = AffirmativeGreen
                 )
             }

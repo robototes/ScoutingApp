@@ -2,23 +2,36 @@ package com.scouting.app.viewmodel
 
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.os.Environment
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.scouting.app.MainActivity
+import com.scouting.app.model.TemplateFormatMatch
 import java.io.File
+import java.io.FileOutputStream
+
 
 class SettingsViewModel : ViewModel() {
 
     var defaultTemplateFileName = mutableStateOf("file.json")
+    var defaultOutputFileName = mutableStateOf(TextFieldValue("output.csv"))
 
-    fun requestFilePicker(context: MainActivity) {
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/json"
-        }
-        ActivityCompat.startActivityForResult(context, intent, 24122, null)
+    var showingFileNameDialog = mutableStateOf(false)
+
+    fun requestFilePicker(context: MainActivity, code: Int) {
+        ActivityCompat.startActivityForResult(
+            context,
+            Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/json"
+            },
+            code,
+            null
+        )
     }
 
     fun processFilePickerResult(fileContent: String, context: MainActivity) {
@@ -35,6 +48,22 @@ class SettingsViewModel : ViewModel() {
         context.getPreferences(MODE_PRIVATE)
             .edit()
             .putString("DEFAULT_TEMPLATE_FILE_PATH", newFilePath)
+            .apply()
+        Gson().fromJson(fileContent, TemplateFormatMatch::class.java).let {
+            defaultTemplateFileName.value = "${it.gameName}-${it.gameYear}"
+        }
+    }
+
+    fun applyOutputFileNameChange(context: MainActivity) {
+        Log.e("DD", context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!
+            .path.plus(defaultOutputFileName.value.text))
+        context.getPreferences(MODE_PRIVATE)
+            .edit()
+            .putString(
+                "DEFAULT_OUTPUT_FILE_PATH",
+                context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!
+                    .path.plus("/${defaultOutputFileName.value.text}")
+            )
             .apply()
     }
 

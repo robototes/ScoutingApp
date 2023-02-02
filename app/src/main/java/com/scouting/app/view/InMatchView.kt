@@ -8,12 +8,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
+import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,12 +27,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.scouting.app.NavDestination
 import com.scouting.app.R
+import com.scouting.app.components.BasicInputField
+import com.scouting.app.components.LabeledCounter
+import com.scouting.app.components.LabeledRatingBar
+import com.scouting.app.components.LabeledTriCounter
 import com.scouting.app.components.SmallButton
 import com.scouting.app.model.TemplateItem
+import com.scouting.app.model.TemplateTypes
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ErrorRed
 import com.scouting.app.theme.NeutralGrayDark
@@ -84,8 +95,7 @@ fun InMatchView(navController: NavController) {
                     elevation = 0.dp,
                     backgroundColor = when (viewModel.currentMatchStage.value) {
                         0 -> SecondaryPurple
-                        1 -> AffirmativeGreen
-                        else -> ErrorRed
+                        else -> AffirmativeGreen
                     }
                 ) {
                     Text(
@@ -129,14 +139,95 @@ fun InMatchView(navController: NavController) {
                 )
             }
         }
-        TemplateLoadView(
-            template = viewModel.let {
-                when (it.currentMatchStage.value) {
-                    0 -> it.autoListItems
-                    1 -> it.teleListItems
-                    else -> it.endgameListItems
+        LazyColumn(
+            modifier = Modifier.padding(top = 20.dp)
+        ) {
+            itemsIndexed(
+                when (viewModel.currentMatchStage.value) {
+                    0 -> viewModel.autoListItems
+                    else -> viewModel.teleListItems
+                }
+            ) { _, item ->
+                when (item.type) {
+                    TemplateTypes.SCORE_BAR -> {
+                        item.itemValueInt = remember { mutableStateOf(0) }
+                        LabeledCounter(
+                            text = item.text,
+                            onValueChange = {
+                                item.itemValueInt!!.value = it
+                            },
+                            incrementStep = 1,
+                            modifier = Modifier.padding(30.dp)
+                        )
+                    }
+                    TemplateTypes.CHECK_BOX -> {
+                        item.itemValueBoolean = remember { mutableStateOf(false) }
+                        Row(
+                            modifier = Modifier.padding(30.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = item.itemValueBoolean!!.value,
+                                onCheckedChange = {
+                                    item.itemValueBoolean!!.value = it
+                                }
+                            )
+                            Text(
+                                text = item.text,
+                                style = MaterialTheme.typography.body2,
+                                modifier = Modifier.padding(start = 15.dp)
+                            )
+                        }
+                    }
+                    TemplateTypes.PLAIN_TEXT -> {
+                        Text(
+                            text = item.text,
+                            style = MaterialTheme.typography.body2,
+                            modifier = Modifier.padding(30.dp)
+                        )
+                    }
+                    TemplateTypes.TEXT_FIELD -> {
+                        var tempItemState by remember { mutableStateOf(TextFieldValue()) }
+                        item.itemValueString = remember { mutableStateOf("") }
+                        BasicInputField(
+                            icon = painterResource(id = R.drawable.ic_text_format_center),
+                            contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
+                            hint = item.text,
+                            textFieldValue = tempItemState,
+                            onValueChange = {
+                                tempItemState = it
+                                item.itemValueString!!.value = it.text
+                            },
+                            enabled = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(30.dp)
+                        )
+                    }
+                    TemplateTypes.RATING_BAR -> {
+                        item.itemValueInt = remember { mutableStateOf(0) }
+                        LabeledRatingBar(
+                            text = item.text,
+                            values = 5,
+                            onValueChange = { item.itemValueInt!!.value = it },
+                            modifier = Modifier.padding(30.dp)
+                        )
+                    }
+                    TemplateTypes.TRI_SCORING -> {
+                        item.itemValueInt = remember { mutableStateOf(0) }
+                        item.itemValue2Int = remember { mutableStateOf(0) }
+                        item.itemValue3Int = remember { mutableStateOf(0) }
+                        LabeledTriCounter(
+                            text1 = item.text,
+                            text2 = item.text2.toString(),
+                            text3 = item.text3.toString(),
+                            onValueChange1 = { item.itemValueInt!!.value = it },
+                            onValueChange2 = { item.itemValue2Int!!.value = it },
+                            onValueChange3 = { item.itemValue3Int!!.value = it }
+                        )
+                    }
                 }
             }
-        )
+        }
     }
 }

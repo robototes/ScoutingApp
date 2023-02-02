@@ -35,6 +35,7 @@ import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.DottedRoundBox
 import com.scouting.app.components.LabeledCounter
 import com.scouting.app.components.LabeledRatingBar
+import com.scouting.app.components.LabeledTriCounter
 import com.scouting.app.components.MediumHeaderBar
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.TabLayout
@@ -77,8 +78,7 @@ fun TemplateEditorView(
                     viewModel.apply {
                         currentListResource = when (currentSelectedTab.value) {
                             0 -> autoListItems
-                            1 -> teleListItems
-                            else -> endgameListItems
+                            else -> teleListItems
                         }
                     }
                     HorizontalPager(
@@ -112,7 +112,8 @@ fun TemplateEditorHeader(
         iconLeft = painterResource(id = R.drawable.ic_save_icon),
         contentDescription = stringResource(id = R.string.ic_save_icon_content_desc),
         onIconLeftClick = {
-            navController.navigate(NavDestination.TemplateSave)
+            viewModel.createSaveKeyList()
+            navController.navigate(NavDestination.EditCSVOrder)
         }
     )
     if (type != "pit") {
@@ -123,15 +124,15 @@ fun TemplateEditorHeader(
             TabLayout(
                 items = listOf(
                     stringResource(id = R.string.template_editor_auto_header),
-                    stringResource(id = R.string.template_editor_tele_header),
-                    stringResource(id = R.string.template_editor_endgame_header)
+                    stringResource(id = R.string.template_editor_tele_header)
                 ),
                 selection = viewModel.currentSelectedTab,
                 onSelectionChange = {
                     viewModel.currentSelectedTab.value = it
                     async.launch { pagerState.animateScrollToPage(it) }
                 },
-                modifier = Modifier.padding(top = 10.dp)
+                modifier = Modifier.padding(top = 10.dp),
+                size = 2
             )
         }
     }
@@ -280,6 +281,16 @@ fun ListItemFromType(item: TemplateItem) {
                 text = item.text,
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.padding(start = 10.dp, end = 20.dp)
+            )
+        }
+        TemplateTypes.TRI_SCORING -> {
+            LabeledTriCounter(
+                text1 = item.text,
+                text2 = item.text2.toString(),
+                text3 = item.text3.toString(),
+                onValueChange1 = {},
+                onValueChange2 = {},
+                onValueChange3 = {}
             )
         }
     }

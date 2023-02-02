@@ -20,6 +20,7 @@ import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.BorderedCard
 import com.scouting.app.components.LabeledCounter
 import com.scouting.app.components.LabeledRatingBar
+import com.scouting.app.components.LabeledTriCounter
 import com.scouting.app.components.SheetHandle
 import java.util.*
 
@@ -31,7 +32,12 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
             BorderedCard(
                 modifier = Modifier.clickable {
                     viewModel.currentListResource.add(
-                        TemplateItem("", TemplateTypes.SCORE_BAR, UUID.randomUUID().toString(), null, "")
+                        TemplateItem(
+                            id = UUID.randomUUID().toString(),
+                            text = "",
+                            type = TemplateTypes.SCORE_BAR,
+                            saveKey = ""
+                        )
                     )
                 }
             ) {
@@ -46,7 +52,12 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
             BorderedCard(
                 modifier = Modifier.clickable {
                     viewModel.currentListResource.add(
-                        TemplateItem("", TemplateTypes.RATING_BAR, UUID.randomUUID().toString(), null, "")
+                        TemplateItem(
+                            id = UUID.randomUUID().toString(),
+                            text = "",
+                            type = TemplateTypes.RATING_BAR,
+                            saveKey = ""
+                        )
                     )
                 }
             ) {
@@ -61,7 +72,12 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
         BorderedCard(
             modifier = Modifier.clickable {
                 viewModel.currentListResource.add(
-                    TemplateItem("", TemplateTypes.TEXT_FIELD, UUID.randomUUID().toString(), null, "")
+                    TemplateItem(
+                        id = UUID.randomUUID().toString(),
+                        text = "",
+                        type = TemplateTypes.TEXT_FIELD,
+                        saveKey = ""
+                    )
                 )
             }
         ) {
@@ -87,7 +103,12 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
         BorderedCard(
             modifier = Modifier.clickable {
                 viewModel.autoListItems.add(
-                    TemplateItem("", TemplateTypes.PLAIN_TEXT, UUID.randomUUID().toString(), null, "")
+                    TemplateItem(
+                        id = UUID.randomUUID().toString(),
+                        text = "",
+                        type = TemplateTypes.PLAIN_TEXT,
+                        saveKey = ""
+                    )
                 )
             }
         ) {
@@ -112,12 +133,10 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
                 .clickable {
                     viewModel.autoListItems.add(
                         TemplateItem(
-                            "",
-                            TemplateTypes.CHECK_BOX,
-                            UUID
-                                .randomUUID()
-                                .toString(),
-                            null, ""
+                            id = UUID.randomUUID().toString(),
+                            text = "",
+                            type = TemplateTypes.CHECK_BOX,
+                            saveKey = ""
                         )
                     )
                 }
@@ -143,6 +162,33 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
                     )
                 }
             }
+        }
+        BorderedCard(
+            modifier = Modifier
+                .padding(bottom = 20.dp)
+                .clickable {
+                    viewModel.autoListItems.add(
+                        TemplateItem(
+                            id = UUID.randomUUID().toString(),
+                            text = "",
+                            text2 = "",
+                            text3 = "",
+                            type = TemplateTypes.TRI_SCORING,
+                            saveKey = "",
+                            saveKey2 = "",
+                            saveKey3 = ""
+                        )
+                    )
+                }
+        ) {
+            LabeledTriCounter(
+                text1 = stringResource(id = R.string.template_editor_label_1_preview),
+                text2 = stringResource(id = R.string.template_editor_label_2_preview),
+                text3 = stringResource(id = R.string.template_editor_label_3_preview),
+                onValueChange1 = {},
+                onValueChange2 = {},
+                onValueChange3 = {}
+            )
         }
     }
 }

@@ -18,22 +18,30 @@ import com.scouting.app.R
 @Composable
 fun LargeHeaderBar(
     title: String,
-    navController: NavController
+    navController: NavController,
+    endContent: (@Composable () -> Unit)? = {}
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        IconButton(
-            onClick = {
-                navController.popBackStack()
-            },
-            modifier = Modifier.padding(top = 25.dp, start = 25.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(top = 25.dp, start = 25.dp, end = 25.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_back),
-                contentDescription = stringResource(id = R.string.ic_arrow_back_content_desc),
-                modifier = Modifier.size(30.dp)
-            )
+            IconButton(
+                onClick = {
+                    navController.popBackStack()
+                }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_back),
+                    contentDescription = stringResource(id = R.string.ic_arrow_back_content_desc),
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+            endContent?.invoke()
         }
         Text(
             text = title,
