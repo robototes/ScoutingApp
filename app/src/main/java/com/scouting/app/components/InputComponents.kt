@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +20,7 @@ import com.scouting.app.theme.ErrorRed
 import com.scouting.app.theme.NeutralGrayMedium
 import com.scouting.app.theme.PrimaryBlue
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasicInputField(
     icon: Painter? = null,
@@ -38,14 +39,14 @@ fun BasicInputField(
         placeholder = @Composable {
             Text(
                 text = hint,
-                style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onBackground,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = textAlign
             )
         },
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = NeutralGrayMedium,
-            cursorColor = MaterialTheme.colors.onBackground,
+            containerColor = NeutralGrayMedium,
+            cursorColor = MaterialTheme.colorScheme.onBackground,
             disabledLabelColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -59,7 +60,7 @@ fun BasicInputField(
                 Icon(
                     painter = it,
                     contentDescription = contentDescription,
-                    tint = MaterialTheme.colors.onBackground,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
@@ -115,7 +116,7 @@ fun CounterBar(
         }
         Text(
             text = temporaryCount.toString(),
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.align(Alignment.Center)
         )
     }
@@ -136,7 +137,7 @@ fun LabeledCounter(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.body2
+            style = MaterialTheme.typography.bodyLarge
         )
         CounterBar(
             onValueChange = onValueChange,
@@ -174,7 +175,7 @@ fun LabeledTriCounter(
             ) {
                 Text(
                     text = textItems[index],
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(bottom = 15.dp)
                 )
                 CounterBar(onValueChange = item)
@@ -196,7 +197,8 @@ fun RatingBar(
         repeat(values) { index ->
             Card(
                 shape = MaterialTheme.shapes.medium,
-                backgroundColor = if (index == currentlySelected) {
+                colors = CardDefaults.cardColors(
+                    containerColor = if (index == currentlySelected) {
                     if (allianceSelectionColor == true) {
                         when (index) {
                             0 -> ErrorRed
@@ -204,12 +206,13 @@ fun RatingBar(
                             else -> PrimaryBlue
                         }
                     } else {
-                        MaterialTheme.colors.primary
+                        MaterialTheme.colorScheme.primary
                     }
                 } else {
                     NeutralGrayMedium
-                },
-                elevation = 0.dp,
+                }
+                ),
+                elevation = CardDefaults.cardElevation(0.dp),
                 modifier = Modifier
                     //.size(50.dp)
                     .padding(end = 10.dp)
@@ -225,7 +228,7 @@ fun RatingBar(
                         } else {
                             customTextValues[index]
                         },
-                        style = MaterialTheme.typography.body2,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(15.dp)
                             .align(Alignment.CenterVertically)
@@ -250,7 +253,7 @@ fun LabeledRatingBar(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.body2
+            style = MaterialTheme.typography.bodyLarge
         )
         RatingBar(values = values, onValueChange = onValueChange)
     }
@@ -286,11 +289,11 @@ fun SettingsPreference(
             Column {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }

@@ -8,7 +8,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.NavDestination
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.R
 import com.scouting.app.components.LargeButton
 import com.scouting.app.theme.NeutralGrayMedium
@@ -35,7 +35,7 @@ fun TemplateTypeDialog(
                 LargeButton(
                     text = stringResource(id = R.string.home_page_template_type_dialog_match),
                     onClick = {
-                        navController.navigate(NavDestination.CreateTemplateConfig)
+                        navController.navigate(NavDestination.TemplateEditor + "/match")
                     },
                     color = NeutralGrayMedium,
                     modifier = Modifier.padding(bottom = 15.dp)

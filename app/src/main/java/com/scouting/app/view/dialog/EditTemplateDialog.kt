@@ -1,7 +1,7 @@
 package com.scouting.app.view.dialog
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -154,7 +154,7 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                                 showingEditDialog = false
                             }
                         },
-                        color = MaterialTheme.colors.primaryVariant
+                        color = MaterialTheme.colorScheme.secondary
                     )
                     SmallButton(
                         text = stringResource(id = R.string.template_editor_edit_dialog_discard_button),
@@ -168,7 +168,7 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                                 showingEditDialog = false
                             }
                         },
-                        color = MaterialTheme.colors.secondaryVariant
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                 }
             }

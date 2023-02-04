@@ -24,6 +24,8 @@
     <string name="ic_view_eye_content_desc">View item</string>
     <string name="ic_save_file_content_desc">Save file</string>
 
+    <string name="permission_request_denial_toast_text">This permission is required for the app to function properly. Please open app info settings and grant the permission!</string>
+
     <string name="home_page_default_device_name">Device name</string>
     <string name="home_page_subtitle_text">Created by Team 2412</string>
     <string name="home_page_button_start_text">Start a match</string>

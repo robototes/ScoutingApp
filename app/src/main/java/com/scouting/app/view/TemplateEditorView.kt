@@ -8,7 +8,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.NavDestination
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.model.TemplateItem
 import com.scouting.app.model.TemplateTypes
 import com.scouting.app.utilities.getViewModel
@@ -46,8 +51,7 @@ import org.burnoutcrew.reorderable.rememberReorderState
 import org.burnoutcrew.reorderable.reorderable
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class,
-    ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 fun TemplateEditorView(
     navController: NavController,
     type: String
@@ -224,7 +228,7 @@ fun TemplateEditorList(
                                 sheetState.show()
                             }
                         },
-                        color = MaterialTheme.colors.primaryVariant,
+                        color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.padding(bottom = 40.dp, top = 25.dp)
                     )
                 }
@@ -271,7 +275,7 @@ fun ListItemFromType(item: TemplateItem) {
                 )
                 Text(
                     text = item.text,
-                    style = MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(start = 10.dp, end = 20.dp)
                 )
             }
@@ -279,7 +283,7 @@ fun ListItemFromType(item: TemplateItem) {
         TemplateTypes.PLAIN_TEXT -> {
             Text(
                 text = item.text,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(start = 10.dp, end = 20.dp)
             )
         }

@@ -1,17 +1,18 @@
 package com.scouting.app.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val DarkColorPalette = darkColors(
+
+private val DarkColorPalette = darkColorScheme(
     primary = PrimaryBlue,
-    primaryVariant = AffirmativeGreen,
-    secondary = SecondaryPurple,
-    secondaryVariant = ErrorRed,
+    secondary = AffirmativeGreen,
+    tertiary = SecondaryPurple,
+    error = ErrorRed,
     background = Color.Black,
     surface = Color.Black,
     onPrimary = Color.Black,
@@ -20,11 +21,11 @@ private val DarkColorPalette = darkColors(
     onSurface = Color.White
 )
 
-private val LightColorPalette = lightColors(
+private val LightColorPalette = lightColorScheme(
     primary = PrimaryBlue,
-    primaryVariant = AffirmativeGreen,
-    secondary = SecondaryPurple,
-    secondaryVariant = ErrorRed,
+    secondary = AffirmativeGreen,
+    tertiary = SecondaryPurple,
+    error = ErrorRed,
     background = Color.White,
     surface = Color.White,
     onPrimary = Color.Black,
@@ -44,7 +45,7 @@ fun ScoutingTheme(
         LightColorPalette
     }
     MaterialTheme(
-        colors = colors,
+        colorScheme = colors,
         typography = typography(),
         shapes = Shapes,
         content = content

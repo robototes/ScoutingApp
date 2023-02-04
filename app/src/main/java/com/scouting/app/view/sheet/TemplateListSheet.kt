@@ -2,9 +2,9 @@ package com.scouting.app.view.sheet
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -88,7 +88,7 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
             ) {
                 Text(
                     text = stringResource(id = R.string.template_editor_text_field_placeholder),
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 BasicInputField(
                     icon = painterResource(id = R.drawable.ic_text_format_center),
@@ -119,11 +119,11 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
             ) {
                 Text(
                     text = stringResource(id = R.string.template_editor_note_text_placeholder),
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
                     text = stringResource(id = R.string.template_editor_note_text_hint),
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
@@ -148,7 +148,7 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
             ) {
                 Text(
                     text = stringResource(id = R.string.template_editor_checkbox_placeholder),
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
@@ -158,7 +158,7 @@ fun TemplateListSheet(viewModel: TemplateEditorViewModel) {
                     )
                     Text(
                         text = stringResource(id = R.string.template_editor_checkbox_hint),
-                        style = MaterialTheme.typography.body2
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }

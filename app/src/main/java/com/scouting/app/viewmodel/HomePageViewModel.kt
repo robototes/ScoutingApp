@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scouting.app.MainActivity
 import com.scouting.app.R
-import com.scouting.app.utilities.getPreferences
 import kotlinx.coroutines.launch
 
 class HomePageViewModel : ViewModel() {

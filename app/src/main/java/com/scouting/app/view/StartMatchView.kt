@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import com.scouting.app.MainActivity
-import com.scouting.app.NavDestination
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.MediumButton
@@ -52,7 +52,7 @@ fun StartMatchView(navController: NavController) {
             SpacedRow(modifier = Modifier.padding(top = itemSpacing)) {
                 Text(
                     text = stringResource(id = R.string.start_match_match_number_text),
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 BasicInputField(
                     hint = viewModel.currentMatchMonitoring.value.text,
@@ -67,7 +67,7 @@ fun StartMatchView(navController: NavController) {
             SpacedRow(modifier = Modifier.padding(top = itemSpacing)) {
                 Text(
                     text = stringResource(id = R.string.start_match_team_number_text),
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 BasicInputField(
                     hint = viewModel.currentTeamMonitoring.value.text,
@@ -82,7 +82,7 @@ fun StartMatchView(navController: NavController) {
             SpacedRow(modifier = Modifier.padding(top = itemSpacing)) {
                 Text(
                     text = stringResource(id = R.string.start_match_alliance_selection_text),
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 RatingBar(
                     values = 2,

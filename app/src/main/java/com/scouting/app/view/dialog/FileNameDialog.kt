@@ -5,7 +5,7 @@ import android.provider.Settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,7 +56,7 @@ fun FileNameDialog(viewModel: SettingsViewModel, navController: NavController) {
                             applyOutputFileNameChange(context)
                         }
                     },
-                    color = MaterialTheme.colors.primaryVariant,
+                    color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = 25.dp)

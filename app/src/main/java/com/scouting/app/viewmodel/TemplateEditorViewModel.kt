@@ -90,8 +90,6 @@ class TemplateEditorViewModel : ViewModel() {
         val template: Any = if (currentTemplateType == "match") {
             TemplateFormatMatch(
                 title = finalFileName.text,
-                gameName = gameNameTextValue.text,
-                gameYear = gameYearTextValue.text,
                 autoTemplateItems = autoListItems,
                 teleTemplateItems = teleListItems,
                 saveOrderByKey = createExportedSaveKeyList()

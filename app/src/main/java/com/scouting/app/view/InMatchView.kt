@@ -1,8 +1,5 @@
 package com.scouting.app.view
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +7,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,21 +28,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.NavDestination
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LabeledCounter
 import com.scouting.app.components.LabeledRatingBar
 import com.scouting.app.components.LabeledTriCounter
 import com.scouting.app.components.SmallButton
-import com.scouting.app.model.TemplateItem
 import com.scouting.app.model.TemplateTypes
 import com.scouting.app.theme.AffirmativeGreen
-import com.scouting.app.theme.ErrorRed
-import com.scouting.app.theme.NeutralGrayDark
-import com.scouting.app.theme.NeutralGrayLight
-import com.scouting.app.theme.NeutralGrayMedium
-import com.scouting.app.theme.PrimaryBlue
 import com.scouting.app.theme.SecondaryPurple
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.InMatchViewModel
@@ -66,14 +58,14 @@ fun InMatchView(navController: NavController) {
                         stringResource(id = R.string.in_match_header_match_number_format),
                         viewModel.currentMatchMonitoring.value.text
                     ),
-                    style = MaterialTheme.typography.h4
+                    style = MaterialTheme.typography.headlineLarge
                 )
                 Text(
                     text = String.format(
                         stringResource(id = R.string.in_match_header_team_number_format),
                         viewModel.currentTeamMonitoring.value.text
                     ),
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 Text(
                     text = if (viewModel.currentAllianceMonitoring.value) {
@@ -81,7 +73,7 @@ fun InMatchView(navController: NavController) {
                     } else {
                         stringResource(id = R.string.in_match_header_alliance_red)
                     },
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = if (viewModel.currentAllianceMonitoring.value) {
                         Color.Blue
                     } else {
@@ -92,11 +84,13 @@ fun InMatchView(navController: NavController) {
             Column(horizontalAlignment = Alignment.End) {
                 Card(
                     shape = MaterialTheme.shapes.medium,
-                    elevation = 0.dp,
-                    backgroundColor = when (viewModel.currentMatchStage.value) {
-                        0 -> SecondaryPurple
-                        else -> AffirmativeGreen
-                    }
+                    elevation = CardDefaults.cardElevation(0.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = when (viewModel.currentMatchStage.value) {
+                            0 -> SecondaryPurple
+                            else -> AffirmativeGreen
+                        }
+                    )
                 ) {
                     Text(
                         text = viewModel.let {
@@ -104,7 +98,7 @@ fun InMatchView(navController: NavController) {
                                 matchStage = it.currentMatchStage.value
                             )
                         },
-                        style = MaterialTheme.typography.h5
+                        style = MaterialTheme.typography.headlineMedium
                                 + TextStyle(fontWeight = FontWeight.SemiBold),
                         modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)
                     )
@@ -133,7 +127,7 @@ fun InMatchView(navController: NavController) {
                             }
                         }
                     },
-                    color = MaterialTheme.colors.onBackground,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(top = 15.dp),
                     outlineStyle = true
                 )
@@ -174,7 +168,7 @@ fun InMatchView(navController: NavController) {
                             )
                             Text(
                                 text = item.text,
-                                style = MaterialTheme.typography.body2,
+                                style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier.padding(start = 15.dp)
                             )
                         }
@@ -182,7 +176,7 @@ fun InMatchView(navController: NavController) {
                     TemplateTypes.PLAIN_TEXT -> {
                         Text(
                             text = item.text,
-                            style = MaterialTheme.typography.body2,
+                            style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.padding(30.dp)
                         )
                     }

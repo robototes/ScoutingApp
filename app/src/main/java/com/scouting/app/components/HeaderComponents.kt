@@ -1,9 +1,9 @@
 package com.scouting.app.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,7 +45,7 @@ fun LargeHeaderBar(
         }
         Text(
             text = title,
-            style = MaterialTheme.typography.h2,
+            style = MaterialTheme.typography.displayMedium,
             modifier = Modifier.padding(start = 30.dp)
         )
     }
@@ -79,7 +79,7 @@ fun MediumHeaderBar(
         }
         Text(
             text = title,
-            style = MaterialTheme.typography.h4
+            style = MaterialTheme.typography.headlineLarge
         )
         if (iconLeft == null) {
             Box(modifier = Modifier.size(30.dp).padding(end = 25.dp))

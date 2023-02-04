@@ -23,7 +23,6 @@ import com.scouting.app.R
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateItem
 import com.scouting.app.model.TemplateTypes
-import com.scouting.app.utilities.getPreferences
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.BufferedWriter
@@ -99,23 +98,30 @@ class InMatchViewModel : ViewModel() {
         val outputFile = File(
             (context as MainActivity).getPreferences(MODE_PRIVATE).getString(
                 "DEFAULT_OUTPUT_FILE_PATH",
-                "${Environment.getExternalStorageDirectory()}/Android/data/com.scouting.app/files/Documents/output.csv"
+                "${Environment.getExternalStorageDirectory()}/Android/data/com.scouting.app/files/Documents/output.csv/"
             )!!
         )
-        lateinit var previousFileText: String
-        context.contentResolver.openInputStream(outputFile.toUri()).use {
-            previousFileText = it!!.reader().readText()
-            it.close()
+
+        if (!outputFile.exists()) {
+            outputFile.createNewFile()
         }
-        FileOutputStream(outputFile).use { outputStream ->
-            outputStream.bufferedWriter().use {
-                it.write("${
-                    previousFileText.ifEmpty {
-                        saveKeyOrderList.value!!.joinToString(",")
-                    }
-                }\n$csvRowDraft")
+
+        if (outputFile.exists()) {
+            lateinit var previousFileText: String
+            context.contentResolver.openInputStream(outputFile.toUri()).use {
+                previousFileText = it!!.reader().readText()
+                it.close()
             }
-            outputStream.close()
+            FileOutputStream(outputFile).use { outputStream ->
+                outputStream.bufferedWriter().use {
+                    it.write("${
+                        previousFileText.ifEmpty {
+                            saveKeyOrderList.value!!.joinToString(",")
+                        }
+                    }\n$csvRowDraft")
+                }
+                outputStream.close()
+            }
         }
     }
 

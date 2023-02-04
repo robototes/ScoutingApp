@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,11 +32,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.NavDestination
 import com.scouting.app.R
 import com.scouting.app.components.DottedRoundBox
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.SmallButton
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.model.TemplateTypes
 import com.scouting.app.theme.NeutralGrayMedium
 import com.scouting.app.theme.ScoutingTheme
@@ -81,7 +83,7 @@ fun EditCSVOrderView(navController: NavController) {
                         onClick = {
                             navController.navigate(NavDestination.TemplateSave)
                         },
-                        color = MaterialTheme.colors.onBackground,
+                        color = MaterialTheme.colorScheme.onBackground,
                         outlineStyle = true
                     )
                 }
@@ -137,7 +139,7 @@ fun EditCSVOrderView(navController: NavController) {
                             )
                             Card(
                                 shape = MaterialTheme.shapes.medium,
-                                backgroundColor = NeutralGrayMedium,
+                                colors = CardDefaults.cardColors(containerColor = NeutralGrayMedium),
                                 modifier = Modifier.padding(15.dp)
                             ) {
                                 Column(
@@ -146,18 +148,18 @@ fun EditCSVOrderView(navController: NavController) {
                                 ) {
                                     Text(
                                         text = stringResource(id = R.string.template_edit_csv_save_key_prefix),
-                                        style = MaterialTheme.typography.body1 + TextStyle(fontWeight = FontWeight.SemiBold),
+                                        style = MaterialTheme.typography.bodyLarge + TextStyle(fontWeight = FontWeight.SemiBold),
                                         modifier = Modifier.padding(end = 10.dp)
                                     )
                                     Text(
                                         text = item.first,
-                                        style = MaterialTheme.typography.body1
+                                        style = MaterialTheme.typography.bodyLarge
                                     )
                                 }
                             }
                             Card(
                                 shape = MaterialTheme.shapes.medium,
-                                backgroundColor = NeutralGrayMedium,
+                                colors = CardDefaults.cardColors(containerColor = NeutralGrayMedium),
                                 modifier = Modifier.padding(end = 15.dp, top = 15.dp, bottom = 15.dp)
                             ) {
                                 Column(
@@ -166,7 +168,7 @@ fun EditCSVOrderView(navController: NavController) {
                                 ) {
                                     Text(
                                         text = stringResource(id = R.string.template_edit_csv_save_type_prefix),
-                                        style = MaterialTheme.typography.body1 + TextStyle(fontWeight = FontWeight.SemiBold),
+                                        style = MaterialTheme.typography.bodyLarge + TextStyle(fontWeight = FontWeight.SemiBold),
                                         modifier = Modifier.padding(end = 10.dp)
                                     )
                                     Text(
@@ -176,13 +178,13 @@ fun EditCSVOrderView(navController: NavController) {
                                                 stringResource(id = R.string.template_edit_csv_type_int)
                                             else -> stringResource(id = R.string.template_edit_csv_type_boolean)
                                         },
-                                        style = MaterialTheme.typography.body1
+                                        style = MaterialTheme.typography.bodyLarge
                                     )
                                 }
                             }
                             Card(
                                 shape = MaterialTheme.shapes.medium,
-                                backgroundColor = NeutralGrayMedium
+                                colors = CardDefaults.cardColors(containerColor = NeutralGrayMedium)
                             ) {
                                 Column(
                                     modifier = Modifier.padding(15.dp),
@@ -190,7 +192,7 @@ fun EditCSVOrderView(navController: NavController) {
                                 ) {
                                     Text(
                                         text = stringResource(id = R.string.template_edit_csv_item_type_prefix),
-                                        style = MaterialTheme.typography.body1 + TextStyle(fontWeight = FontWeight.SemiBold),
+                                        style = MaterialTheme.typography.bodyLarge + TextStyle(fontWeight = FontWeight.SemiBold),
                                         modifier = Modifier.padding(end = 10.dp)
                                     )
                                     Text(
@@ -200,7 +202,7 @@ fun EditCSVOrderView(navController: NavController) {
                                             TemplateTypes.CHECK_BOX -> stringResource(id = R.string.template_edit_csv_item_checkbox_prefix)
                                             else -> stringResource(id = R.string.template_edit_csv_item_counter_prefix)
                                         },
-                                        style = MaterialTheme.typography.body1
+                                        style = MaterialTheme.typography.bodyLarge
                                     )
                                 }
                             }

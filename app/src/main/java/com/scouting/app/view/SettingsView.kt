@@ -18,7 +18,6 @@ import com.scouting.app.components.MediumButton
 import com.scouting.app.components.SettingsPreference
 import com.scouting.app.theme.NeutralGrayLight
 import com.scouting.app.theme.ScoutingTheme
-import com.scouting.app.utilities.getPreferences
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.dialog.FileNameDialog
 import com.scouting.app.viewmodel.SettingsViewModel

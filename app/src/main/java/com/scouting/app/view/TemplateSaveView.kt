@@ -1,8 +1,8 @@
 package com.scouting.app.view
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.scouting.app.MainActivity
-import com.scouting.app.NavDestination
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.R
 import com.scouting.app.components.MediumButton
 import com.scouting.app.theme.NeutralGrayDark
@@ -61,7 +61,7 @@ fun TemplateSaveView(navController: NavController) {
                 onClick = {
                     viewModel.requestFilePicker(navController.context as MainActivity)
                 },
-                color = MaterialTheme.colors.primaryVariant
+                color = MaterialTheme.colorScheme.secondary
             )
         }
     }

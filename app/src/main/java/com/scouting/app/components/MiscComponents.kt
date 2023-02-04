@@ -8,9 +8,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -39,8 +40,8 @@ fun SheetHandle() {
                 .width(100.dp)
                 .height(4.dp),
             shape = RoundedCornerShape(8.dp),
-            backgroundColor = NeutralGrayMedium,
-            elevation = 0.dp
+            colors = CardDefaults.cardColors(containerColor = NeutralGrayMedium),
+            elevation = CardDefaults.cardElevation(0.dp)
         ) { }
     }
 }
@@ -52,9 +53,9 @@ fun BorderedCard(
 ) {
     Card(
         shape = MaterialTheme.shapes.medium,
-        elevation = 0.dp,
-        backgroundColor = Color.Transparent,
-        border = BorderStroke(2.dp, MaterialTheme.colors.onBackground),
+        elevation = CardDefaults.cardElevation(0.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onBackground),
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 10.dp)
@@ -69,9 +70,12 @@ fun DottedRoundBox(
     height: Dp,
     content: @Composable () -> Unit
 ) {
-    MaterialTheme.colors.let { themeColors ->
+    MaterialTheme.colorScheme.let { themeColors ->
         Box(modifier = modifier) {
-            Canvas(Modifier.fillMaxWidth().height(height)) {
+            Canvas(
+                Modifier
+                    .fillMaxWidth()
+                    .height(height)) {
                 drawRoundRect(
                     color = themeColors.onBackground,
                     style = Stroke(
@@ -97,7 +101,7 @@ fun TabLayout(
     Row(
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colors.background)
+            .background(color = MaterialTheme.colorScheme.background)
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
     ) {
@@ -111,7 +115,7 @@ fun TabLayout(
                     .border(
                         width = if (selection.value == index) 2.dp else 0.dp,
                         shape = MaterialTheme.shapes.medium,
-                        color = if (selection.value == index) MaterialTheme.colors.onBackground else Color.Transparent
+                        color = if (selection.value == index) MaterialTheme.colorScheme.onBackground else Color.Transparent
                     )
                     .clickable {
                         onSelectionChange(index)
@@ -120,7 +124,7 @@ fun TabLayout(
             ) {
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
                 )
             }

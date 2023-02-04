@@ -2,7 +2,7 @@ package com.scouting.app.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.scouting.app.MainActivity
-import com.scouting.app.NavDestination
 import com.scouting.app.R
 import com.scouting.app.components.LargeButton
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.dialog.DeviceNameDialog
 import com.scouting.app.view.dialog.TemplateTypeDialog
@@ -53,7 +53,7 @@ fun HomePageView(navController: NavController) {
                     )
                     Text(
                         text = viewModel.deviceEditNameText.text,
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(start = 20.dp)
                     )
                 }
@@ -73,12 +73,12 @@ fun HomePageView(navController: NavController) {
                 Column {
                     Text(
                         text = stringResource(id = R.string.app_name),
-                        style = MaterialTheme.typography.h1,
+                        style = MaterialTheme.typography.displayLarge,
                         fontSize = 80.sp
                     )
                     Text(
                         text = stringResource(id = R.string.home_page_subtitle_text),
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.titleLarge
                     )
                 }
                 Column {
@@ -89,7 +89,7 @@ fun HomePageView(navController: NavController) {
                         onClick = {
                             navController.navigate(NavDestination.StartMatchConfig)
                         },
-                        color = MaterialTheme.colors.primaryVariant,
+                        color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.padding(bottom = 20.dp)
                     )
                     LargeButton(
@@ -99,7 +99,7 @@ fun HomePageView(navController: NavController) {
                         onClick = {
                             viewModel.showingTemplateTypeDialog = true
                         },
-                        color = MaterialTheme.colors.secondaryVariant,
+                        color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(bottom = 20.dp)
                     )
                     LargeButton(
@@ -107,7 +107,7 @@ fun HomePageView(navController: NavController) {
                         icon = painterResource(id = R.drawable.ic_pit_stand),
                         contentDescription = stringResource(id = R.string.ic_pit_stand_content_desc),
                         onClick = { /*TODO*/ },
-                        color = MaterialTheme.colors.secondary,
+                        color = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.padding(bottom = 20.dp)
                     )
                 }

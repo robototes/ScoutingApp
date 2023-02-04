@@ -50,7 +50,7 @@ class SettingsViewModel : ViewModel() {
             .putString("DEFAULT_TEMPLATE_FILE_PATH", newFilePath)
             .apply()
         Gson().fromJson(fileContent, TemplateFormatMatch::class.java).let {
-            defaultTemplateFileName.value = "${it.gameName}-${it.gameYear}"
+            defaultTemplateFileName.value = "e"
         }
     }
 
