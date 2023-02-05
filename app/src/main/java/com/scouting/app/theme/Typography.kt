@@ -65,6 +65,7 @@ fun typography() = Typography(
         fontSize = 40.sp
     ),
     headlineLarge = TextStyle(
+        fontFamily = Inter,
         fontWeight = FontWeight.SemiBold,
         fontSize = 35.sp
     ),
@@ -76,7 +77,7 @@ fun typography() = Typography(
     headlineSmall = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Medium,
-        fontSize = 25.sp
+        fontSize = 22.sp
     ),
     titleLarge = TextStyle(
         fontFamily = Inter,

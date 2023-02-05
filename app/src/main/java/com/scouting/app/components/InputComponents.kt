@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -36,10 +37,11 @@ fun BasicInputField(
         enabled = enabled,
         modifier = modifier,
         value = textFieldValue,
+        textStyle = MaterialTheme.typography.headlineSmall,
         placeholder = @Composable {
             Text(
                 text = hint,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = textAlign
             )
@@ -72,7 +74,8 @@ fun BasicInputField(
 fun CounterBar(
     onValueChange: (Int) -> Unit,
     incrementStep: Int = 1,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     var temporaryCount by remember { mutableStateOf(0) }
     Box {
@@ -92,7 +95,11 @@ fun CounterBar(
                     temporaryCount += incrementStep
                     onValueChange.invoke(temporaryCount)
                 },
-                modifier = Modifier.padding(start = 5.dp)
+                modifier = Modifier.padding(start = 5.dp),
+                enabled = enabled,
+                colors = IconButtonDefaults.iconButtonColors(
+                    disabledContentColor = MaterialTheme.colorScheme.onBackground
+                )
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_add_circle),
@@ -105,7 +112,11 @@ fun CounterBar(
                     temporaryCount -= incrementStep
                     onValueChange.invoke(temporaryCount)
                 },
-                modifier = Modifier.padding(end = 5.dp)
+                modifier = Modifier.padding(end = 5.dp),
+                enabled = enabled,
+                colors = IconButtonDefaults.iconButtonColors(
+                    disabledContentColor = MaterialTheme.colorScheme.onBackground
+                )
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_subtract_circle),
@@ -128,7 +139,8 @@ fun LabeledCounter(
     incrementStep: Int = 1,
     onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    counterModifier: Modifier = Modifier
+    counterModifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -137,12 +149,13 @@ fun LabeledCounter(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.headlineSmall
         )
         CounterBar(
             onValueChange = onValueChange,
             incrementStep = incrementStep,
-            modifier = counterModifier
+            modifier = counterModifier,
+            enabled = enabled
         )
     }
 }
@@ -155,7 +168,8 @@ fun LabeledTriCounter(
     onValueChange1: (Int) -> Unit,
     onValueChange2: (Int) -> Unit,
     onValueChange3: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Row(
         modifier = modifier
@@ -178,7 +192,7 @@ fun LabeledTriCounter(
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(bottom = 15.dp)
                 )
-                CounterBar(onValueChange = item)
+                CounterBar(onValueChange = item, enabled = enabled)
             }
         }
     }
@@ -190,7 +204,9 @@ fun RatingBar(
     onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     customTextValues: List<String>? = null,
-    allianceSelectionColor: Boolean? = false
+    allianceSelectionColor: Boolean? = false,
+    customColor: Color? = null,
+    enabled: Boolean = true
 ) {
     var currentlySelected by remember { mutableStateOf(0) }
     Row(modifier = modifier) {
@@ -199,26 +215,30 @@ fun RatingBar(
                 shape = MaterialTheme.shapes.medium,
                 colors = CardDefaults.cardColors(
                     containerColor = if (index == currentlySelected) {
-                    if (allianceSelectionColor == true) {
-                        when (index) {
-                            0 -> ErrorRed
-                            1 -> PrimaryBlue
-                            else -> PrimaryBlue
+                        if (allianceSelectionColor == true) {
+                            when (index) {
+                                0 -> ErrorRed
+                                1 -> PrimaryBlue
+                                else -> PrimaryBlue
+                            }
+                        } else {
+                            customColor ?: MaterialTheme.colorScheme.primary
                         }
                     } else {
-                        MaterialTheme.colorScheme.primary
+                        NeutralGrayMedium
                     }
-                } else {
-                    NeutralGrayMedium
-                }
                 ),
                 elevation = CardDefaults.cardElevation(0.dp),
                 modifier = Modifier
                     //.size(50.dp)
-                    .padding(end = 10.dp)
-                    .clickable {
-                        currentlySelected = index
-                        onValueChange.invoke(index + 1)
+                    .padding(start = 10.dp)
+                    .composed {
+                        if (enabled) {
+                            clickable {
+                                currentlySelected = index
+                                onValueChange.invoke(index + 1)
+                            }
+                        } else Modifier
                     }
             ) {
                 Row(horizontalArrangement = Arrangement.Center) {
@@ -228,7 +248,8 @@ fun RatingBar(
                         } else {
                             customTextValues[index]
                         },
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier
                             .padding(15.dp)
                             .align(Alignment.CenterVertically)
@@ -244,7 +265,8 @@ fun LabeledRatingBar(
     text: String,
     values: Int,
     onValueChange: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -253,23 +275,24 @@ fun LabeledRatingBar(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.headlineSmall
         )
-        RatingBar(values = values, onValueChange = onValueChange)
+        RatingBar(values = values, onValueChange = onValueChange, enabled = enabled)
     }
 }
 
 @Composable
 fun SettingsPreference(
     title: String,
-    subtitle: String,
+    subtitle: String? = null,
     icon: Painter? = null,
     contentDescription: String? = null,
     onClickAction: (() -> Unit) = {},
-    endContent: (@Composable () -> Unit)? = null
+    endContent: (@Composable () -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClickAction.invoke() }
             .padding(horizontal = 30.dp),
@@ -289,12 +312,14 @@ fun SettingsPreference(
             Column {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.headlineSmall
                 )
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                subtitle?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
         }
         endContent?.invoke()

@@ -15,6 +15,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -66,7 +67,7 @@ fun TemplateEditorView(
     Surface {
         ModalBottomSheetLayout(
             sheetContent = {
-                TemplateListSheet(viewModel = viewModel)
+                TemplateListSheet(viewModel, bottomSheetState)
             },
             sheetState = bottomSheetState,
             sheetShape = MaterialTheme.shapes.large
@@ -80,20 +81,34 @@ fun TemplateEditorView(
                 )
                 if (type == "match") {
                     viewModel.apply {
-                        currentListResource = when (currentSelectedTab.value) {
+                        currentListResource = when (pagerState.currentPage) {
                             0 -> autoListItems
                             else -> teleListItems
                         }
                     }
                     HorizontalPager(
-                        count = 3,
+                        count = 2,
                         state = pagerState
-                    ) {
-                        TemplateEditorList(viewModel, bottomSheetState)
+                    ) { page ->
+                        when (page) {
+                            0 -> TemplateEditorList(
+                                viewModel,
+                                bottomSheetState,
+                                viewModel.autoListItems
+                            )
+                            1 -> TemplateEditorList(
+                                viewModel,
+                                bottomSheetState,
+                                viewModel.teleListItems
+                            )
+                        }
                     }
                 } else {
-                    viewModel.apply { currentListResource = pitListItems }
-                    TemplateEditorList(viewModel, bottomSheetState)
+                    TemplateEditorList(
+                        viewModel,
+                        bottomSheetState,
+                        viewModel.pitListItems
+                    )
                 }
             }
             EditTemplateDialog(viewModel = viewModel)
@@ -130,9 +145,10 @@ fun TemplateEditorHeader(
                     stringResource(id = R.string.template_editor_auto_header),
                     stringResource(id = R.string.template_editor_tele_header)
                 ),
-                selection = viewModel.currentSelectedTab,
+                selection = remember {
+                    derivedStateOf { pagerState.targetPage }
+                },
                 onSelectionChange = {
-                    viewModel.currentSelectedTab.value = it
                     async.launch { pagerState.animateScrollToPage(it) }
                 },
                 modifier = Modifier.padding(top = 10.dp),
@@ -143,13 +159,12 @@ fun TemplateEditorHeader(
 }
 
 @Composable
-@OptIn(ExperimentalAnimationApi::class,
-    ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 fun TemplateEditorList(
     viewModel: TemplateEditorViewModel,
-    sheetState: ModalBottomSheetState
+    sheetState: ModalBottomSheetState,
+    listResource: SnapshotStateList<TemplateItem>
 ) {
-    val list = viewModel.currentListResource
     val coroutineScope = rememberCoroutineScope()
     val listReorderState = rememberReorderState()
     AnimatedVisibility(visible = true) {
@@ -160,56 +175,53 @@ fun TemplateEditorList(
                 .reorderable(
                     state = listReorderState,
                     onMove = { old, new ->
-                        list.move(old.index, new.index)
+                        listResource.move(old.index, new.index)
                     }
                 ),
             state = listReorderState.listState
         ) {
-            itemsIndexed(items = list, key = { _, item -> item.id }) { index, item ->
+            itemsIndexed(items = listResource, key = { _, item -> item.id }) { index, item ->
                 var height by remember { mutableStateOf(0.dp) }
-                var setHeight by remember { mutableStateOf(false) }
-                DottedRoundBox(
-                    modifier = Modifier
-                        .animateEnterExit(
-                            enter = slideInVertically(
-                                initialOffsetY = { it * (index + 1) },
-                                animationSpec = tween(1000)
-                            )
-                        )
-                        .padding(horizontal = 30.dp, vertical = 8.dp)
-                        .detectReorderAfterLongPress(listReorderState)
-                        .longPressEffect(listReorderState.offsetByKey(item.id))
-                        .onGloballyPositioned { layoutCoordinates ->
-                            if (!setHeight) {
-                                setHeight = true
-                                height = layoutCoordinates.size.height.let { it - (it * 0.3) }.dp
-                            }
-                        }
-                        .clickable {
-                            viewModel.apply {
-                                currentEditItemIndex = index
-                                showingEditDialog = true
-                            }
-                        },
-                    height = height
-                ) {
-                    Row(
-                        horizontalArrangement = if (item.type == TemplateTypes.PLAIN_TEXT) {
-                            Arrangement.Start
-                        } else {
-                            Arrangement.SpaceBetween
-                        },
-                        verticalAlignment = Alignment.CenterVertically,
+                var layoutCalculated by remember { mutableStateOf(false) }
+                AnimatedVisibility(visible = !viewModel.showingEditDialog) {
+                    DottedRoundBox(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 10.dp)
+                            .padding(horizontal = 30.dp, vertical = 8.dp)
+                            .detectReorderAfterLongPress(listReorderState)
+                            .longPressEffect(listReorderState.offsetByKey(item.id))
+                            .onGloballyPositioned { layoutCoordinates ->
+                                if (!layoutCalculated) {
+                                    layoutCalculated = true
+                                    height =
+                                        layoutCoordinates.size.height.let { it - (it * 0.25) }.dp
+                                }
+                            }
+                            .clickable {
+                                viewModel.apply {
+                                    currentEditItemIndex = index
+                                    showingEditDialog = true
+                                }
+                            },
+                        height = height
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_drag_indicator),
-                            contentDescription = stringResource(id = R.string.ic_drag_indicator_content_desc)
-                        )
-                        Column(modifier = Modifier.padding(vertical = 10.dp)) {
-                            ListItemFromType(item = item)
+                        Row(
+                            horizontalArrangement = if (item.type == TemplateTypes.PLAIN_TEXT) {
+                                Arrangement.Start
+                            } else {
+                                Arrangement.SpaceBetween
+                            },
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp, vertical = 10.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_drag_indicator),
+                                contentDescription = stringResource(id = R.string.ic_drag_indicator_content_desc)
+                            )
+                            Column(modifier = Modifier.padding(vertical = 10.dp)) {
+                                ListItemFromType(item)
+                            }
                         }
                     }
                 }
@@ -244,7 +256,8 @@ fun ListItemFromType(item: TemplateItem) {
             LabeledCounter(
                 text = item.text,
                 onValueChange = {},
-                modifier = Modifier.padding(start = 20.dp, end = 10.dp)
+                modifier = Modifier.padding(start = 20.dp, end = 10.dp),
+                enabled = false
             )
         }
         TemplateTypes.RATING_BAR -> {
@@ -252,7 +265,8 @@ fun ListItemFromType(item: TemplateItem) {
                 text = item.text,
                 values = 5,
                 onValueChange = {},
-                modifier = Modifier.padding(start = 20.dp, end = 10.dp)
+                modifier = Modifier.padding(start = 20.dp, end = 10.dp),
+                enabled = false
             )
         }
         TemplateTypes.TEXT_FIELD -> {
@@ -271,11 +285,12 @@ fun ListItemFromType(item: TemplateItem) {
                 Checkbox(
                     checked = false,
                     onCheckedChange = {},
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(40.dp),
+                    enabled = false
                 )
                 Text(
                     text = item.text,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(start = 10.dp, end = 20.dp)
                 )
             }
@@ -283,7 +298,7 @@ fun ListItemFromType(item: TemplateItem) {
         TemplateTypes.PLAIN_TEXT -> {
             Text(
                 text = item.text,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(start = 10.dp, end = 20.dp)
             )
         }
@@ -294,7 +309,8 @@ fun ListItemFromType(item: TemplateItem) {
                 text3 = item.text3.toString(),
                 onValueChange1 = {},
                 onValueChange2 = {},
-                onValueChange3 = {}
+                onValueChange3 = {},
+                enabled = false
             )
         }
     }

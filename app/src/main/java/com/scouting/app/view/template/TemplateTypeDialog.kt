@@ -36,6 +36,7 @@ fun TemplateTypeDialog(
                     text = stringResource(id = R.string.home_page_template_type_dialog_match),
                     onClick = {
                         navController.navigate(NavDestination.TemplateEditor + "/match")
+                        viewModel.showingTemplateTypeDialog = false
                     },
                     color = NeutralGrayMedium,
                     modifier = Modifier.padding(bottom = 15.dp)
@@ -44,6 +45,7 @@ fun TemplateTypeDialog(
                     text = stringResource(id = R.string.home_page_template_type_dialog_pit),
                     onClick = {
                         navController.navigate("${NavDestination.TemplateEditor}/pit")
+                        viewModel.showingTemplateTypeDialog = false
                     },
                     color = NeutralGrayMedium
                 )

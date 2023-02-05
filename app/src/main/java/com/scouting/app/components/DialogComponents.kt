@@ -50,8 +50,8 @@ fun DialogScaffold(
             subtitle?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(start = 20.dp, top = 10.dp, end = 20.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(start = 25.dp, top = 10.dp, end = 20.dp),
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }

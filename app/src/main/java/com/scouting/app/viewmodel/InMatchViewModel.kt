@@ -3,6 +3,7 @@ package com.scouting.app.viewmodel
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.net.Uri
 import android.os.Environment
 import android.text.method.TextKeyListener.clear
 import android.util.Log
@@ -20,6 +21,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.scouting.app.MainActivity
 import com.scouting.app.R
+import com.scouting.app.misc.FilePaths
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateItem
 import com.scouting.app.model.TemplateTypes
@@ -95,12 +97,13 @@ class InMatchViewModel : ViewModel() {
                 }
             }
         }
-        val outputFile = File(
+        val outputFileChild = File(
             (context as MainActivity).getPreferences(MODE_PRIVATE).getString(
-                "DEFAULT_OUTPUT_FILE_PATH",
-                "${Environment.getExternalStorageDirectory()}/Android/data/com.scouting.app/files/Documents/output.csv/"
+                "DEFAULT_OUTPUT_FILE_NAME",
+                "output.csv"
             )!!
         )
+        val outputFile = File("${FilePaths.DATA_DIRECTORY}/$outputFileChild")
 
         if (!outputFile.exists()) {
             outputFile.createNewFile()

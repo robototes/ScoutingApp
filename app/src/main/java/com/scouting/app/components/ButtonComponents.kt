@@ -10,6 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.scouting.app.R
@@ -29,6 +30,7 @@ fun LargeButton(
             .height(80.dp)
             .clip(MaterialTheme.shapes.large),
         onClick = onClick,
+        shape = MaterialTheme.shapes.large,
         elevation = ButtonDefaults.buttonElevation(0.dp),
         colors = ButtonDefaults.buttonColors(containerColor = color)
     ) {
@@ -57,8 +59,8 @@ fun LargeButton(
 @Composable
 fun MediumButton(
     text: String,
-    icon: Painter,
-    contentDescription: String,
+    icon: Painter? = null,
+    contentDescription: String? = null,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     color: Color
@@ -68,6 +70,7 @@ fun MediumButton(
             .height(55.dp)
             .clip(MaterialTheme.shapes.medium),
         onClick = onClick,
+        shape = MaterialTheme.shapes.medium,
         elevation = ButtonDefaults.buttonElevation(0.dp),
         colors = ButtonDefaults.buttonColors(containerColor = color)
     ) {
@@ -75,15 +78,18 @@ fun MediumButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 10.dp, end = 15.dp)
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-            Icon(
-                painter = icon,
-                contentDescription = contentDescription,
-                modifier = Modifier
-                    .size(35.dp)
-                    .padding(end = 10.dp)
-            )
+            icon?.let {
+                Icon(
+                    painter = it,
+                    contentDescription = contentDescription,
+                    modifier = Modifier
+                        .size(35.dp)
+                        .padding(end = 10.dp)
+                )
+            }
         }
     }
 }
@@ -107,6 +113,7 @@ fun SmallButton(
                 color = color,
                 shape = MaterialTheme.shapes.medium
             ),
+        shape = MaterialTheme.shapes.medium,
         onClick = onClick,
         elevation = ButtonDefaults.buttonElevation(0.dp),
         colors = ButtonDefaults.buttonColors(

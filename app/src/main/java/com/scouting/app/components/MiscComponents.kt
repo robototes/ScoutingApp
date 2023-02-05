@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -93,7 +94,7 @@ fun DottedRoundBox(
 @Composable
 fun TabLayout(
     items: List<String>,
-    selection: MutableState<Int>,
+    selection: State<Int>,
     onSelectionChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     size: Int
@@ -105,7 +106,6 @@ fun TabLayout(
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
     ) {
-
         items.forEachIndexed { index, text ->
             Column(
                 modifier = Modifier
@@ -133,10 +133,10 @@ fun TabLayout(
 }
 
 @Composable
-fun SpacedRow(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun SpacedRow(modifier: Modifier = Modifier, maxWidth: Float = 1.0F, content: @Composable () -> Unit) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(maxWidth)
             .padding(horizontal = 30.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically

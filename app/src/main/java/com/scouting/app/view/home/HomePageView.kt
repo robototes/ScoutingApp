@@ -57,13 +57,16 @@ fun HomePageView(navController: NavController) {
                         modifier = Modifier.padding(start = 20.dp)
                     )
                 }
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_settings),
-                    contentDescription = stringResource(id = R.string.ic_settings_content_desc),
-                    modifier = Modifier.clickable {
+                IconButton(
+                    onClick = {
                         navController.navigate(NavDestination.Settings)
                     }
-                )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings),
+                        contentDescription = stringResource(id = R.string.ic_settings_content_desc)
+                    )
+                }
             }
             Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.1F))
             Column(
@@ -122,6 +125,5 @@ fun HomePageView(navController: NavController) {
         TemplateTypeDialog(viewModel, navController)
     }
 }
-
 
 

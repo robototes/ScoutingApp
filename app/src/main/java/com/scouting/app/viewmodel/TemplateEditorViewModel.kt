@@ -1,47 +1,59 @@
 package com.scouting.app.viewmodel
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.provider.DocumentsContract
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.scouting.app.MainActivity
+import com.scouting.app.misc.FilePaths
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
 import com.scouting.app.model.TemplateItem
 import com.scouting.app.model.TemplateTypes
-import java.io.OutputStream
+import java.io.File
 import java.util.UUID
 
 class TemplateEditorViewModel : ViewModel() {
 
     var currentTemplateType = "match"
+    var finalFileName by mutableStateOf(TextFieldValue())
 
-    var gameNameTextValue by mutableStateOf(TextFieldValue())
-    var gameYearTextValue by mutableStateOf(TextFieldValue())
-    var finalFileName by mutableStateOf(
-        TextFieldValue("${gameNameTextValue.text}${gameYearTextValue.text}.json")
-    )
-
+    // Triple consists of saveKey, itemType and itemID
+    var saveKeyList = mutableStateListOf<Triple<String, TemplateTypes, String>>()
     var autoListItems = mutableStateListOf<TemplateItem>()
     var teleListItems = mutableStateListOf<TemplateItem>()
     var pitListItems = mutableStateListOf<TemplateItem>()
 
-    // Triple consists of saveKey, itemType and itemID
-    var saveKeyList = mutableStateListOf<Triple<String, TemplateTypes, String>>()
-
     var showingEditDialog by mutableStateOf(false)
-
     var currentListResource by mutableStateOf(pitListItems)
-    var currentSelectedTab = mutableStateOf(0)
     var currentEditItemIndex by mutableStateOf(0)
+
+    fun writeTemplateToFile(context: MainActivity) {
+        val outputFile = File(FilePaths.TEMPLATE_DIRECTORY, processFinalFileName())
+        val template: Any = if (currentTemplateType == "match") {
+            TemplateFormatMatch(
+                title = processFinalFileName(),
+                autoTemplateItems = autoListItems,
+                teleTemplateItems = teleListItems,
+                saveOrderByKey = createExportedSaveKeyList()
+            )
+        } else {
+            TemplateFormatPit(
+                title = processFinalFileName(),
+                templateItems = pitListItems
+            )
+        }
+        outputFile.createNewFile()
+        context.contentResolver.openOutputStream(outputFile.toUri())?.use {
+            it.write(Gson().toJson(template).toByteArray())
+            it.close()
+        }
+        resetInstanceData()
+    }
 
     fun createSaveKeyList() {
         saveKeyList.clear()
@@ -57,7 +69,7 @@ class TemplateEditorViewModel : ViewModel() {
         }
     }
 
-    fun createExportedSaveKeyList() : List<String> {
+    private fun createExportedSaveKeyList() : List<String> {
         val exportedSaveKeyList = mutableListOf<String>()
         saveKeyList.forEach { triple ->
             exportedSaveKeyList.add(triple.first)
@@ -65,45 +77,18 @@ class TemplateEditorViewModel : ViewModel() {
         return exportedSaveKeyList
     }
 
-    /**
-     * Request the system to open the file picker so that the user
-     * can choose where the template is saved.
-     */
-    fun requestFilePicker(context: MainActivity) {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/json"
-            putExtra(Intent.EXTRA_TITLE, finalFileName.text)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                putExtra(DocumentsContract.EXTRA_INITIAL_URI, Uri.parse("~/Documents"))
-            }
+    private fun processFinalFileName() : String {
+        return finalFileName.text.let {
+            if (it.contains(".json")) it else "$it.json"
         }
-        startActivityForResult(context, intent, 2412, null)
     }
 
-    /**
-     * Serialize all the layout data that the user edited and write
-     * it to the file at the location selected by the user
-     * in JSON format (which will later be deserialized in the match view)
-     */
-    fun writeTemplateToFile(file: OutputStream) {
-        val template: Any = if (currentTemplateType == "match") {
-            TemplateFormatMatch(
-                title = finalFileName.text,
-                autoTemplateItems = autoListItems,
-                teleTemplateItems = teleListItems,
-                saveOrderByKey = createExportedSaveKeyList()
-            )
-        } else {
-            TemplateFormatPit(
-                title = finalFileName.text,
-                templateItems = pitListItems
-            )
-        }
-        file.apply {
-            write(Gson().toJson(template).toByteArray())
-            close()
-        }
+    fun resetInstanceData() {
+        saveKeyList.clear()
+        autoListItems.clear()
+        teleListItems.clear()
+        pitListItems.clear()
+        finalFileName = TextFieldValue()
     }
 
 }

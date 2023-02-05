@@ -36,7 +36,7 @@ private val LightColorPalette = lightColorScheme(
 
 @Composable
 fun ScoutingTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {

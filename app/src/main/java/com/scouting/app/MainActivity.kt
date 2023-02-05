@@ -116,13 +116,6 @@ class MainActivity : ComponentActivity() {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode == RESULT_OK) {
             when (requestCode) {
-                2412 -> {
-                    resultData?.data?.let { contentResolver.openOutputStream(it) }?.let {
-                        getViewModel(TemplateEditorViewModel::class.java)
-                            .writeTemplateToFile(it)
-                    }
-                }
-
                 24122 -> {
                     resultData?.data?.let {
                         getViewModel(SettingsViewModel::class.java)

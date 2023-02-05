@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.scouting.app.MainActivity
@@ -25,19 +26,18 @@ fun FileNameDialog(viewModel: SettingsViewModel, navController: NavController) {
     val context = navController.context as MainActivity
     if (viewModel.showingFileNameDialog.value) {
         DialogScaffold(
-            icon = painterResource(id = R.drawable.ic_save_icon),
-            contentDescription = stringResource(id = R.string.ic_save_icon_content_desc),
-            title = stringResource(id = R.string.settings_choose_default_output_location_dialog_title),
-            subtitle = stringResource(id = R.string.settings_choose_default_output_location_dialog_subtitle),
+            icon = painterResource(id = R.drawable.ic_data_unstructured),
+            contentDescription = stringResource(id = R.string.ic_data_unstructured_content_desc),
+            title = stringResource(id = R.string.settings_choose_default_output_location_title),
             onDismissRequest = {
                 viewModel.showingFileNameDialog.value = false
             }
         ) {
             Column {
                 BasicInputField(
-                    icon = painterResource(id = R.drawable.ic_save_file),
-                    contentDescription = stringResource(id = R.string.ic_save_file_content_desc),
-                    hint = stringResource(id = R.string.home_page_device_edit_dialog_hint),
+                    icon = painterResource(id = R.drawable.ic_edit_pen),
+                    contentDescription = stringResource(id = R.string.ic_edit_pen_content_desc),
+                    hint = stringResource(id = R.string.settings_choose_default_output_location_dialog_input_hint),
                     textFieldValue = viewModel.defaultOutputFileName.value,
                     onValueChange = { value ->
                         viewModel.defaultOutputFileName.value = value
@@ -54,6 +54,9 @@ fun FileNameDialog(viewModel: SettingsViewModel, navController: NavController) {
                         viewModel.apply {
                             showingFileNameDialog.value = false
                             applyOutputFileNameChange(context)
+                            viewModel.defaultOutputFileName.value = TextFieldValue(
+                                viewModel.processDefaultOutputFileName()
+                            )
                         }
                     },
                     color = MaterialTheme.colorScheme.secondary,

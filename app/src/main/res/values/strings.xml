@@ -23,6 +23,8 @@
     <string name="ic_document_export_content_desc">Export document</string>
     <string name="ic_view_eye_content_desc">View item</string>
     <string name="ic_save_file_content_desc">Save file</string>
+    <string name="ic_data_unstructured_content_desc">Data diagram</string>
+    <string name="ic_machine_learning_content_desc">Robot</string>
 
     <string name="permission_request_denial_toast_text">This permission is required for the app to function properly. Please open app info settings and grant the permission!</string>
 
@@ -55,9 +57,9 @@
     <string name="template_editor_checkbox_hint">Checkbox criteria</string>
     <string name="template_editor_auto_header">Auto</string>
     <string name="template_editor_tele_header">Tele-op</string>
-    <string name="template_editor_label_1_preview">Counter 1</string>
-    <string name="template_editor_label_2_preview">Counter 2</string>
-    <string name="template_editor_label_3_preview">Counter 3</string>
+    <string name="template_editor_label_1_preview">Triple</string>
+    <string name="template_editor_label_2_preview">Counter</string>
+    <string name="template_editor_label_3_preview">View</string>
 
     <string name="template_editor_edit_dialog_header">Edit item</string>
     <string name="template_editor_edit_dialog_save_key_hint">Save key (CSV column label)</string>
@@ -72,11 +74,11 @@
 
     <string name="template_save_header_title">Finalize your\ntemplate</string>
     <string name="template_save_file_name_input_hint">Template file name</string>
-    <string name="template_save_path_disclaimer_placeholder">Template will be saved to ~/Downloads/%1$s</string>
+    <string name="template_save_path_disclaimer_placeholder">Template will be saved to ~/Documents/scouting/templates</string>
     <string name="template_save_button_preview_text">Preview template</string>
     <string name="template_save_button_export_text">Export to JSON</string>
 
-    <string name="template_edit_csv_header_title">Edit CSV save order</string>
+    <string name="template_edit_csv_header_title">Edit save order</string>
     <string name="template_edit_csv_header_subtitle">You can edit the order that the data for each item will appear in the CSV file produced after scouting each match. The easiest way to differentiate different values is to set their save key in the template editor</string>
     <string name="template_edit_csv_save_key_prefix">Save key</string>
     <string name="template_edit_csv_item_type_prefix">Item type</string>
@@ -89,8 +91,8 @@
     <string name="template_edit_csv_type_int">Integer</string>
     <string name="template_edit_csv_type_boolean">Boolean</string>
     <string name="template_edit_csv_save_header_move_on_button">Finalize template</string>
-
-    <string name="template_preview_header_title">Preview template</string>
+    <string name="template_edit_save_fail_toast">Failed to export template, please add a file name first!</string>
+    <string name="template_edit_save_success_toast">Successfully exported template!</string>
 
     <string name="start_match_header_title">Start a match</string>
     <string name="start_match_match_number_text">Match number</string>
@@ -110,16 +112,15 @@
     <string name="in_match_stage_finish_scout_text">Finish match</string>
 
     <string name="finish_match_header_title">Finalize match</string>
-    <string name="finish_match_name_confirmation">Confirm your name</string>
-    <string name="finish_match_name_confirmation_hint">Your name</string>
+    <string name="finish_match_name_confirmation">Enter your name</string>
+    <string name="finish_match_name_confirmation_hint">Scout name</string>
     <string name="finish_match_done_button_text">Save match data</string>
 
-    <string name="settings_header_title">Preferences</string>
-    <string name="settings_choose_default_template_title">Choose default match template</string>
-    <string name="settings_choose_default_template_subtitle">This template will be used for scouting all matches</string>
-    <string name="settings_choose_default_output_location_title">Choose default match output file</string>
-    <string name="settings_choose_default_output_location_subtitle">Select the file where data from each match will be saved</string>
-    <string name="settings_choose_default_output_location_dialog_title">Match data output filename</string>
-    <string name="settings_choose_default_output_location_dialog_subtitle">All match output data will be saved to a single file, in the ~/Android/data/com.scouting.app/Documents directory</string>
+    <string name="settings_header_title">Configuration</string>
+    <string name="settings_choose_default_template_title">Current match template</string>
+    <string name="settings_choose_default_output_location_title">Output file name</string>
+    <string name="settings_choose_default_output_location_dialog_input_hint">File name</string>
+    <string name="settings_tablet_configuration_title">Device position</string>
+
 
 </resources>

@@ -19,8 +19,11 @@ class SettingsViewModel : ViewModel() {
 
     var defaultTemplateFileName = mutableStateOf("file.json")
     var defaultOutputFileName = mutableStateOf(TextFieldValue("output.csv"))
+    var deviceAlliancePosition = mutableStateOf("RED")
+    var deviceRobotPosition = mutableStateOf(0)
 
     var showingFileNameDialog = mutableStateOf(false)
+    var showingDevicePositionDialog = mutableStateOf(false)
 
     fun requestFilePicker(context: MainActivity, code: Int) {
         ActivityCompat.startActivityForResult(
@@ -36,6 +39,7 @@ class SettingsViewModel : ViewModel() {
 
     fun processFilePickerResult(fileContent: String, context: MainActivity) {
         val newFilePath = context.filesDir.path + "/DefaultTemplate.json"
+        val preferences = context.getPreferences(MODE_PRIVATE)
         // Write the contents of the file to the app's data directory because
         // we cannot access the actual path of the selected file, however if
         // we create a new file in the private app data folder you don't need
@@ -45,26 +49,40 @@ class SettingsViewModel : ViewModel() {
             it.close()
         }
         // Save file path to SharedPreferences
-        context.getPreferences(MODE_PRIVATE)
-            .edit()
+         preferences.edit()
             .putString("DEFAULT_TEMPLATE_FILE_PATH", newFilePath)
             .apply()
         Gson().fromJson(fileContent, TemplateFormatMatch::class.java).let {
-            defaultTemplateFileName.value = "e"
+            defaultTemplateFileName.value = it.title
+            preferences.edit()
+                .putString("DEFAULT_TEMPLATE_FILE_NAME", it.title)
+                .apply()
         }
     }
 
+    fun applyDevicePositionChange(context: MainActivity) {
+        context.getPreferences(MODE_PRIVATE)
+            .edit()
+            .putString("DEVICE_ALLIANCE_POSITION", deviceAlliancePosition.value)
+            .putInt("DEVICE_ROBOT_POSITION", deviceRobotPosition.value + 1)
+            .apply()
+    }
+
     fun applyOutputFileNameChange(context: MainActivity) {
-        Log.e("DD", context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!
-            .path.plus(defaultOutputFileName.value.text))
         context.getPreferences(MODE_PRIVATE)
             .edit()
             .putString(
                 "DEFAULT_OUTPUT_FILE_PATH",
                 context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!
-                    .path.plus("/${defaultOutputFileName.value.text}")
+                    .path.plus("/${processDefaultOutputFileName()}")
             )
             .apply()
+    }
+
+    fun processDefaultOutputFileName() : String {
+        return defaultOutputFileName.value.text.let {
+            if (it.contains(".csv")) it else "$it.csv"
+        }
     }
 
 }

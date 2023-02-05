@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="alliance_position_values">
+        <item>RED</item>
+        <item>BLUE</item>
+    </array>
+</resources>
