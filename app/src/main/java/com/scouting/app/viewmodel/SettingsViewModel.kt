@@ -2,11 +2,13 @@ package com.scouting.app.viewmodel
 
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toFile
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.scouting.app.MainActivity
@@ -19,45 +21,40 @@ class SettingsViewModel : ViewModel() {
 
     var defaultTemplateFileName = mutableStateOf("file.json")
     var defaultOutputFileName = mutableStateOf(TextFieldValue("output.csv"))
+    var competitionScheduleFileName = mutableStateOf("none")
     var deviceAlliancePosition = mutableStateOf("RED")
     var deviceRobotPosition = mutableStateOf(0)
 
     var showingFileNameDialog = mutableStateOf(false)
     var showingDevicePositionDialog = mutableStateOf(false)
 
-    fun requestFilePicker(context: MainActivity, code: Int) {
+    fun requestFilePicker(context: MainActivity, code: Int, type: String) {
         ActivityCompat.startActivityForResult(
             context,
             Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/json"
+                this.type = type
             },
             code,
             null
         )
     }
 
-    fun processFilePickerResult(fileContent: String, context: MainActivity) {
-        val newFilePath = context.filesDir.path + "/DefaultTemplate.json"
+    fun processTemplateFilePickerResult(filePath: Uri, context: MainActivity) {
         val preferences = context.getPreferences(MODE_PRIVATE)
-        // Write the contents of the file to the app's data directory because
-        // we cannot access the actual path of the selected file, however if
-        // we create a new file in the private app data folder you don't need
-        // any permissions and it will return the real path
-        File(newFilePath).bufferedWriter().use {
-            it.write(fileContent)
-            it.close()
-        }
+        Log.e("DD", filePath.toFile().path)
         // Save file path to SharedPreferences
          preferences.edit()
-            .putString("DEFAULT_TEMPLATE_FILE_PATH", newFilePath)
+            .putString("DEFAULT_TEMPLATE_FILE_PATH", filePath.encodedPath)
             .apply()
-        Gson().fromJson(fileContent, TemplateFormatMatch::class.java).let {
-            defaultTemplateFileName.value = it.title
+            defaultTemplateFileName.value = filePath.lastPathSegment.toString()
             preferences.edit()
-                .putString("DEFAULT_TEMPLATE_FILE_NAME", it.title)
+                .putString("DEFAULT_TEMPLATE_FILE_NAME", filePath.lastPathSegment)
                 .apply()
-        }
+    }
+
+    fun processScheduleFilePickerResult() {
+
     }
 
     fun applyDevicePositionChange(context: MainActivity) {

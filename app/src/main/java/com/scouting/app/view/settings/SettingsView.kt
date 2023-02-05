@@ -50,8 +50,9 @@ fun SettingsView(navController: NavController) {
                                 text = viewModel.defaultTemplateFileName.value,
                                 onClick = {
                                     viewModel.requestFilePicker(
-                                        context as MainActivity,
-                                        24122
+                                        context = context as MainActivity,
+                                        code = 2412,
+                                        type = "application/json"
                                     )
                                 },
                                 color = NeutralGrayLight
@@ -81,6 +82,23 @@ fun SettingsView(navController: NavController) {
                                 } else {
                                     MaterialTheme.colorScheme.primary
                                 }
+                            )
+                        },
+                        modifier = Modifier.padding(top = 50.dp)
+                    )
+                    SettingsPreference(
+                        title = stringResource(id = R.string.settings_load_competition_schedule_title),
+                        endContent = {
+                            MediumButton(
+                                text = viewModel.competitionScheduleFileName.value,
+                                onClick = {
+                                      viewModel.requestFilePicker(
+                                          context = context as MainActivity,
+                                          code = 2413,
+                                          type = "F"
+                                      )
+                                },
+                                color = NeutralGrayLight
                             )
                         },
                         modifier = Modifier.padding(top = 50.dp)

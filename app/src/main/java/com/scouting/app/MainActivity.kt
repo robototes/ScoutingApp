@@ -3,6 +3,7 @@ package com.scouting.app
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -116,15 +117,18 @@ class MainActivity : ComponentActivity() {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode == RESULT_OK) {
             when (requestCode) {
-                24122 -> {
+                2412 -> {
                     resultData?.data?.let {
                         getViewModel(SettingsViewModel::class.java)
-                            .processFilePickerResult(
-                                fileContent = BufferedReader(
-                                    InputStreamReader(contentResolver.openInputStream(it))
-                                ).readText(),
+                            .processTemplateFilePickerResult(
+                                filePath = it,
                                 context = this
                             )
+                    }
+                }
+                2413 -> {
+                    resultData?.data?.let {
+                        Log.e("DD", it.path.toString())
                     }
                 }
             }

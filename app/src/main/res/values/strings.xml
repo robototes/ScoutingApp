@@ -121,6 +121,6 @@
     <string name="settings_choose_default_output_location_title">Output file name</string>
     <string name="settings_choose_default_output_location_dialog_input_hint">File name</string>
     <string name="settings_tablet_configuration_title">Device position</string>
-
+    <string name="settings_load_competition_schedule_title">Competition schedule</string>
 
 </resources>
