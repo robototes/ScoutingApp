@@ -27,6 +27,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -108,7 +114,24 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                         fontSize = 80.sp
                     )
                     Text(
-                        text = stringResource(id = R.string.home_page_subtitle_text),
+                        text = buildAnnotatedString {
+                            append(stringResource(id = R.string.home_page_subtitle_text))
+                            addStyle(
+                                start = 11,
+                                end = 20,
+                                style = SpanStyle(
+                                    fontFamily = FontFamily(Font(R.font.bankgothic_medium)),
+                                    letterSpacing = (-1).sp
+                                )
+                            )
+                            // Bring the "12" of 2412 closer together because it looks
+                            // kind of like there is a space between them otherwise
+                            addStyle(
+                                start = 18,
+                                end = 20,
+                                style = SpanStyle(letterSpacing = (-3).sp)
+                            )
+                        },
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
