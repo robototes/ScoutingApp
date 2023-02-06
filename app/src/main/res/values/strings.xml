@@ -71,7 +71,6 @@
     <string name="template_editor_edit_dialog_close_button">Save changes</string>
     <string name="template_editor_edit_dialog_discard_button">Delete item</string>
 
-
     <string name="template_save_header_title">Finalize your\ntemplate</string>
     <string name="template_save_file_name_input_hint">Template file name</string>
     <string name="template_save_path_disclaimer_placeholder">Template will be saved to ~/Documents/scouting/templates</string>
@@ -122,5 +121,6 @@
     <string name="settings_choose_default_output_location_dialog_input_hint">File name</string>
     <string name="settings_tablet_configuration_title">Device position</string>
     <string name="settings_load_competition_schedule_title">Competition schedule</string>
+    <string name="settings_competition_mode_toggle_title">Competition mode</string>
 
 </resources>

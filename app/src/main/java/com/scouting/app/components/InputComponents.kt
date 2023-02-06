@@ -206,9 +206,10 @@ fun RatingBar(
     customTextValues: List<String>? = null,
     allianceSelectionColor: Boolean? = false,
     customColor: Color? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    startingSelectedIndex: Int = 0
 ) {
-    var currentlySelected by remember { mutableStateOf(0) }
+    var currentlySelected by remember { mutableStateOf(startingSelectedIndex) }
     Row(modifier = modifier) {
         repeat(values) { index ->
             Card(

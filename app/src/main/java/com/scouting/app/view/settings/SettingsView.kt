@@ -1,11 +1,15 @@
 package com.scouting.app.view
 
 import android.content.Context
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -17,6 +21,7 @@ import com.scouting.app.R
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.MediumButton
 import com.scouting.app.components.SettingsPreference
+import com.scouting.app.misc.MatchManager
 import com.scouting.app.theme.NeutralGrayLight
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
@@ -26,14 +31,23 @@ import com.scouting.app.viewmodel.SettingsViewModel
 import java.io.File
 
 @Composable
-fun SettingsView(navController: NavController) {
-    val context = navController.context
+fun SettingsView(navController: NavController, matchManager: MatchManager) {
+    val context = navController.context as MainActivity
     val viewModel = context.getViewModel(SettingsViewModel::class.java)
     LaunchedEffect(true) {
-        viewModel.defaultTemplateFileName.value = File(
-            (context as MainActivity).getPreferences(Context.MODE_PRIVATE)
-            .getString("DEFAULT_TEMPLATE_FILE_NAME", "file.json")!!
-        ).name
+        val preferences = context.getPreferences(Context.MODE_PRIVATE)
+        viewModel.apply {
+            deviceRobotPosition.value = preferences.getInt("DEVICE_ROBOT_POSITION", 1)
+            deviceAlliancePosition.value =
+                preferences.getString("DEVICE_ALLIANCE_POSITION", "RED")!!
+            defaultTemplateFileName.value = File(
+                preferences.getString("DEFAULT_TEMPLATE_FILE_NAME", "file.json")!!
+            ).name
+            competitionScheduleFileName.value =
+                preferences.getString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")!!
+            competitionMode.value = preferences.getBoolean("COMPETITION_MODE", false)
+            this.matchManager = matchManager
+        }
     }
     ScoutingTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -52,7 +66,7 @@ fun SettingsView(navController: NavController) {
                                     viewModel.requestFilePicker(
                                         context = context as MainActivity,
                                         code = 2412,
-                                        type = "application/json"
+                                        type = "json"
                                     )
                                 },
                                 color = NeutralGrayLight
@@ -93,15 +107,51 @@ fun SettingsView(navController: NavController) {
                                 text = viewModel.competitionScheduleFileName.value,
                                 onClick = {
                                       viewModel.requestFilePicker(
-                                          context = context as MainActivity,
+                                          context = context,
                                           code = 2413,
-                                          type = "F"
+                                          type = "csv"
                                       )
                                 },
                                 color = NeutralGrayLight
                             )
                         },
                         modifier = Modifier.padding(top = 50.dp)
+                    )
+                    SettingsPreference(
+                        title = stringResource(id = R.string.settings_competition_mode_toggle_title),
+                        endContent = {
+                            Switch(
+                                checked = viewModel.competitionMode.value,
+                                onCheckedChange = {
+                                    viewModel.apply {
+                                        competitionMode.value = it
+                                        if (it) {
+                                            beginCompetitionMode(context)
+                                        } else {
+                                            endCompetitionMode(context)
+                                            matchManager.resetManager(context)
+                                        }
+                                    }
+                                },
+                                colors = SwitchDefaults.colors(
+                                    uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(0.2F)
+                                )
+                            )
+                        },
+                        modifier = Modifier.padding(top = 50.dp),
+                        onClickAction = {
+                            viewModel.apply {
+                                competitionMode.let {
+                                    it.value = !it.value
+                                }
+                                if (competitionMode.value) {
+                                    beginCompetitionMode(context)
+                                } else {
+                                    endCompetitionMode(context)
+                                    matchManager.resetManager(context)
+                                }
+                            }
+                        }
                     )
                 }
             }

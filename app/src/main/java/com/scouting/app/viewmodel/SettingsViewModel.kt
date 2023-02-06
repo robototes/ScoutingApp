@@ -1,20 +1,14 @@
 package com.scouting.app.viewmodel
 
+import abhishekti7.unicorn.filepicker.UnicornFilePicker
 import android.content.Context.MODE_PRIVATE
-import android.content.Intent
-import android.net.Uri
 import android.os.Environment
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.core.app.ActivityCompat
-import androidx.core.net.toFile
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
 import com.scouting.app.MainActivity
-import com.scouting.app.model.TemplateFormatMatch
-import java.io.File
-import java.io.FileOutputStream
+import com.scouting.app.R
+import com.scouting.app.misc.MatchManager
 
 
 class SettingsViewModel : ViewModel() {
@@ -24,44 +18,55 @@ class SettingsViewModel : ViewModel() {
     var competitionScheduleFileName = mutableStateOf("none")
     var deviceAlliancePosition = mutableStateOf("RED")
     var deviceRobotPosition = mutableStateOf(0)
+    var competitionMode = mutableStateOf(false)
 
     var showingFileNameDialog = mutableStateOf(false)
     var showingDevicePositionDialog = mutableStateOf(false)
 
+    lateinit var matchManager: MatchManager
+
     fun requestFilePicker(context: MainActivity, code: Int, type: String) {
-        ActivityCompat.startActivityForResult(
-            context,
-            Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                this.type = type
-            },
-            code,
-            null
-        )
+        UnicornFilePicker.from(context)
+            .addConfigBuilder()
+            .selectMultipleFiles(false)
+            .setRootDirectory(Environment.getExternalStorageDirectory().absolutePath)
+            .showHiddenFiles(false)
+            .addItemDivider(true)
+            .setFilters(arrayOf(type))
+            .theme(R.style.FilePickerTheme)
+            .build()
+            .forResult(code)
     }
 
-    fun processTemplateFilePickerResult(filePath: Uri, context: MainActivity) {
+    fun processTemplateFilePickerResult(filePath: String, context: MainActivity) {
         val preferences = context.getPreferences(MODE_PRIVATE)
-        Log.e("DD", filePath.toFile().path)
-        // Save file path to SharedPreferences
+        val fileName = filePath.split("/").let { it[it.size - 1] }
          preferences.edit()
-            .putString("DEFAULT_TEMPLATE_FILE_PATH", filePath.encodedPath)
-            .apply()
-            defaultTemplateFileName.value = filePath.lastPathSegment.toString()
-            preferences.edit()
-                .putString("DEFAULT_TEMPLATE_FILE_NAME", filePath.lastPathSegment)
-                .apply()
+             .putString("DEFAULT_TEMPLATE_FILE_PATH", filePath)
+             .putString("DEFAULT_TEMPLATE_FILE_NAME", fileName)
+             .apply()
+        defaultTemplateFileName.value = fileName
     }
 
-    fun processScheduleFilePickerResult() {
-
+    fun processScheduleFilePickerResult(filePath: String, context: MainActivity) {
+        val preferences = context.getPreferences(MODE_PRIVATE)
+        val fileName = filePath.split("/").let { it[it.size - 1] }
+        preferences.edit()
+            .putString("COMPETITION_SCHEDULE_FILE_PATH", filePath)
+            .putString("COMPETITION_SCHEDULE_FILE_NAME", fileName)
+            .apply()
+        competitionScheduleFileName.value = fileName
+        matchManager.apply {
+            loadCompetitionScheduleFromFile(filePath, context)
+            resetManager(context)
+        }
     }
 
     fun applyDevicePositionChange(context: MainActivity) {
         context.getPreferences(MODE_PRIVATE)
             .edit()
             .putString("DEVICE_ALLIANCE_POSITION", deviceAlliancePosition.value)
-            .putInt("DEVICE_ROBOT_POSITION", deviceRobotPosition.value + 1)
+            .putInt("DEVICE_ROBOT_POSITION", deviceRobotPosition.value)
             .apply()
     }
 
@@ -80,6 +85,21 @@ class SettingsViewModel : ViewModel() {
         return defaultOutputFileName.value.text.let {
             if (it.contains(".csv")) it else "$it.csv"
         }
+    }
+
+    fun beginCompetitionMode(context: MainActivity) {
+        context.getPreferences(MODE_PRIVATE)
+            .edit()
+            .putBoolean("COMPETITION_MODE", true)
+            .apply()
+        matchManager.resetManager(context)
+    }
+
+    fun endCompetitionMode(context: MainActivity) {
+        context.getPreferences(MODE_PRIVATE)
+            .edit()
+            .putBoolean("COMPETITION_MODE", false)
+            .apply()
     }
 
 }

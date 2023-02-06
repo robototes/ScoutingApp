@@ -15,6 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.scouting.app.misc.NavDestination
+import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LargeHeaderBar
@@ -27,7 +29,7 @@ import com.scouting.app.viewmodel.InMatchViewModel
 
 @Composable
 fun FinishMatchView(navController: NavController) {
-    val context = navController.context
+    val context = navController.context as MainActivity
     val viewModel = context.getViewModel(InMatchViewModel::class.java)
     ScoutingTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -59,7 +61,10 @@ fun FinishMatchView(navController: NavController) {
                         text = stringResource(id = R.string.finish_match_done_button_text),
                         icon = painterResource(id = R.drawable.ic_save_file),
                         contentDescription = stringResource(id = R.string.ic_save_file_content_desc),
-                        onClick = { viewModel.saveMatchDataToFile(context) },
+                        onClick = {
+                            viewModel.saveMatchDataToFile(context)
+                            navController.navigate(NavDestination.HomePage)
+                        },
                         color = AffirmativeGreen
                     )
                 }

@@ -3,7 +3,6 @@ package com.scouting.app
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,12 +15,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.scouting.app.misc.FilePaths
+import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.EditCSVOrderView
 import com.scouting.app.view.FinishMatchView
-import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.scouting.app.view.HomePageView
 import com.scouting.app.view.InMatchView
 import com.scouting.app.view.SettingsView
@@ -29,17 +28,18 @@ import com.scouting.app.view.StartMatchView
 import com.scouting.app.view.TemplateEditorView
 import com.scouting.app.view.TemplateSaveView
 import com.scouting.app.viewmodel.SettingsViewModel
-import java.io.BufferedReader
 import java.io.File
-import java.io.InputStreamReader
+
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var navigationController: NavHostController
+    private val matchManager = MatchManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         configureStorage()
+        matchManager.loadCachedCompetitionSchedule(this)
         setContent {
             ScoutingTheme {
                 NavigationHost()
@@ -68,13 +68,13 @@ class MainActivity : ComponentActivity() {
                     TemplateSaveView(navigationController)
                 }
                 composable(NavDestination.StartMatchConfig) {
-                    StartMatchView(navigationController)
+                    StartMatchView(navigationController, matchManager)
                 }
                 composable(NavDestination.InMatch) {
                     InMatchView(navigationController)
                 }
                 composable(NavDestination.Settings) {
-                    SettingsView(navigationController)
+                    SettingsView(navigationController, matchManager)
                 }
                 composable(NavDestination.FinishMatch) {
                     FinishMatchView(navigationController)
@@ -89,8 +89,7 @@ class MainActivity : ComponentActivity() {
     /**
      * Request storage permission so that we can save files,
      * if the user denies this permission it will repeatedly
-     * ask them every time they open the app until they grant it
-     * because we need this to function ☺
+     * ask them every time they open the app until they grant it ☺
      */
     private fun configureStorage() {
         val requestPermissionLauncher = registerForActivityResult(
@@ -111,28 +110,29 @@ class MainActivity : ComponentActivity() {
         requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    // TODO use registerForActivityResult
-    @Deprecated("Deprecated in Java")
+    @Deprecated("")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode == RESULT_OK) {
-            when (requestCode) {
-                2412 -> {
-                    resultData?.data?.let {
-                        getViewModel(SettingsViewModel::class.java)
-                            .processTemplateFilePickerResult(
-                                filePath = it,
-                                context = this
+            resultData?.let { data ->
+                getViewModel(SettingsViewModel::class.java).apply {
+                    when (requestCode) {
+                        2412 -> {
+                            processTemplateFilePickerResult(
+                                filePath = data.getStringArrayListExtra("filePaths")!![0],
+                                context = this@MainActivity
                             )
-                    }
-                }
-                2413 -> {
-                    resultData?.data?.let {
-                        Log.e("DD", it.path.toString())
+                        }
+
+                        2413 -> {
+                            processScheduleFilePickerResult(
+                                filePath = data.getStringArrayListExtra("filePaths")!![0],
+                                context = this@MainActivity
+                            )
+                        }
                     }
                 }
             }
         }
     }
-
 }

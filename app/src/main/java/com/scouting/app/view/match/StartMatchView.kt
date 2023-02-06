@@ -1,10 +1,7 @@
 package com.scouting.app.view
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -12,38 +9,36 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavDeepLinkRequest
 import com.scouting.app.MainActivity
-import com.scouting.app.misc.NavDestination
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LargeButton
-import com.scouting.app.components.MediumButton
-import com.scouting.app.theme.NeutralGrayLight
-import com.scouting.app.utilities.getViewModel
-import com.scouting.app.viewmodel.InMatchViewModel
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.RatingBar
 import com.scouting.app.components.SpacedRow
+import com.scouting.app.misc.MatchManager
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme
+import com.scouting.app.utilities.getViewModel
+import com.scouting.app.viewmodel.InMatchViewModel
 
 @Composable
-fun StartMatchView(navController: NavController) {
-    val context = navController.context
+fun StartMatchView(navController: NavController, matchManager: MatchManager) {
+    val context = navController.context as MainActivity
     val viewModel = context.getViewModel(InMatchViewModel::class.java)
     val itemSpacing = 50.dp
     LaunchedEffect(true) {
-        viewModel.loadTemplateItems(context as MainActivity)
+        viewModel.apply {
+            loadTemplateItems(context)
+            this.matchManager = matchManager
+            populateMatchDataIfCompetition(context)
+        }
     }
     ScoutingTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -99,7 +94,8 @@ fun StartMatchView(navController: NavController) {
                             stringResource(id = R.string.start_match_alliance_label_red),
                             stringResource(id = R.string.start_match_alliance_label_blue)
                         ),
-                        allianceSelectionColor = true
+                        allianceSelectionColor = true,
+                        startingSelectedIndex = if (viewModel.currentAllianceMonitoring.value) 1 else 0
                     )
                 }
                 LargeButton(

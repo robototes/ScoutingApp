@@ -42,7 +42,10 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
                             viewModel.deviceAlliancePosition.value =
                                 alliancePositionValues[it - 1]
                         },
-                        allianceSelectionColor = true
+                        allianceSelectionColor = true,
+                        startingSelectedIndex = alliancePositionValues.indexOf(
+                            viewModel.deviceAlliancePosition.value
+                        )
                     )
                     RatingBar(
                         values = 3,
@@ -52,7 +55,8 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
                         customColor = when (viewModel.deviceAlliancePosition.value) {
                             "RED" -> MaterialTheme.colorScheme.error
                             else -> MaterialTheme.colorScheme.primary
-                        }
+                        },
+                        startingSelectedIndex = viewModel.deviceRobotPosition.value
                     )
                 }
                 SmallButton(
