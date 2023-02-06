@@ -14,28 +14,6 @@ import kotlinx.coroutines.launch
 
 class HomePageViewModel : ViewModel() {
 
-    var showingDeviceEditDialog by mutableStateOf(false)
     var showingTemplateTypeDialog by mutableStateOf(false)
-    var deviceEditNameText by mutableStateOf(TextFieldValue())
-
-    fun restoreDeviceName(context: MainActivity) {
-        viewModelScope.launch {
-            deviceEditNameText = TextFieldValue(
-                context.getPreferences(MODE_PRIVATE).getString(
-                    "CURRENT_SCOUT_NAME",
-                    context.resources.getString(R.string.home_page_default_device_name)
-                )!!
-            )
-        }
-    }
-
-    fun applyDeviceNameChange(context: MainActivity) {
-        viewModelScope.launch {
-            context.getPreferences(MODE_PRIVATE).edit().apply {
-                putString("CURRENT_SCOUT_NAME", deviceEditNameText.text)
-                apply()
-            }
-        }
-    }
 
 }

@@ -64,7 +64,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                 text = viewModel.defaultTemplateFileName.value,
                                 onClick = {
                                     viewModel.requestFilePicker(
-                                        context = context as MainActivity,
+                                        context = context,
                                         code = 2412,
                                         type = "json"
                                     )

@@ -1,14 +1,30 @@
 package com.scouting.app.view
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import android.content.Context.MODE_PRIVATE
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -19,13 +35,14 @@ import com.scouting.app.R
 import com.scouting.app.components.LargeButton
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.utilities.getViewModel
-import com.scouting.app.view.dialog.DeviceNameDialog
 import com.scouting.app.view.dialog.TemplateTypeDialog
 import com.scouting.app.viewmodel.HomePageViewModel
 
 @Composable
 fun HomePageView(navController: NavController) {
-    val viewModel = navController.context.getViewModel(HomePageViewModel::class.java)
+    val context = navController.context as MainActivity
+    val viewModel = context.getViewModel(HomePageViewModel::class.java)
+    val preferences = context.getPreferences(MODE_PRIVATE)
     Surface {
         Column(
             modifier = Modifier
@@ -39,22 +56,30 @@ fun HomePageView(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
+                val allianceColor = if (preferences.getString("DEVICE_ALLIANCE_POSITION", "RED")!! == "RED") {
+                    Color(0xFFEC4076)
+                } else {
+                    Color(0xFF4284F5)
+                }
+                Button(
+                    onClick = { navController.navigate(NavDestination.Settings) },
+                    modifier = Modifier.height(50.dp)
                         .clip(MaterialTheme.shapes.medium)
-                        .clickable {
-                            viewModel.showingDeviceEditDialog = true
-                        }
+                        .border(
+                            width = 2.5.dp,
+                            color = allianceColor,
+                            shape = MaterialTheme.shapes.medium
+                        ),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = ButtonDefaults.buttonElevation(0.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_user_avatar),
-                        contentDescription = stringResource(id = R.string.ic_user_avatar_content_desc)
-                    )
                     Text(
-                        text = viewModel.deviceEditNameText.text,
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(start = 20.dp)
+                        text = preferences.let {
+                            "${it.getString("DEVICE_ALLIANCE_POSITION", "RED")!!} ${it.getInt("DEVICE_ROBOT_POSITION", 1)}"
+                        },
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = allianceColor
                     )
                 }
                 IconButton(
@@ -64,7 +89,8 @@ fun HomePageView(navController: NavController) {
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_settings),
-                        contentDescription = stringResource(id = R.string.ic_settings_content_desc)
+                        contentDescription = stringResource(id = R.string.ic_settings_content_desc),
+                        modifier = Modifier.size(30.dp)
                     )
                 }
             }
@@ -116,12 +142,6 @@ fun HomePageView(navController: NavController) {
                 }
             }
         }
-        navController.context.apply {
-            LaunchedEffect(key1 = true) {
-                viewModel.restoreDeviceName(this@apply as MainActivity)
-            }
-        }
-        DeviceNameDialog(viewModel, navController)
         TemplateTypeDialog(viewModel, navController)
     }
 }
