@@ -2,6 +2,8 @@ package com.scouting.app.view.sheet
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material3.Checkbox
@@ -26,6 +28,7 @@ import com.scouting.app.components.LabeledRatingBar
 import com.scouting.app.components.LabeledTriCounter
 import com.scouting.app.components.SheetHandle
 import com.scouting.app.components.SpacedRow
+import com.scouting.app.components.TriButtonBlock
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -36,7 +39,11 @@ fun TemplateListSheet(
     sheetState: ModalBottomSheetState
 ) {
     val coroutineScope = rememberCoroutineScope()
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
         SheetHandle()
         BorderedCard(
             modifier = Modifier.clickable {
@@ -167,9 +174,7 @@ fun TemplateListSheet(
             }
         }
         BorderedCard(
-            modifier = Modifier
-                .padding(bottom = 20.dp)
-                .clickable {
+            modifier = Modifier.clickable {
                     viewModel.autoListItems.add(
                         TemplateItem(
                             id = UUID
@@ -195,6 +200,37 @@ fun TemplateListSheet(
                 onValueChange2 = {},
                 onValueChange3 = {},
                 enabled = false
+            )
+        }
+        BorderedCard(
+            modifier = Modifier
+                .padding(bottom = 20.dp)
+                .clickable {
+                    viewModel.currentListResource.add(
+                        TemplateItem(
+                            id = UUID
+                                .randomUUID()
+                                .toString(),
+                            text = "",
+                            text2 = "",
+                            text3 = "",
+                            text4 = "",
+                            type = TemplateTypes.TRI_BUTTON,
+                            saveKey = ""
+                        )
+                    )
+                    coroutineScope.launch { sheetState.hide() }
+                }
+        ) {
+            val buttonLabel = stringResource(id = R.string.template_editor_tri_button_format_text)
+            TriButtonBlock(
+                headerText = stringResource(id = R.string.template_editor_tri_button_label),
+                buttonLabelOne = "$buttonLabel 1",
+                buttonLabelTwo = "$buttonLabel 2",
+                buttonLabelThree = "$buttonLabel 3",
+                onValueChange = {},
+                enabled = false,
+                modifier = Modifier.padding(horizontal = 30.dp, vertical = 20.dp)
             )
         }
     }

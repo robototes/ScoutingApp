@@ -50,23 +50,23 @@ import org.burnoutcrew.reorderable.reorderable
 fun EditCSVOrderView(navController: NavController) {
     val viewModel = LocalContext.current.getViewModel(TemplateEditorViewModel::class.java)
     val listReorderState = rememberReorderState()
-    LaunchedEffect(key1 = viewModel.autoListItems, key2 = viewModel.teleListItems) {
-        viewModel.apply {
-            (autoListItems + teleListItems).forEachIndexed { index, it ->
-                if (it.saveKey.isEmpty()) {
-                    it.saveKey = index.toString()
-                }
-                if (it.type == TemplateTypes.TRI_SCORING) {
-                    if (it.saveKey2?.isEmpty() == true) {
-                        it.saveKey2 = index.toString()
-                    }
-                    if (it.saveKey3?.isEmpty() == true) {
-                        it.saveKey3 = index.toString()
-                    }
-                }
-            }
-        }
-    }
+//    LaunchedEffect(key1 = viewModel.autoListItems, key2 = viewModel.teleListItems) {
+//        viewModel.apply {
+//            (autoListItems + teleListItems).forEachIndexed { index, it ->
+//                if (it.saveKey.isEmpty()) {
+//                    it.saveKey = index.toString()
+//                }
+//                if (it.type == TemplateTypes.TRI_SCORING) {
+//                    if (it.saveKey2?.isEmpty() == true) {
+//                        it.saveKey2 = index.toString()
+//                    }
+//                    if (it.saveKey3?.isEmpty() == true) {
+//                        it.saveKey3 = index.toString()
+//                    }
+//                }
+//            }
+//        }
+//    }
     ScoutingTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column {
@@ -176,9 +176,9 @@ fun EditCSVOrderView(navController: NavController) {
                                         Text(
                                             text = when (item.second) {
                                                 TemplateTypes.TEXT_FIELD -> stringResource(id = R.string.template_edit_csv_type_string)
-                                                TemplateTypes.TRI_SCORING, TemplateTypes.SCORE_BAR ->
-                                                    stringResource(id = R.string.template_edit_csv_type_int)
-
+                                                TemplateTypes.TRI_SCORING,
+                                                TemplateTypes.SCORE_BAR,
+                                                TemplateTypes.TRI_BUTTON -> stringResource(id = R.string.template_edit_csv_type_int)
                                                 else -> stringResource(id = R.string.template_edit_csv_type_boolean)
                                             },
                                             style = MaterialTheme.typography.bodyLarge
@@ -205,6 +205,7 @@ fun EditCSVOrderView(navController: NavController) {
                                                 TemplateTypes.TEXT_FIELD -> stringResource(id = R.string.template_edit_csv_item_text_field_prefix)
                                                 TemplateTypes.TRI_SCORING -> stringResource(id = R.string.template_edit_csv_item_tri_scoring_prefix)
                                                 TemplateTypes.CHECK_BOX -> stringResource(id = R.string.template_edit_csv_item_checkbox_prefix)
+                                                TemplateTypes.TRI_BUTTON ->  stringResource(id = R.string.template_edit_csv_item_tri_button_prefix)
                                                 else -> stringResource(id = R.string.template_edit_csv_item_counter_prefix)
                                             },
                                             style = MaterialTheme.typography.bodyLarge

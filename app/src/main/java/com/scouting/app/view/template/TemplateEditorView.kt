@@ -45,6 +45,7 @@ import com.scouting.app.components.LabeledTriCounter
 import com.scouting.app.components.MediumHeaderBar
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.TabLayout
+import com.scouting.app.components.TriButtonBlock
 import kotlinx.coroutines.launch
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.move
@@ -311,6 +312,17 @@ fun ListItemFromType(item: TemplateItem) {
                 onValueChange2 = {},
                 onValueChange3 = {},
                 enabled = false
+            )
+        }
+        TemplateTypes.TRI_BUTTON -> {
+            TriButtonBlock(
+                headerText = item.text,
+                buttonLabelOne = item.text2.toString(),
+                buttonLabelTwo = item.text3.toString(),
+                buttonLabelThree = item.text4.toString(),
+                onValueChange = {},
+                enabled = false,
+                modifier = Modifier.padding(start = 30.dp, end = 15.dp, bottom = 10.dp)
             )
         }
     }

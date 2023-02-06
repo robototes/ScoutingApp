@@ -9,6 +9,7 @@ data class TemplateItem(
     var text: String,
     var text2: String? = null,
     var text3: String? = null,
+    var text4: String? = null,
     var type: TemplateTypes,
     // The type of the item will always be non null so by using the type
     // we can determine which of these values we know will not be null

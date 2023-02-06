@@ -61,14 +61,18 @@
     <string name="template_editor_label_1_preview">Triple</string>
     <string name="template_editor_label_2_preview">Counter</string>
     <string name="template_editor_label_3_preview">View</string>
+    <string name="template_editor_tri_button_label">Triple button</string>
+    <string name="template_editor_tri_button_format_text">Button</string>
 
     <string name="template_editor_edit_dialog_header">Edit item</string>
     <string name="template_editor_edit_dialog_save_key_hint">Save key (CSV column label)</string>
     <string name="template_editor_edit_dialog_save_key_2_hint">Second save key</string>
     <string name="template_editor_edit_dialog_save_key_3_hint">Third save key</string>
     <string name="template_editor_edit_dialog_field_hint">Label text</string>
+    <string name="template_editor_edit_dialog_field_special_hint">Header text</string>
     <string name="template_editor_edit_dialog_field_2_hint">Second label text</string>
     <string name="template_editor_edit_dialog_field_3_hint">Third label text</string>
+    <string name="template_editor_edit_dialog_field_4_hint">Fourth label text</string>
     <string name="template_editor_edit_dialog_close_button">Save changes</string>
     <string name="template_editor_edit_dialog_discard_button">Delete item</string>
 
@@ -87,6 +91,7 @@
     <string name="template_edit_csv_item_checkbox_prefix">Checkbox</string>
     <string name="template_edit_csv_item_tri_scoring_prefix">Tri-counter</string>
     <string name="template_edit_csv_item_counter_prefix">Counter</string>
+    <string name="template_edit_csv_item_tri_button_prefix">Tri-button</string>
     <string name="template_edit_csv_type_string">String</string>
     <string name="template_edit_csv_type_int">Integer</string>
     <string name="template_edit_csv_type_boolean">Boolean</string>

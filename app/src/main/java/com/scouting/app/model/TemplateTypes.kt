@@ -6,5 +6,6 @@ enum class TemplateTypes {
     CHECK_BOX,
     TEXT_FIELD,
     PLAIN_TEXT,
-    TRI_SCORING
+    TRI_SCORING,
+    TRI_BUTTON
 }

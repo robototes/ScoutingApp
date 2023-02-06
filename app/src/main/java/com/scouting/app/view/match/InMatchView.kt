@@ -38,6 +38,7 @@ import com.scouting.app.components.LabeledCounter
 import com.scouting.app.components.LabeledRatingBar
 import com.scouting.app.components.LabeledTriCounter
 import com.scouting.app.components.SmallButton
+import com.scouting.app.components.TriButtonBlock
 import com.scouting.app.model.TemplateTypes
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme
@@ -231,6 +232,19 @@ fun InMatchView(navController: NavController) {
                                         onValueChange1 = { item.itemValueInt!!.value = it },
                                         onValueChange2 = { item.itemValue2Int!!.value = it },
                                         onValueChange3 = { item.itemValue3Int!!.value = it }
+                                    )
+                                }
+                                TemplateTypes.TRI_BUTTON -> {
+                                    item.itemValueInt = remember { mutableStateOf(0) }
+                                    TriButtonBlock(
+                                        headerText = item.text,
+                                        buttonLabelOne = item.text2.toString(),
+                                        buttonLabelTwo = item.text3.toString(),
+                                        buttonLabelThree = item.text4.toString(),
+                                        onValueChange = {
+                                            item.itemValueInt!!.value = it
+                                        },
+                                        modifier = Modifier.padding(bottom = 10.dp, start = 30.dp, end = 30.dp)
                                     )
                                 }
                             }

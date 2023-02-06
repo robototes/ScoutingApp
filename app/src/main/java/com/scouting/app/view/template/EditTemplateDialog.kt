@@ -47,6 +47,9 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     var textFieldValueLabel3 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.text3.toString()))
                     }
+                    var textFieldValueLabel4 by remember {
+                        mutableStateOf(TextFieldValue(currentEditItem.text4.toString()))
+                    }
                     var textFieldValueSaveKey by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey))
                     }
@@ -59,7 +62,11 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     BasicInputField(
                         icon = painterResource(id = R.drawable.ic_text_format_center),
                         contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
-                        hint = stringResource(id = R.string.template_editor_edit_dialog_field_hint),
+                        hint = if (currentEditItem.type == TemplateTypes.TRI_BUTTON) {
+                            stringResource(id = R.string.template_editor_edit_dialog_field_special_hint)
+                        } else {
+                            stringResource(id = R.string.template_editor_edit_dialog_field_hint)
+                        },
                         textFieldValue = textFieldValueLabel,
                         onValueChange = {
                             textFieldValueLabel = it
@@ -68,7 +75,9 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                             .fillMaxWidth()
                             .padding(horizontal = 30.dp, vertical = 10.dp)
                     )
-                    if (currentEditItem.type == TemplateTypes.TRI_SCORING) {
+                    if (currentEditItem.type == TemplateTypes.TRI_SCORING ||
+                        currentEditItem.type == TemplateTypes.TRI_BUTTON
+                    ) {
                         BasicInputField(
                             icon = painterResource(id = R.drawable.ic_text_format_center),
                             contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
@@ -88,6 +97,20 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                             textFieldValue = textFieldValueLabel3,
                             onValueChange = {
                                 textFieldValueLabel3 = it
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 30.dp, vertical = 10.dp)
+                        )
+                    }
+                    if (currentEditItem.type == TemplateTypes.TRI_BUTTON) {
+                        BasicInputField(
+                            icon = painterResource(id = R.drawable.ic_text_format_center),
+                            contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
+                            hint = stringResource(id = R.string.template_editor_edit_dialog_field_4_hint),
+                            textFieldValue = textFieldValueLabel4,
+                            onValueChange = {
+                                textFieldValueLabel4 = it
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -136,7 +159,8 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                         )
                     }
                     Row(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(start = 30.dp, end = 30.dp, top = 20.dp, bottom = 15.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -150,6 +174,7 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                                         text = textFieldValueLabel.text
                                         text2 = textFieldValueLabel2.text
                                         text3 = textFieldValueLabel3.text
+                                        text4 = textFieldValueLabel4.text
                                         saveKey = textFieldValueSaveKey.text
                                         saveKey2 = textFieldValueSaveKey2.text
                                         saveKey3 = textFieldValueSaveKey3.text
