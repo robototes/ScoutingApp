@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
             modifier = Modifier.fillMaxSize(),
             builder = {
                 composable(NavDestination.HomePage) {
-                    HomePageView(navigationController)
+                    HomePageView(navigationController, matchManager)
                 }
                 composable("${NavDestination.TemplateEditor}/{type}") {
                     TemplateEditorView(

@@ -33,13 +33,14 @@ import androidx.navigation.NavController
 import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.LargeButton
+import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.dialog.TemplateTypeDialog
 import com.scouting.app.viewmodel.HomePageViewModel
 
 @Composable
-fun HomePageView(navController: NavController) {
+fun HomePageView(navController: NavController, matchManager: MatchManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(HomePageViewModel::class.java)
     val preferences = context.getPreferences(MODE_PRIVATE)
@@ -63,7 +64,8 @@ fun HomePageView(navController: NavController) {
                 }
                 Button(
                     onClick = { navController.navigate(NavDestination.Settings) },
-                    modifier = Modifier.height(50.dp)
+                    modifier = Modifier
+                        .height(50.dp)
                         .clip(MaterialTheme.shapes.medium)
                         .border(
                             width = 2.5.dp,
@@ -112,7 +114,14 @@ fun HomePageView(navController: NavController) {
                 }
                 Column {
                     LargeButton(
-                        text = stringResource(id = R.string.home_page_button_start_text),
+                        text = if (preferences.getBoolean("COMPETITION_MODE", false)) {
+                            String.format(
+                                stringResource(id = R.string.home_page_button_competition_start_format),
+                                matchManager.currentMatchNumber + 1
+                            )
+                        } else {
+                            stringResource(id = R.string.home_page_button_start_text)
+                        },
                         icon = painterResource(id = R.drawable.ic_play_button),
                         contentDescription = stringResource(id = R.string.ic_play_button_content_desc),
                         onClick = {
