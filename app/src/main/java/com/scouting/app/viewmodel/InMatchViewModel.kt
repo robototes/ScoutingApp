@@ -21,9 +21,11 @@ import java.io.FileOutputStream
 
 class InMatchViewModel : ViewModel() {
 
+    // true = pit, false = match
+    var scoutingType = mutableStateOf(false)
+
     var autoListItems = mutableStateListOf<TemplateItem>()
     var teleListItems = mutableStateListOf<TemplateItem>()
-
     var saveKeyOrderList = mutableStateOf<List<String>?>(null)
 
     // true = blue, false = red
@@ -38,7 +40,7 @@ class InMatchViewModel : ViewModel() {
 
     fun loadTemplateItems(context: MainActivity) {
         val preferences = context.getPreferences(MODE_PRIVATE)
-        val defaultTemplate = preferences.getString("DEFAULT_TEMPLATE_FILE_PATH", "")
+        val defaultTemplate = preferences.getString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")
         if (defaultTemplate?.isNotBlank() == true) {
             File(defaultTemplate).bufferedReader().use { file ->
                 val serializedTemplate = Gson().fromJson(file.readText(), TemplateFormatMatch::class.java)
@@ -103,7 +105,7 @@ class InMatchViewModel : ViewModel() {
         // Write all data to the specified output file name
         val outputFileChild = File(
             context.getPreferences(MODE_PRIVATE).getString(
-                "DEFAULT_OUTPUT_FILE_NAME",
+                "DEFAULT_OUTPUT_FILE_NAME_MATCH",
                 "output.csv"
             )!!
         )

@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,13 +44,19 @@ import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.dialog.TemplateTypeDialog
+import com.scouting.app.view.settings.DevicePositionDialog
 import com.scouting.app.viewmodel.HomePageViewModel
+import com.scouting.app.viewmodel.SettingsViewModel
 
 @Composable
 fun HomePageView(navController: NavController, matchManager: MatchManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(HomePageViewModel::class.java)
+    val settingsViewModel = context.getViewModel(SettingsViewModel::class.java) // might be bad practice lolz
     val preferences = context.getPreferences(MODE_PRIVATE)
+    LaunchedEffect(true) {
+        settingsViewModel.loadSavedPreferences(context)
+    }
     Surface {
         Column(
             modifier = Modifier
@@ -69,7 +76,9 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                     Color(0xFF4284F5)
                 }
                 Button(
-                    onClick = { navController.navigate(NavDestination.Settings) },
+                    onClick = {
+                        settingsViewModel.showingDevicePositionDialog.value = true
+                    },
                     modifier = Modifier
                         .height(50.dp)
                         .clip(MaterialTheme.shapes.medium)
@@ -121,7 +130,8 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                                 end = 20,
                                 style = SpanStyle(
                                     fontFamily = FontFamily(Font(R.font.bankgothic_medium)),
-                                    letterSpacing = (-1).sp
+                                    letterSpacing = (-1).sp,
+                                    fontSize = 28.sp
                                 )
                             )
                             // Bring the "12" of 2412 closer together because it looks
@@ -175,6 +185,10 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
             }
         }
         TemplateTypeDialog(viewModel, navController)
+        DevicePositionDialog(
+            viewModel = settingsViewModel,
+            navController = navController
+        )
     }
 }
 

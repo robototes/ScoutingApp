@@ -1,5 +1,6 @@
 package com.scouting.app.view.settings
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -39,18 +40,17 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
                         values = 2,
                         customTextValues = alliancePositionValues.asList(),
                         onValueChange = {
-                            viewModel.deviceAlliancePosition.value =
-                                alliancePositionValues[it - 1]
+                            viewModel.deviceAlliancePosition.value = alliancePositionValues[it - 1]
                         },
                         allianceSelectionColor = true,
                         startingSelectedIndex = alliancePositionValues.indexOf(
                             viewModel.deviceAlliancePosition.value
-                        )
+                        ) + 1
                     )
                     RatingBar(
                         values = 3,
                         onValueChange = {
-                            viewModel.deviceRobotPosition.value = it - 1
+                            viewModel.deviceRobotPosition.value = it
                         },
                         customColor = when (viewModel.deviceAlliancePosition.value) {
                             "RED" -> MaterialTheme.colorScheme.error

@@ -20,11 +20,12 @@ import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.EditCSVOrderView
-import com.scouting.app.view.FinishMatchView
+import com.scouting.app.view.FinishScoutingView
 import com.scouting.app.view.HomePageView
 import com.scouting.app.view.InMatchView
 import com.scouting.app.view.SettingsView
 import com.scouting.app.view.StartMatchView
+import com.scouting.app.view.StartPitScoutingView
 import com.scouting.app.view.TemplateEditorView
 import com.scouting.app.view.TemplateSaveView
 import com.scouting.app.viewmodel.SettingsViewModel
@@ -76,8 +77,11 @@ class MainActivity : ComponentActivity() {
                 composable(NavDestination.Settings) {
                     SettingsView(navigationController, matchManager)
                 }
-                composable(NavDestination.FinishMatch) {
-                    FinishMatchView(navigationController)
+                composable(NavDestination.FinishScouting) {
+                    FinishScoutingView(navigationController)
+                }
+                composable(NavDestination.StartPitScouting) {
+                    StartPitScoutingView(navigationController)
                 }
                 composable(NavDestination.EditCSVOrder) {
                     EditCSVOrderView(navigationController)

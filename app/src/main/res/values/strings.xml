@@ -25,6 +25,8 @@
     <string name="ic_save_file_content_desc">Save file</string>
     <string name="ic_data_unstructured_content_desc">Data diagram</string>
     <string name="ic_machine_learning_content_desc">Robot</string>
+    <string name="ic_rotate_180_content_desc">Revert</string>
+    <string name="ic_close_outline_content_desc">Deny</string>
 
     <string name="permission_request_denial_toast_text">This permission is required for the app to function properly. Please open app info settings and grant the permission!</string>
 
@@ -116,18 +118,25 @@
     <string name="in_match_stage_move_on_format">Move to %1$s</string>
     <string name="in_match_stage_finish_scout_text">Finish match</string>
 
-    <string name="finish_match_header_title">Finalize match</string>
+    <string name="finish_match_header_title">Finalize data</string>
     <string name="finish_match_name_confirmation">Enter your name</string>
     <string name="finish_match_name_confirmation_hint">Scout name</string>
-    <string name="finish_match_done_button_text">Save match data</string>
+    <string name="finish_match_done_button_text">Save data</string>
 
     <string name="settings_header_title">Configuration</string>
     <string name="settings_choose_default_template_title">Current match template</string>
+    <string name="settings_choose_default_template_pit_title">Current pit template</string>
     <string name="settings_choose_default_output_location_title">Match output file name</string>
     <string name="settings_choose_default_pit_output_location_title">Pit output file name</string>
     <string name="settings_choose_default_output_location_dialog_input_hint">File name</string>
     <string name="settings_tablet_configuration_title">Device position</string>
     <string name="settings_load_competition_schedule_title">Competition schedule</string>
     <string name="settings_competition_mode_toggle_title">Competition mode</string>
+    <string name="settings_competition_mode_dialog_enable_title">Enable competition mode?</string>
+    <string name="settings_competition_mode_dialog_disable_title">Disable competition mode?</string>
+    <string name="settings_competition_mode_dialog_enable_subtitle">Enabling competition mode will auto-populate match scouting team numbers, starting with the first match on your selected competition schedule.</string>
+    <string name="settings_competition_mode_dialog_disable_subtitle">Are you sure you wish to disable competition mode? This will RESET match auto-population of team numbers, so if you are in the middle of the qualification matches, it\'s probably not a good idea to do this unless directed by the scouting lead.</string>
+    <string name="settings_competition_mode_dialog_positive_button_label">Yes</string>
+    <string name="settings_competition_mode_dialog_negative_button_label">No, go back</string>
 
 </resources>

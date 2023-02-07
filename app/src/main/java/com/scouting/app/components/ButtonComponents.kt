@@ -87,7 +87,7 @@ fun MediumButton(
                     contentDescription = contentDescription,
                     modifier = Modifier
                         .size(35.dp)
-                        .padding(end = 10.dp)
+                        .padding(horizontal = 10.dp)
                 )
             }
         }

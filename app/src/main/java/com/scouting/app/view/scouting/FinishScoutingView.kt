@@ -21,6 +21,7 @@ import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.MediumButton
+import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme
@@ -28,7 +29,7 @@ import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.InMatchViewModel
 
 @Composable
-fun FinishMatchView(navController: NavController) {
+fun FinishScoutingView(navController: NavController) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(InMatchViewModel::class.java)
     ScoutingTheme {
@@ -57,7 +58,7 @@ fun FinishMatchView(navController: NavController) {
                         .padding(horizontal = 30.dp, vertical = 50.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    MediumButton(
+                    SmallButton(
                         text = stringResource(id = R.string.finish_match_done_button_text),
                         icon = painterResource(id = R.drawable.ic_save_file),
                         contentDescription = stringResource(id = R.string.ic_save_file_content_desc),

@@ -3,12 +3,14 @@ package com.scouting.app.viewmodel
 import abhishekti7.unicorn.filepicker.UnicornFilePicker
 import android.content.Context.MODE_PRIVATE
 import android.os.Environment
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.misc.MatchManager
+import java.io.File
 
 
 class SettingsViewModel : ViewModel() {
@@ -22,8 +24,23 @@ class SettingsViewModel : ViewModel() {
 
     var showingFileNameDialog = mutableStateOf(false)
     var showingDevicePositionDialog = mutableStateOf(false)
+    var showingCompetitionModeDialog = mutableStateOf(false)
 
     lateinit var matchManager: MatchManager
+
+    fun loadSavedPreferences(context: MainActivity) {
+        val preferences = context.getPreferences(MODE_PRIVATE)
+        deviceRobotPosition.value = preferences.getInt("DEVICE_ROBOT_POSITION", 1)
+        deviceAlliancePosition.value =
+            preferences.getString("DEVICE_ALLIANCE_POSITION", "RED")!!
+        Log.e("Dd", deviceRobotPosition.value.toString() + " " + deviceAlliancePosition.value)
+        defaultTemplateFileName.value = File(
+            preferences.getString("DEFAULT_TEMPLATE_FILE_NAME", "file.json")!!
+        ).name
+        competitionScheduleFileName.value =
+            preferences.getString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")!!
+        competitionMode.value = preferences.getBoolean("COMPETITION_MODE", false)
+    }
 
     fun requestFilePicker(context: MainActivity, code: Int, type: String) {
         UnicornFilePicker.from(context)
@@ -42,8 +59,8 @@ class SettingsViewModel : ViewModel() {
         val preferences = context.getPreferences(MODE_PRIVATE)
         val fileName = filePath.split("/").let { it[it.size - 1] }
          preferences.edit()
-             .putString("DEFAULT_TEMPLATE_FILE_PATH", filePath)
-             .putString("DEFAULT_TEMPLATE_FILE_NAME", fileName)
+             .putString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", filePath)
+             .putString("DEFAULT_TEMPLATE_FILE_NAME_MATCH", fileName)
              .apply()
         defaultTemplateFileName.value = fileName
     }
@@ -87,19 +104,12 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
-    fun beginCompetitionMode(context: MainActivity) {
+    fun setCompetitionMode(context: MainActivity, value: Boolean) {
         context.getPreferences(MODE_PRIVATE)
             .edit()
-            .putBoolean("COMPETITION_MODE", true)
+            .putBoolean("COMPETITION_MODE", value)
             .apply()
         matchManager.resetManager(context)
-    }
-
-    fun endCompetitionMode(context: MainActivity) {
-        context.getPreferences(MODE_PRIVATE)
-            .edit()
-            .putBoolean("COMPETITION_MODE", false)
-            .apply()
     }
 
 }

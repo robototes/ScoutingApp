@@ -35,6 +35,7 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
     val itemSpacing = 50.dp
     LaunchedEffect(true) {
         viewModel.apply {
+            scoutingType.value = false
             loadTemplateItems(context)
             this.matchManager = matchManager
             populateMatchDataIfCompetition(context)

@@ -267,7 +267,7 @@ fun RatingBar(
     enabled: Boolean = true,
     startingSelectedIndex: Int = 0
 ) {
-    var currentlySelected by remember { mutableStateOf(startingSelectedIndex) }
+    var currentlySelected by remember { mutableStateOf(startingSelectedIndex - 1) }
     Row(modifier = modifier) {
         repeat(values) { index ->
             Card(
@@ -360,7 +360,7 @@ fun SettingsPreference(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(0.6F)
+            modifier = Modifier.padding(end = 10.dp)
         ) {
             icon?.let {
                 Icon(

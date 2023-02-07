@@ -175,7 +175,7 @@ fun TemplateListSheet(
         }
         BorderedCard(
             modifier = Modifier.clickable {
-                    viewModel.autoListItems.add(
+                    viewModel.currentListResource.add(
                         TemplateItem(
                             id = UUID
                                 .randomUUID()

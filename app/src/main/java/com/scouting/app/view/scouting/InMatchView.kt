@@ -129,7 +129,7 @@ fun InMatchView(navController: NavController) {
                             onClick = {
                                 viewModel.currentMatchStage.let {
                                     if (it.value >= 1) {
-                                        navController.navigate(NavDestination.FinishMatch)
+                                        navController.navigate(NavDestination.FinishScouting)
                                     } else {
                                         it.value++
                                     }
