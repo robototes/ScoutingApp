@@ -1,4 +1,4 @@
-package com.scouting.app.view.dialog
+package com.scouting.app.view.settings
 
 import android.content.Context
 import android.provider.Settings

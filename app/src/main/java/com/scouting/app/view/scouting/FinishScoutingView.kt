@@ -1,4 +1,4 @@
-package com.scouting.app.view
+package com.scouting.app.view.scouting
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,6 @@ import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LargeHeaderBar
-import com.scouting.app.components.MediumButton
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.theme.AffirmativeGreen

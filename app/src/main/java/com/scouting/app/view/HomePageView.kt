@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -28,9 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -43,8 +40,8 @@ import com.scouting.app.components.LargeButton
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.utilities.getViewModel
-import com.scouting.app.view.dialog.TemplateTypeDialog
 import com.scouting.app.view.settings.DevicePositionDialog
+import com.scouting.app.view.template.TemplateTypeDialog
 import com.scouting.app.viewmodel.HomePageViewModel
 import com.scouting.app.viewmodel.SettingsViewModel
 

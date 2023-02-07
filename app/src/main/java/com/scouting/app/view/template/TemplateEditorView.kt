@@ -1,4 +1,4 @@
-package com.scouting.app.view
+package com.scouting.app.view.template
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -29,8 +29,6 @@ import com.scouting.app.model.TemplateItem
 import com.scouting.app.model.TemplateTypes
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.utilities.longPressEffect
-import com.scouting.app.view.dialog.EditTemplateDialog
-import com.scouting.app.view.sheet.TemplateListSheet
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager

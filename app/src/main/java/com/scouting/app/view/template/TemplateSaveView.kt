@@ -1,4 +1,4 @@
-package com.scouting.app.view
+package com.scouting.app.view.template
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*

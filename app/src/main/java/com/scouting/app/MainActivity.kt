@@ -19,15 +19,15 @@ import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
-import com.scouting.app.view.EditCSVOrderView
-import com.scouting.app.view.FinishScoutingView
+import com.scouting.app.view.scouting.FinishScoutingView
 import com.scouting.app.view.HomePageView
-import com.scouting.app.view.InMatchView
-import com.scouting.app.view.SettingsView
-import com.scouting.app.view.StartMatchView
-import com.scouting.app.view.StartPitScoutingView
-import com.scouting.app.view.TemplateEditorView
-import com.scouting.app.view.TemplateSaveView
+import com.scouting.app.view.scouting.InMatchView
+import com.scouting.app.view.scouting.StartMatchView
+import com.scouting.app.view.scouting.StartPitScoutingView
+import com.scouting.app.view.settings.SettingsView
+import com.scouting.app.view.template.EditCSVOrderView
+import com.scouting.app.view.template.TemplateEditorView
+import com.scouting.app.view.template.TemplateSaveView
 import com.scouting.app.viewmodel.SettingsViewModel
 import java.io.File
 

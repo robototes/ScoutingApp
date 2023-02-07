@@ -1,4 +1,4 @@
-package com.scouting.app.view.sheet
+package com.scouting.app.view.template
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

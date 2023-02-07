@@ -1,4 +1,4 @@
-package com.scouting.app.view.dialog
+package com.scouting.app.view.template
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi

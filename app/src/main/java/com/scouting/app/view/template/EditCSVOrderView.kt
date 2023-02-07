@@ -1,4 +1,4 @@
-package com.scouting.app.view
+package com.scouting.app.view.template
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

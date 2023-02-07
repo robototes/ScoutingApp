@@ -1,4 +1,4 @@
-package com.scouting.app.view
+package com.scouting.app.view.settings
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -38,11 +38,7 @@ import com.scouting.app.misc.MatchManager
 import com.scouting.app.theme.NeutralGrayLight
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
-import com.scouting.app.view.dialog.FileNameDialog
-import com.scouting.app.view.settings.CompetitionModeDialog
-import com.scouting.app.view.settings.DevicePositionDialog
 import com.scouting.app.viewmodel.SettingsViewModel
-import java.io.File
 
 @Composable
 fun SettingsView(navController: NavController, matchManager: MatchManager) {

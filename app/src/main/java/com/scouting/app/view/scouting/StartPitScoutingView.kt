@@ -1,4 +1,4 @@
-package com.scouting.app.view
+package com.scouting.app.view.scouting
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

@@ -1,4 +1,4 @@
-package com.scouting.app.view
+package com.scouting.app.view.scouting
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
