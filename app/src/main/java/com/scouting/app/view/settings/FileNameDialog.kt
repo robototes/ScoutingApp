@@ -20,8 +20,18 @@ import com.scouting.app.components.SmallButton
 import com.scouting.app.viewmodel.SettingsViewModel
 
 @Composable
-fun FileNameDialog(viewModel: SettingsViewModel, navController: NavController) {
+fun FileNameDialog(
+    viewModel: SettingsViewModel,
+    navController: NavController
+) {
     val context = navController.context as MainActivity
+    val currentEditingTextFieldValue = viewModel.let {
+        if (it.fileNameEditingType.value) {
+            it.defaultPitOutputFileName
+        } else {
+            it.defaultMatchOutputFileName
+        }
+    }
     if (viewModel.showingFileNameDialog.value) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_data_unstructured),
@@ -36,9 +46,9 @@ fun FileNameDialog(viewModel: SettingsViewModel, navController: NavController) {
                     icon = painterResource(id = R.drawable.ic_edit_pen),
                     contentDescription = stringResource(id = R.string.ic_edit_pen_content_desc),
                     hint = stringResource(id = R.string.settings_choose_default_output_location_dialog_input_hint),
-                    textFieldValue = viewModel.defaultMatchOutputFileName.value,
+                    textFieldValue = currentEditingTextFieldValue.value,
                     onValueChange = { value ->
-                        viewModel.defaultMatchOutputFileName.value = value
+                        currentEditingTextFieldValue.value = value
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -51,11 +61,10 @@ fun FileNameDialog(viewModel: SettingsViewModel, navController: NavController) {
                     onClick = {
                         viewModel.apply {
                             showingFileNameDialog.value = false
-                            applyOutputFileNameChange(context)
-                            // use .let 🗣️😤
-                            viewModel.defaultMatchOutputFileName.value = TextFieldValue(
+                            applyOutputFileNameChange(context, currentEditingTextFieldValue.value.text)
+                            currentEditingTextFieldValue.value = TextFieldValue(
                                 viewModel.processDefaultOutputFileName(
-                                    viewModel.defaultMatchOutputFileName.value.text
+                                    currentEditingTextFieldValue.value.text
                                 )
                             )
                         }

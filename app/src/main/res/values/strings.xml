@@ -93,6 +93,7 @@
     <string name="template_edit_csv_item_checkbox_prefix">Checkbox</string>
     <string name="template_edit_csv_item_tri_scoring_prefix">Tri-counter</string>
     <string name="template_edit_csv_item_counter_prefix">Counter</string>
+    <string name="template_edit_csv_item_rating_bar_prefix">Rating bar</string>
     <string name="template_edit_csv_item_tri_button_prefix">Tri-button</string>
     <string name="template_edit_csv_type_string">String</string>
     <string name="template_edit_csv_type_int">Integer</string>

@@ -60,19 +60,33 @@ class TemplateEditorViewModel : ViewModel() {
         val listResources = listOf(autoListItems, teleListItems)
         listResources.forEach { list ->
             list.forEach {
-                if (it.saveKey.isBlank()) {
-                    it.saveKey = UUID.randomUUID().toString().substring(0, 8)
-                }
-                saveKeyList.add(Triple(it.saveKey, it.type, it.id))
-                if (it.type == TemplateTypes.TRI_SCORING) {
-                    if (it.saveKey2.toString().isBlank()) {
-                        it.saveKey2 = UUID.randomUUID().toString().substring(0, 8)
+                if (it.type != TemplateTypes.PLAIN_TEXT) {
+                    if (it.saveKey.isBlank()) {
+                        it.saveKey = UUID.randomUUID().toString().substring(0, 8)
                     }
-                    if (it.saveKey3.toString().isBlank()) {
-                        it.saveKey3 = UUID.randomUUID().toString().substring(0, 8)
+                    saveKeyList.add(Triple(it.saveKey, it.type, it.id))
+                    if (it.type == TemplateTypes.TRI_SCORING) {
+                        if (it.saveKey2.toString().isBlank()) {
+                            it.saveKey2 = UUID.randomUUID().toString().substring(0, 8)
+                        }
+                        if (it.saveKey3.toString().isBlank()) {
+                            it.saveKey3 = UUID.randomUUID().toString().substring(0, 8)
+                        }
+                        saveKeyList.add(
+                            Triple(
+                                it.saveKey2.toString(),
+                                it.type,
+                                UUID.randomUUID().toString()
+                            )
+                        )
+                        saveKeyList.add(
+                            Triple(
+                                it.saveKey3.toString(),
+                                it.type,
+                                UUID.randomUUID().toString()
+                            )
+                        )
                     }
-                    saveKeyList.add(Triple(it.saveKey2.toString(), it.type, UUID.randomUUID().toString()))
-                    saveKeyList.add(Triple(it.saveKey3.toString(), it.type, UUID.randomUUID().toString()))
                 }
             }
         }

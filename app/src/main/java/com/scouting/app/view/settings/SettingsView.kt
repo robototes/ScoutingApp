@@ -81,7 +81,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                     color = NeutralGrayLight,
                                     modifier = Modifier.padding(start = 10.dp)
                                 )
-                                AnimatedVisibility(visible = viewModel.competitionMode.value) {
+                                AnimatedVisibility(visible = viewModel.competitionScheduleFileName.value != "NONE") {
                                     IconButton(
                                         onClick = {
                                             matchManager.resetManager(context)
@@ -89,7 +89,10 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                                 .putBoolean("COMPETITION_MODE", false)
                                                 .putString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")
                                                 .apply()
-                                            viewModel.competitionMode.value = false
+                                            viewModel.apply {
+                                                competitionMode.value = false
+                                                competitionScheduleFileName.value = "NONE"
+                                            }
                                         }
                                     ) {
                                         Icon(
@@ -102,29 +105,33 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                         },
                         modifier = Modifier.padding(top = 50.dp)
                     )
-                    SettingsPreference(
-                        title = stringResource(id = R.string.settings_competition_mode_toggle_title),
-                        endContent = {
-                            Switch(
-                                checked = viewModel.competitionMode.value,
-                                onCheckedChange = {
-                                    viewModel.showingCompetitionModeDialog.value = true
-                                },
-                                colors = SwitchDefaults.colors(
-                                    uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(0.2F)
+                    AnimatedVisibility(visible = viewModel.competitionScheduleFileName.value != "NONE") {
+                        SettingsPreference(
+                            title = stringResource(id = R.string.settings_competition_mode_toggle_title),
+                            endContent = {
+                                Switch(
+                                    checked = viewModel.competitionMode.value,
+                                    onCheckedChange = {
+                                        viewModel.showingCompetitionModeDialog.value = true
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(
+                                            0.2F
+                                        )
+                                    )
                                 )
-                            )
-                        },
-                        modifier = Modifier.padding(top = 50.dp),
-                        onClickAction = {
-                            viewModel.showingCompetitionModeDialog.value = true
-                        }
-                    )
+                            },
+                            modifier = Modifier.padding(top = 50.dp),
+                            onClickAction = {
+                                viewModel.showingCompetitionModeDialog.value = true
+                            }
+                        )
+                    }
                     SettingsPreference(
                         title = stringResource(id = R.string.settings_choose_default_template_title),
                         endContent = {
                             MediumButton(
-                                text = viewModel.defaultTemplateFileName.value,
+                                text = viewModel.defaultMatchTemplateFileName.value,
                                 onClick = {
                                     viewModel.requestFilePicker(
                                         context = context,
@@ -142,7 +149,12 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                         endContent = {
                             MediumButton(
                                 text = viewModel.defaultMatchOutputFileName.value.text,
-                                onClick = { viewModel.showingFileNameDialog.value = true },
+                                onClick = {
+                                    viewModel.apply {
+                                        fileNameEditingType.value = false
+                                        showingFileNameDialog.value = true
+                                    }
+                                },
                                 color = NeutralGrayLight
                             )
                         },
@@ -169,9 +181,12 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                         title = stringResource(id = R.string.settings_choose_default_pit_output_location_title),
                         endContent = {
                             MediumButton(
-                                text = viewModel.defaultPitTemplateOutputFileName.value,
+                                text = viewModel.defaultPitOutputFileName.value.text,
                                 onClick = {
-                                    viewModel.showingFileNameDialog.value = true
+                                    viewModel.apply {
+                                        fileNameEditingType.value = true
+                                        showingFileNameDialog.value = true
+                                    }
                                 },
                                 color = NeutralGrayLight
                             )

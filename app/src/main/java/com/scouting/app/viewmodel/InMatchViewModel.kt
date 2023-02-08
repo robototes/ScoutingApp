@@ -1,6 +1,7 @@
 package com.scouting.app.viewmodel
 
 import android.content.Context.MODE_PRIVATE
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -139,6 +140,7 @@ class InMatchViewModel : ViewModel() {
     private fun List<TemplateItem>.findItemValueWithKey(key: String) : Any? {
         var foundItem: Any? = null
         forEachIndexed { _, item ->
+            Log.e("DDD", item.type.name)
             when (key) {
                     item.saveKey -> {
                         foundItem = when (item.type) {

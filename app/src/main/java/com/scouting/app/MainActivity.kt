@@ -122,12 +122,19 @@ class MainActivity : ComponentActivity() {
                 getViewModel(SettingsViewModel::class.java).apply {
                     when (requestCode) {
                         2412 -> {
-                            processTemplateFilePickerResult(
+                            processSettingsFilePickerResult(
                                 filePath = data.getStringArrayListExtra("filePaths")!![0],
-                                context = this@MainActivity
+                                context = this@MainActivity,
+                                matchTemplate = true
                             )
                         }
-
+                        2414 -> {
+                            processSettingsFilePickerResult(
+                                filePath = data.getStringArrayListExtra("filePaths")!![0],
+                                context = this@MainActivity,
+                                matchTemplate = false
+                            )
+                        }
                         2413 -> {
                             processScheduleFilePickerResult(
                                 filePath = data.getStringArrayListExtra("filePaths")!![0],

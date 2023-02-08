@@ -13,15 +13,18 @@ import java.io.File
 
 class SettingsViewModel : ViewModel() {
 
-    var defaultTemplateFileName = mutableStateOf("NONE")
+    var defaultMatchTemplateFileName = mutableStateOf("NONE")
     var defaultMatchOutputFileName = mutableStateOf(TextFieldValue("output-match.csv"))
     var defaultPitTemplateFileName = mutableStateOf("NONE")
-    var defaultPitTemplateOutputFileName = mutableStateOf("output-pit.csv")
+    var defaultPitOutputFileName = mutableStateOf(TextFieldValue("output-pit.csv"))
 
     var competitionScheduleFileName = mutableStateOf("none")
     var deviceAlliancePosition = mutableStateOf("RED")
     var deviceRobotPosition = mutableStateOf(0)
     var competitionMode = mutableStateOf(false)
+
+    // false = match, true = pit
+    var fileNameEditingType = mutableStateOf(false)
 
     var showingFileNameDialog = mutableStateOf(false)
     var showingDevicePositionDialog = mutableStateOf(false)
@@ -35,14 +38,25 @@ class SettingsViewModel : ViewModel() {
             preferences.getInt("DEVICE_ROBOT_POSITION", 1)
         deviceAlliancePosition.value =
             preferences.getString("DEVICE_ALLIANCE_POSITION", "RED")!!
-        defaultTemplateFileName.value = File(
-            preferences.getString("DEFAULT_TEMPLATE_FILE_NAME", "NONE")!!
+        defaultMatchTemplateFileName.value = File(
+            preferences.getString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "NONE")!!
+        ).name
+        defaultPitTemplateFileName.value = File(
+            preferences.getString("DEFAULT_TEMPLATE_FILE_PATH_PIT", "NONE")!!
         ).name
         competitionScheduleFileName.value =
             preferences.getString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")!!
-        // Need to add pit and match output file name and pit template file name
-        competitionMode.value =
-            preferences.getBoolean("COMPETITION_MODE", false)
+        defaultMatchOutputFileName.value = TextFieldValue(
+            File(
+                preferences.getString("DEFAULT_OUTPUT_FILE_NAME_MATCH", "output-match.csv")!!
+            ).name
+        )
+        defaultPitOutputFileName.value = TextFieldValue(
+            File(
+                preferences.getString("DEFAULT_OUTPUT_FILE_NAME_PIT", "output-pit.csv")!!
+            ).name
+        )
+        competitionMode.value = preferences.getBoolean("COMPETITION_MODE", false)
     }
 
     fun requestFilePicker(context: MainActivity, code: Int, type: String) {
@@ -58,14 +72,23 @@ class SettingsViewModel : ViewModel() {
             .forResult(code)
     }
 
-    fun processTemplateFilePickerResult(filePath: String, context: MainActivity) {
+    fun processSettingsFilePickerResult(
+        filePath: String,
+        context: MainActivity,
+        matchTemplate: Boolean
+    ) {
         val preferences = context.getPreferences(MODE_PRIVATE)
-        val fileName = filePath.split("/").let { it[it.size - 1] }
+        val fileName = File(filePath).name
+        val prefKeyEnding = if (matchTemplate) "MATCH" else "PIT"
          preferences.edit()
-             .putString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", filePath)
-             .putString("DEFAULT_TEMPLATE_FILE_NAME_MATCH", fileName)
+             .putString("DEFAULT_TEMPLATE_FILE_PATH_$prefKeyEnding", filePath)
+             .putString("DEFAULT_TEMPLATE_FILE_NAME_$prefKeyEnding", fileName)
              .apply()
-        defaultTemplateFileName.value = fileName
+        if (matchTemplate) {
+            defaultMatchTemplateFileName.value = fileName
+        } else {
+            defaultPitTemplateFileName.value = fileName
+        }
     }
 
     fun processScheduleFilePickerResult(filePath: String, context: MainActivity) {
@@ -90,13 +113,17 @@ class SettingsViewModel : ViewModel() {
             .apply()
     }
 
-    fun applyOutputFileNameChange(context: MainActivity) {
+    fun applyOutputFileNameChange(context: MainActivity, fileName: String) {
         context.getPreferences(MODE_PRIVATE)
             .edit()
             .putString(
-                "DEFAULT_OUTPUT_FILE_NAME_MATCH",
+                if (fileNameEditingType.value) {
+                    "DEFAULT_OUTPUT_FILE_NAME_PIT"
+                } else {
+                    "DEFAULT_OUTPUT_FILE_NAME_MATCH"
+                },
                 context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!
-                    .path.plus("/${processDefaultOutputFileName(defaultMatchOutputFileName.value.text)}")
+                    .path.plus("/${processDefaultOutputFileName(fileName)}")
             )
             .apply()
     }
