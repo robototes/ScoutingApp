@@ -1,18 +1,11 @@
 package com.scouting.app.view.settings
 
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,8 +14,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -150,8 +141,38 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                         title = stringResource(id = R.string.settings_choose_default_output_location_title),
                         endContent = {
                             MediumButton(
-                                text = viewModel.defaultOutputFileName.value.text,
+                                text = viewModel.defaultMatchOutputFileName.value.text,
                                 onClick = { viewModel.showingFileNameDialog.value = true },
+                                color = NeutralGrayLight
+                            )
+                        },
+                        modifier = Modifier.padding(top = 50.dp)
+                    )
+                    SettingsPreference(
+                        title = stringResource(id = R.string.settings_choose_default_template_pit_title),
+                        endContent = {
+                            MediumButton(
+                                text = viewModel.defaultPitTemplateFileName.value,
+                                onClick = {
+                                    viewModel.requestFilePicker(
+                                        context = context,
+                                        code = 2414,
+                                        type = "json"
+                                    )
+                                },
+                                color = NeutralGrayLight
+                            )
+                        },
+                        modifier = Modifier.padding(top = 50.dp)
+                    )
+                    SettingsPreference(
+                        title = stringResource(id = R.string.settings_choose_default_pit_output_location_title),
+                        endContent = {
+                            MediumButton(
+                                text = viewModel.defaultPitTemplateOutputFileName.value,
+                                onClick = {
+                                    viewModel.showingFileNameDialog.value = true
+                                },
                                 color = NeutralGrayLight
                             )
                         },

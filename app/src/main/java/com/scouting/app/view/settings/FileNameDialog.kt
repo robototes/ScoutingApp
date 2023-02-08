@@ -1,7 +1,5 @@
 package com.scouting.app.view.settings
 
-import android.content.Context
-import android.provider.Settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,7 +26,7 @@ fun FileNameDialog(viewModel: SettingsViewModel, navController: NavController) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_data_unstructured),
             contentDescription = stringResource(id = R.string.ic_data_unstructured_content_desc),
-            title = stringResource(id = R.string.settings_choose_default_output_location_title),
+            title = stringResource(id = R.string.settings_choose_default_output_location_dialog_title),
             onDismissRequest = {
                 viewModel.showingFileNameDialog.value = false
             }
@@ -38,9 +36,9 @@ fun FileNameDialog(viewModel: SettingsViewModel, navController: NavController) {
                     icon = painterResource(id = R.drawable.ic_edit_pen),
                     contentDescription = stringResource(id = R.string.ic_edit_pen_content_desc),
                     hint = stringResource(id = R.string.settings_choose_default_output_location_dialog_input_hint),
-                    textFieldValue = viewModel.defaultOutputFileName.value,
+                    textFieldValue = viewModel.defaultMatchOutputFileName.value,
                     onValueChange = { value ->
-                        viewModel.defaultOutputFileName.value = value
+                        viewModel.defaultMatchOutputFileName.value = value
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -54,8 +52,11 @@ fun FileNameDialog(viewModel: SettingsViewModel, navController: NavController) {
                         viewModel.apply {
                             showingFileNameDialog.value = false
                             applyOutputFileNameChange(context)
-                            viewModel.defaultOutputFileName.value = TextFieldValue(
-                                viewModel.processDefaultOutputFileName()
+                            // use .let 🗣️😤
+                            viewModel.defaultMatchOutputFileName.value = TextFieldValue(
+                                viewModel.processDefaultOutputFileName(
+                                    viewModel.defaultMatchOutputFileName.value.text
+                                )
                             )
                         }
                     },
