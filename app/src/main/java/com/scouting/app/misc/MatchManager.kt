@@ -56,7 +56,6 @@ class MatchManager {
                 monitoringTeamPositionIndex += 2
             }
             monitoringTeamPositionIndex += getInt("DEVICE_ROBOT_POSITION", 0)
-            edit().putString("COMPETITION_SCHEDULE_CACHED", "").apply()
         }
     }
 
