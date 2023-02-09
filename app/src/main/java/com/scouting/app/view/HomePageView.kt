@@ -174,7 +174,7 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                         text = stringResource(id = R.string.home_page_button_pit_text),
                         icon = painterResource(id = R.drawable.ic_pit_stand),
                         contentDescription = stringResource(id = R.string.ic_pit_stand_content_desc),
-                        onClick = { /*TODO*/ },
+                        onClick = { navController.navigate(NavDestination.StartPitScouting) },
                         color = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.padding(bottom = 20.dp)
                     )

@@ -15,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,7 +34,7 @@ import com.scouting.app.components.DottedRoundBox
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.SmallButton
 import com.scouting.app.misc.NavDestination
-import com.scouting.app.model.TemplateTypes
+import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.theme.NeutralGrayMedium
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel

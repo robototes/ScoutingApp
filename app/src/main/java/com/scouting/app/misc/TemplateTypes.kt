@@ -1,4 +1,4 @@
-package com.scouting.app.model
+package com.scouting.app.misc
 
 enum class TemplateTypes {
     SCORE_BAR,

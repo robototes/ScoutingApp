@@ -3,12 +3,16 @@ package com.scouting.app.viewmodel
 import abhishekti7.unicorn.filepicker.UnicornFilePicker
 import android.content.Context.MODE_PRIVATE
 import android.os.Environment
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.scouting.app.MainActivity
 import com.scouting.app.R
+import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.MatchManager
+import org.json.JSONObject
 import java.io.File
 
 class SettingsViewModel : ViewModel() {
@@ -77,23 +81,43 @@ class SettingsViewModel : ViewModel() {
         context: MainActivity,
         matchTemplate: Boolean
     ) {
-        val preferences = context.getPreferences(MODE_PRIVATE)
-        val fileName = File(filePath).name
-        val prefKeyEnding = if (matchTemplate) "MATCH" else "PIT"
-         preferences.edit()
-             .putString("DEFAULT_TEMPLATE_FILE_PATH_$prefKeyEnding", filePath)
-             .putString("DEFAULT_TEMPLATE_FILE_NAME_$prefKeyEnding", fileName)
-             .apply()
-        if (matchTemplate) {
-            defaultMatchTemplateFileName.value = fileName
+        if (checkIfTemplateIsMatch(filePath) == matchTemplate) {
+            val preferences = context.getPreferences(MODE_PRIVATE)
+            val fileName = File(filePath).name
+            val prefKeyEnding = if (matchTemplate) "MATCH" else "PIT"
+            preferences.edit()
+                .putString("DEFAULT_TEMPLATE_FILE_PATH_$prefKeyEnding", filePath)
+                .putString("DEFAULT_TEMPLATE_FILE_NAME_$prefKeyEnding", fileName)
+                .apply()
+            if (matchTemplate) {
+                defaultMatchTemplateFileName.value = fileName
+            } else {
+                defaultPitTemplateFileName.value = fileName
+            }
         } else {
-            defaultPitTemplateFileName.value = fileName
+            Toast.makeText(
+                context,
+                context.resources.getString(R.string.settings_pick_incorrect_template_toast_text),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun checkIfTemplateIsMatch(filePath: String) : Boolean {
+        return File(filePath).bufferedReader().use {
+            // Read as JSONObject instead of serializing because match and
+            // pit templates are different and would cause a crash if fed into
+            // Gson, but since we know they both have the isMatchTemplate
+            // field then we can individually check it without messing with the rest
+            val matchTemplate = JSONObject(it.readText()).getBoolean("isMatchTemplate")
+            it.close()
+            matchTemplate
         }
     }
 
     fun processScheduleFilePickerResult(filePath: String, context: MainActivity) {
         val preferences = context.getPreferences(MODE_PRIVATE)
-        val fileName = filePath.split("/").let { it[it.size - 1] }
+        val fileName = File(filePath).name
         preferences.edit()
             .putString("COMPETITION_SCHEDULE_FILE_PATH", filePath)
             .putString("COMPETITION_SCHEDULE_FILE_NAME", fileName)
@@ -122,8 +146,7 @@ class SettingsViewModel : ViewModel() {
                 } else {
                     "DEFAULT_OUTPUT_FILE_NAME_MATCH"
                 },
-                context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!
-                    .path.plus("/${processDefaultOutputFileName(fileName)}")
+                FilePaths.DATA_DIRECTORY.plus("/${processDefaultOutputFileName(fileName)}")
             )
             .apply()
     }

@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
@@ -21,7 +23,7 @@ import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.scouting.FinishScoutingView
 import com.scouting.app.view.HomePageView
-import com.scouting.app.view.scouting.InMatchView
+import com.scouting.app.view.scouting.ScoutingView
 import com.scouting.app.view.scouting.StartMatchView
 import com.scouting.app.view.scouting.StartPitScoutingView
 import com.scouting.app.view.settings.SettingsView
@@ -59,7 +61,10 @@ class MainActivity : ComponentActivity() {
                 composable(NavDestination.HomePage) {
                     HomePageView(navigationController, matchManager)
                 }
-                composable("${NavDestination.TemplateEditor}/{type}") {
+                composable(
+                    route = "${NavDestination.TemplateEditor}/{type}",
+                    arguments = listOf(navArgument("type") { type = NavType.StringType })
+                ) {
                     TemplateEditorView(
                         navController = navigationController,
                         type = it.arguments?.getString("type", "match")!!
@@ -71,8 +76,13 @@ class MainActivity : ComponentActivity() {
                 composable(NavDestination.StartMatchConfig) {
                     StartMatchView(navigationController, matchManager)
                 }
-                composable(NavDestination.InMatch) {
-                    InMatchView(navigationController)
+                composable(
+                    route = "${NavDestination.Scouting}/{type}",
+                    arguments = listOf(navArgument("type") { type = NavType.BoolType })
+                ) {
+                    ScoutingView(
+                        navController = navigationController,
+                        scoutingMatch = it.arguments?.getBoolean("type", true) ?: false                  )
                 }
                 composable(NavDestination.Settings) {
                     SettingsView(navigationController, matchManager)

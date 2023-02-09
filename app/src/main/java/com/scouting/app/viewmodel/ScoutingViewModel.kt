@@ -16,24 +16,27 @@ import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateItem
-import com.scouting.app.model.TemplateTypes
+import com.scouting.app.misc.TemplateTypes
+import com.scouting.app.model.TemplateFormatPit
 import java.io.File
 import java.io.FileOutputStream
 
-class InMatchViewModel : ViewModel() {
+class ScoutingViewModel : ViewModel() {
 
     // true = pit, false = match
     var scoutingType = mutableStateOf(false)
 
     var autoListItems = mutableStateListOf<TemplateItem>()
     var teleListItems = mutableStateListOf<TemplateItem>()
+    var pitListItems = mutableStateListOf<TemplateItem>()
     var saveKeyOrderList = mutableStateOf<List<String>?>(null)
 
     // true = blue, false = red
     var currentAllianceMonitoring = mutableStateOf(true)
     // 0 = auto, 1 = teleop
     var currentMatchStage = mutableStateOf(0)
-    var currentTeamMonitoring = mutableStateOf(TextFieldValue())
+    var currentTeamNumberMonitoring = mutableStateOf(TextFieldValue())
+    var currentTeamNameMonitoring = mutableStateOf(TextFieldValue())
     var currentMatchMonitoring = mutableStateOf(TextFieldValue())
     var scoutName = mutableStateOf(TextFieldValue())
 
@@ -41,20 +44,38 @@ class InMatchViewModel : ViewModel() {
 
     fun loadTemplateItems(context: MainActivity) {
         val preferences = context.getPreferences(MODE_PRIVATE)
-        val defaultTemplate = preferences.getString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")
+        val templateType = if (scoutingType.value) "PIT" else "MATCH"
+        val defaultTemplate = preferences.getString("DEFAULT_TEMPLATE_FILE_PATH_$templateType", "")
         if (defaultTemplate?.isNotBlank() == true) {
             File(defaultTemplate).bufferedReader().use { file ->
-                val serializedTemplate = Gson().fromJson(file.readText(), TemplateFormatMatch::class.java)
+                val serializedTemplate = Gson().fromJson(
+                    file.readText(),
+                    if (scoutingType.value) {
+                        TemplateFormatPit::class.java
+                    } else {
+                        TemplateFormatMatch::class.java
+                    }
+                )
                 file.close()
-                autoListItems.apply {
-                    clear()
-                    addAll(serializedTemplate.autoTemplateItems)
+                if (scoutingType.value) {
+                    serializedTemplate as TemplateFormatPit
+                    pitListItems.apply {
+                        clear()
+                        addAll(serializedTemplate.templateItems)
+                    }
+                    saveKeyOrderList.value = serializedTemplate.saveOrderByKey
+                } else {
+                    serializedTemplate as TemplateFormatMatch
+                    autoListItems.apply {
+                        clear()
+                        addAll(serializedTemplate.autoTemplateItems)
+                    }
+                    teleListItems.apply {
+                        clear()
+                        addAll(serializedTemplate.teleTemplateItems)
+                    }
+                    saveKeyOrderList.value = serializedTemplate.saveOrderByKey
                 }
-                teleListItems.apply {
-                    clear()
-                    addAll(serializedTemplate.teleTemplateItems)
-                }
-                saveKeyOrderList.value = serializedTemplate.saveOrderByKey
             }
         }
     }
@@ -65,7 +86,7 @@ class InMatchViewModel : ViewModel() {
             currentAllianceMonitoring.value =
                 preferences.getString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE"
             currentMatchMonitoring.value = TextFieldValue((matchManager.currentMatchNumber + 1).toString())
-            currentTeamMonitoring.value = TextFieldValue(matchManager.getCurrentTeam())
+            currentTeamNumberMonitoring.value = TextFieldValue(matchManager.getCurrentTeam())
         }
     }
 
@@ -83,34 +104,47 @@ class InMatchViewModel : ViewModel() {
 
     fun saveMatchDataToFile(context: MainActivity) {
         var csvRowDraft = ""
-        val combinedItemList = (autoListItems + teleListItems)
+        val itemList = if (scoutingType.value) {
+            pitListItems
+        } else {
+            autoListItems.toList() + teleListItems.toList()
+        }
         val preferences = context.getPreferences(MODE_PRIVATE)
+        val templateType = if (scoutingType.value) "PIT" else "MATCH"
+        val specialColumnName = if (scoutingType.value) "name" else "match"
 
         // Add device name, scout name, match number and team number
-        val tabletName = preferences.getString("DEVICE_ALLIANCE_POSITION", "RED") +
+        // OR if pit scouting add team name in place of match number
+        val tabletName = preferences.getString("DEVICE_ALLIANCE_POSITION", "RED") + "-"
                 preferences.getInt("DEVICE_ROBOT_POSITION", 1)
-        csvRowDraft += "$tabletName,${scoutName.value.text},${currentMatchMonitoring.value.text},${currentTeamMonitoring.value.text},"
+        csvRowDraft += "$tabletName,${scoutName.value.text}," +
+                "${
+                    if (scoutingType.value) { 
+                        currentTeamNameMonitoring.value.text 
+                    } else { 
+                        currentMatchMonitoring.value.text
+                    }
+                },${currentTeamNumberMonitoring.value.text},"
 
         // Append ordered user-inputted match data
-        repeat(combinedItemList.size) { index ->
-            combinedItemList.findItemValueWithKey(
+        repeat(itemList.size) { index ->
+            itemList.findItemValueWithKey(
                 saveKeyOrderList.value?.get(index).toString()
             ).let { data ->
                 csvRowDraft += data
-                if (index < combinedItemList.size - 1) {
+                if (index < itemList.size - 1) {
                     csvRowDraft += ","
                 }
             }
         }
 
         // Write all data to the specified output file name
-        val outputFileChild = File(
+        val outputFile = File(
             context.getPreferences(MODE_PRIVATE).getString(
-                "DEFAULT_OUTPUT_FILE_NAME_MATCH",
+                "DEFAULT_OUTPUT_FILE_NAME_$templateType",
                 "output.csv"
             )!!
         )
-        val outputFile = File("${FilePaths.DATA_DIRECTORY}/$outputFileChild")
         if (!outputFile.exists()) {
             outputFile.createNewFile()
         }
@@ -125,7 +159,8 @@ class InMatchViewModel : ViewModel() {
                     // If the file is newly created, add the save keys as the first row
                     it.write("${
                         previousFileText.ifEmpty {
-                            "device,scout,match,team," + saveKeyOrderList.value!!.joinToString(",")
+                            "device,scout,$specialColumnName,team," +
+                                    saveKeyOrderList.value!!.joinToString(",")
                         }
                     }\n$csvRowDraft")
                 }

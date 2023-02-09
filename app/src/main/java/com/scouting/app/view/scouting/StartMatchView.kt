@@ -26,12 +26,12 @@ import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
-import com.scouting.app.viewmodel.InMatchViewModel
+import com.scouting.app.viewmodel.ScoutingViewModel
 
 @Composable
 fun StartMatchView(navController: NavController, matchManager: MatchManager) {
     val context = navController.context as MainActivity
-    val viewModel = context.getViewModel(InMatchViewModel::class.java)
+    val viewModel = context.getViewModel(ScoutingViewModel::class.java)
     val itemSpacing = 50.dp
     LaunchedEffect(true) {
         viewModel.apply {
@@ -69,10 +69,10 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
                         style = MaterialTheme.typography.headlineSmall
                     )
                     BasicInputField(
-                        hint = viewModel.currentTeamMonitoring.value.text,
-                        textFieldValue = viewModel.currentTeamMonitoring.value,
+                        hint = viewModel.currentTeamNumberMonitoring.value.text,
+                        textFieldValue = viewModel.currentTeamNumberMonitoring.value,
                         onValueChange = { newText ->
-                            viewModel.currentTeamMonitoring.value = newText
+                            viewModel.currentTeamNumberMonitoring.value = newText
                         },
                         icon = painterResource(id = R.drawable.ic_machine_learning),
                         modifier = Modifier.width(125.dp)
@@ -105,7 +105,7 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
                         viewModel.resetMatchConfig()
-                        navController.navigate(NavDestination.InMatch)
+                        navController.navigate("${NavDestination.Scouting}/" + true)
                     },
                     color = AffirmativeGreen,
                     modifier = Modifier.padding(horizontal = 30.dp, vertical = itemSpacing)

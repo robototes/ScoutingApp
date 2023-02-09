@@ -1,9 +1,6 @@
 package com.scouting.app.view.template
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.model.TemplateItem
-import com.scouting.app.model.TemplateTypes
+import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.utilities.longPressEffect
 import com.scouting.app.viewmodel.TemplateEditorViewModel
@@ -103,6 +100,9 @@ fun TemplateEditorView(
                         }
                     }
                 } else {
+                    viewModel.apply {
+                        currentListResource = pitListItems
+                    }
                     TemplateEditorList(
                         viewModel,
                         bottomSheetState,

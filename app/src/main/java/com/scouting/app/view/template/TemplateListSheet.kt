@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.scouting.app.R
 import com.scouting.app.model.TemplateItem
-import com.scouting.app.model.TemplateTypes
+import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.BorderedCard

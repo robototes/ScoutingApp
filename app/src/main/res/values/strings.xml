@@ -110,6 +110,15 @@
     <string name="start_match_alliance_label_blue">BLUE</string>
     <string name="start_match_begin_button_text">Start</string>
 
+    <string name="start_pit_scouting_header_title">Start pit scouting</string>
+    <string name="start_pit_scouting_team_number_prefix">Team number</string>
+    <string name="start_pit_scouting_team_name_prefix">Team name</string>
+    <string name="start_pit_scouting_begin_button_text">Begin scouting</string>
+
+    <string name="in_pit_scouting_header_text">Pit scouting</string>
+    <string name="in_pit_scouting_primary_subtitle_text">Monitoring team %1$s\n%2$s</string>
+    <string name="in_pit_scouting_end_button_text">Finish scouting</string>
+
     <string name="in_match_header_match_number_format">Qualification #%1$s</string>
     <string name="in_match_header_team_number_format">Monitoring team %1$s</string>
     <string name="in_match_header_alliance_red">Red alliance</string>
@@ -140,5 +149,6 @@
     <string name="settings_competition_mode_dialog_disable_subtitle">Are you sure you wish to disable competition mode? This will RESET match auto-population of team numbers, so if you are in the middle of the qualification matches, it\'s probably not a good idea to do this unless directed by the scouting lead.</string>
     <string name="settings_competition_mode_dialog_positive_button_label">Yes</string>
     <string name="settings_competition_mode_dialog_negative_button_label">No, go back</string>
+    <string name="settings_pick_incorrect_template_toast_text">Error! You must choose the correct type of template!</string>
 
 </resources>

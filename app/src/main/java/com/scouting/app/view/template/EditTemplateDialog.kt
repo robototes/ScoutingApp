@@ -1,7 +1,5 @@
 package com.scouting.app.view.template
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
@@ -16,7 +14,7 @@ import com.scouting.app.components.SmallButton
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.DialogScaffold
-import com.scouting.app.model.TemplateTypes
+import com.scouting.app.misc.TemplateTypes
 
 @Composable
 fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {

@@ -25,12 +25,12 @@ import com.scouting.app.components.SpacedRow
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
-import com.scouting.app.viewmodel.InMatchViewModel
+import com.scouting.app.viewmodel.ScoutingViewModel
 
 @Composable
 fun FinishScoutingView(navController: NavController) {
     val context = navController.context as MainActivity
-    val viewModel = context.getViewModel(InMatchViewModel::class.java)
+    val viewModel = context.getViewModel(ScoutingViewModel::class.java)
     ScoutingTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column {

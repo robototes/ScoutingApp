@@ -1,7 +1,7 @@
 package com.scouting.app.model
 
 import androidx.compose.runtime.MutableState
-import com.google.gson.annotations.Expose
+import com.scouting.app.misc.TemplateTypes
 
 data class TemplateItem(
     // Require separate unique key from item index to allow drag and drop
