@@ -155,7 +155,7 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                         icon = painterResource(id = R.drawable.ic_play_button),
                         contentDescription = stringResource(id = R.string.ic_play_button_content_desc),
                         onClick = {
-                            navController.navigate(NavDestination.StartMatchConfig)
+                            navController.navigate(NavDestination.StartMatchScouting)
                         },
                         color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.padding(bottom = 20.dp)

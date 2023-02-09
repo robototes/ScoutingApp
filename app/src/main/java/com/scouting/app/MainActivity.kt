@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
@@ -70,11 +72,17 @@ class MainActivity : ComponentActivity() {
                         type = it.arguments?.getString("type", "match")!!
                     )
                 }
+                composable(NavDestination.EditCSVOrder) {
+                    EditCSVOrderView(navigationController)
+                }
                 composable(NavDestination.TemplateSave) {
                     TemplateSaveView(navigationController)
                 }
-                composable(NavDestination.StartMatchConfig) {
+                composable(NavDestination.StartMatchScouting) {
                     StartMatchView(navigationController, matchManager)
+                }
+                composable(NavDestination.StartPitScouting) {
+                    StartPitScoutingView(navigationController)
                 }
                 composable(
                     route = "${NavDestination.Scouting}/{type}",
@@ -89,12 +97,6 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(NavDestination.FinishScouting) {
                     FinishScoutingView(navigationController)
-                }
-                composable(NavDestination.StartPitScouting) {
-                    StartPitScoutingView(navigationController)
-                }
-                composable(NavDestination.EditCSVOrder) {
-                    EditCSVOrderView(navigationController)
                 }
             }
         )

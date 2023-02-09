@@ -2,7 +2,7 @@ package com.scouting.app.misc
 
 object NavDestination {
     const val HomePage = "home"
-    const val StartMatchConfig = "start-match"
+    const val StartMatchScouting = "start-match"
     const val TemplateEditor = "template-editor"
     const val TemplateSave = "template-save"
     const val Scouting = "scouting"

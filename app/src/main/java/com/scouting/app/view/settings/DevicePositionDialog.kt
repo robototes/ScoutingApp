@@ -33,7 +33,10 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
             }
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                SpacedRow(modifier = Modifier.padding(end = 10.dp, top = 40.dp, bottom = 40.dp)) {
+                SpacedRow(
+                    modifier = Modifier.padding(end = 10.dp, top = 40.dp, bottom = 40.dp),
+                    horizontalPadding = 20.dp
+                ) {
                     val alliancePositionValues =
                         context.resources.getStringArray(R.array.alliance_position_values)
                     RatingBar(
