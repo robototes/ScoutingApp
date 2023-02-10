@@ -1,5 +1,6 @@
 package com.scouting.app.view.scouting
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -104,8 +105,15 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
-                        viewModel.resetMatchConfig()
-                        navController.navigate("${NavDestination.Scouting}/" + true)
+                        if (context.getPreferences(Context.MODE_PRIVATE).getString(
+                                "DEFAULT_TEMPLATE_FILE_PATH_MATCH", ""
+                            )!!.isEmpty()
+                        ) {
+                            viewModel.showingNoTemplateDialog.value = true
+                        } else {
+                            viewModel.resetMatchConfig()
+                            navController.navigate("${NavDestination.Scouting}/" + true)
+                        }
                     },
                     color = AffirmativeGreen,
                     modifier = Modifier.padding(horizontal = 30.dp, vertical = itemSpacing)
@@ -113,4 +121,5 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
             }
         }
     }
+    NoTemplateDialog(viewModel, navController)
 }

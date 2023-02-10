@@ -27,6 +27,7 @@
     <string name="ic_machine_learning_content_desc">Robot</string>
     <string name="ic_rotate_180_content_desc">Revert</string>
     <string name="ic_close_outline_content_desc">Deny</string>
+    <string name="ic_help_content_desc">Question mark</string>
 
     <string name="permission_request_denial_toast_text">This permission is required for the app to function properly. Please open app info settings and grant the permission!</string>
 
@@ -101,6 +102,11 @@
     <string name="template_edit_csv_save_header_move_on_button">Finalize template</string>
     <string name="template_edit_save_fail_toast">Failed to export template, please add a file name first!</string>
     <string name="template_edit_save_success_toast">Successfully exported template!</string>
+
+    <string name="start_scouting_dialog_no_template_title">No template found</string>
+    <string name="start_scouting_dialog_no_template_subtitle">There currently isn\'t a default template selected. Before proceeding, you must choose a template in the settings menu.</string>
+    <string name="start_scouting_dialog_no_template_neutral_button_text">Settings</string>
+    <string name="start_scouting_dialog_no_template_positive_button_text">Got it!</string>
 
     <string name="start_match_header_title">Start a match</string>
     <string name="start_match_match_number_text">Match number</string>

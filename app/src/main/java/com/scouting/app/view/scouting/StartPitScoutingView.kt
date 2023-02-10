@@ -1,5 +1,6 @@
 package com.scouting.app.view.scouting
 
+import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -77,8 +78,15 @@ fun StartPitScoutingView(navController: NavController) {
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
-                        viewModel.resetMatchConfig()
-                        navController.navigate("${NavDestination.Scouting}/" + false)
+                        if (context.getPreferences(MODE_PRIVATE).getString(
+                                "DEFAULT_TEMPLATE_FILE_PATH_PIT", ""
+                            )!!.isEmpty()
+                        ) {
+                            viewModel.showingNoTemplateDialog.value = true
+                        } else {
+                            viewModel.resetMatchConfig()
+                            navController.navigate("${NavDestination.Scouting}/" + false)
+                        }
                     },
                     color = AffirmativeGreen,
                     modifier = Modifier.padding(horizontal = 30.dp, vertical = 50.dp)
@@ -86,4 +94,5 @@ fun StartPitScoutingView(navController: NavController) {
             }
         }
     }
+    NoTemplateDialog(viewModel, navController)
 }

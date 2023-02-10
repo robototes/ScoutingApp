@@ -39,6 +39,8 @@ class ScoutingViewModel : ViewModel() {
     var currentMatchMonitoring = mutableStateOf(TextFieldValue())
     var scoutName = mutableStateOf(TextFieldValue())
 
+    var showingNoTemplateDialog = mutableStateOf(false)
+
     lateinit var matchManager: MatchManager
 
     fun loadTemplateItems(context: MainActivity) {
