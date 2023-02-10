@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
@@ -155,10 +156,15 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                             Text(
                                 text = String.format(
                                     stringResource(id = R.string.in_pit_scouting_primary_subtitle_text),
-                                    viewModel.currentTeamNumberMonitoring.value.text,
-                                    viewModel.currentTeamNameMonitoring.value.text
+                                    viewModel.currentTeamNumberMonitoring.value.text
                                 ),
-                                style = MaterialTheme.typography.headlineSmall
+                                style = MaterialTheme.typography.headlineSmall,
+                                modifier = Modifier.padding(top = 5.dp)
+                            )
+                            Text(
+                                text = viewModel.currentTeamNameMonitoring.value.text,
+                                style = MaterialTheme.typography.headlineSmall +
+                                        TextStyle(fontWeight = FontWeight.Normal)
                             )
                         }
                         SmallButton(
@@ -210,11 +216,12 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                         checked = item.itemValueBoolean!!.value,
                                         onCheckedChange = {
                                             item.itemValueBoolean!!.value = it
-                                        }
+                                        },
+                                        modifier = Modifier.size(80.dp)
                                     )
                                     Text(
                                         text = item.text,
-                                        style = MaterialTheme.typography.bodyLarge,
+                                        style = MaterialTheme.typography.headlineSmall,
                                         modifier = Modifier.padding(start = 15.dp)
                                     )
                                 }

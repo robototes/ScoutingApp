@@ -122,7 +122,7 @@
     <string name="start_pit_scouting_begin_button_text">Begin scouting</string>
 
     <string name="in_pit_scouting_header_text">Pit scouting</string>
-    <string name="in_pit_scouting_primary_subtitle_text">Monitoring team %1$s\n%2$s</string>
+    <string name="in_pit_scouting_primary_subtitle_text">Monitoring team %1$s</string>
     <string name="in_pit_scouting_end_button_text">Finish scouting</string>
 
     <string name="in_match_header_match_number_format">Qualification #%1$s</string>

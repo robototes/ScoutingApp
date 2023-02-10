@@ -280,11 +280,11 @@ fun ListItemFromType(item: TemplateItem) {
             )
         }
         TemplateTypes.CHECK_BOX -> {
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = false,
                     onCheckedChange = {},
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(80.dp),
                     enabled = false
                 )
                 Text(
