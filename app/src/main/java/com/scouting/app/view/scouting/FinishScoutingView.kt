@@ -15,13 +15,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.misc.NavDestination
 import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel

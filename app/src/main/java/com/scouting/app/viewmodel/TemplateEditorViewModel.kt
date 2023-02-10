@@ -10,10 +10,10 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.scouting.app.MainActivity
 import com.scouting.app.misc.FilePaths
+import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
 import com.scouting.app.model.TemplateItem
-import com.scouting.app.misc.TemplateTypes
 import java.io.File
 import java.util.UUID
 

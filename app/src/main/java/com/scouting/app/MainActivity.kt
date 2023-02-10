@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,14 +16,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
-import com.scouting.app.view.scouting.FinishScoutingView
 import com.scouting.app.view.HomePageView
+import com.scouting.app.view.scouting.FinishScoutingView
 import com.scouting.app.view.scouting.ScoutingView
 import com.scouting.app.view.scouting.StartMatchView
 import com.scouting.app.view.scouting.StartPitScoutingView

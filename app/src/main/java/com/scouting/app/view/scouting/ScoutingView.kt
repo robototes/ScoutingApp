@@ -1,6 +1,5 @@
 package com.scouting.app.view.scouting
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.misc.NavDestination
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LabeledCounter
@@ -40,6 +38,7 @@ import com.scouting.app.components.LabeledTriCounter
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.components.TriButtonBlock
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme

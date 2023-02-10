@@ -15,7 +15,6 @@ import com.scouting.app.R
 import com.scouting.app.components.DialogScaffold
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
-import com.scouting.app.misc.MatchManager
 import com.scouting.app.viewmodel.SettingsViewModel
 
 @Composable

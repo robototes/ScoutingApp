@@ -1,7 +1,12 @@
 package com.scouting.app.view.template
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -12,16 +17,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.scouting.app.MainActivity
-import com.scouting.app.misc.NavDestination
 import com.scouting.app.R
-import com.scouting.app.components.MediumButton
-import com.scouting.app.theme.NeutralGrayDark
-import com.scouting.app.utilities.getViewModel
-import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LargeHeaderBar
-import com.scouting.app.components.SettingsPreference
+import com.scouting.app.components.MediumButton
+import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.ScoutingTheme
+import com.scouting.app.utilities.getViewModel
+import com.scouting.app.viewmodel.TemplateEditorViewModel
 
 @Composable
 fun TemplateSaveView(navController: NavController) {

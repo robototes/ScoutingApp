@@ -1,7 +1,6 @@
 package com.scouting.app.misc
 
 import android.content.Context.MODE_PRIVATE
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue

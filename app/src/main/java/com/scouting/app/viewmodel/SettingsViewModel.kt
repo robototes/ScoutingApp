@@ -3,7 +3,6 @@ package com.scouting.app.viewmodel
 import abhishekti7.unicorn.filepicker.UnicornFilePicker
 import android.content.Context.MODE_PRIVATE
 import android.os.Environment
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue

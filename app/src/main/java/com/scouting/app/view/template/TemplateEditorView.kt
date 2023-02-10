@@ -21,12 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.misc.NavDestination
-import com.scouting.app.model.TemplateItem
-import com.scouting.app.misc.TemplateTypes
-import com.scouting.app.utilities.getViewModel
-import com.scouting.app.utilities.longPressEffect
-import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -41,6 +35,12 @@ import com.scouting.app.components.MediumHeaderBar
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.TabLayout
 import com.scouting.app.components.TriButtonBlock
+import com.scouting.app.misc.NavDestination
+import com.scouting.app.misc.TemplateTypes
+import com.scouting.app.model.TemplateItem
+import com.scouting.app.utilities.getViewModel
+import com.scouting.app.utilities.longPressEffect
+import com.scouting.app.viewmodel.TemplateEditorViewModel
 import kotlinx.coroutines.launch
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.move
