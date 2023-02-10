@@ -1,5 +1,6 @@
 package com.scouting.app.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +25,7 @@ fun DialogScaffold(
     title: String,
     subtitle: String? = null,
     onDismissRequest: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Column(

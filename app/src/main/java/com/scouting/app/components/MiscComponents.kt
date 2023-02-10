@@ -150,3 +150,14 @@ fun SpacedRow(
         content.invoke()
     }
 }
+
+@Composable
+fun SettingsDivider(modifier: Modifier) {
+    Row(
+       modifier = modifier
+           .fillMaxWidth(0.8F)
+           .clip(MaterialTheme.shapes.medium)
+           .height(3.dp)
+           .background(MaterialTheme.colorScheme.onBackground.copy(0.15F))
+    ) {}
+}

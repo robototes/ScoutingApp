@@ -7,15 +7,21 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOut
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
@@ -49,14 +55,18 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
+    
     @Composable
+    @OptIn(ExperimentalAnimationApi::class)
     fun NavigationHost() {
-        navigationController = rememberNavController()
-        NavHost(
+        navigationController = rememberAnimatedNavController()
+        AnimatedNavHost(
             navController = navigationController,
             startDestination = NavDestination.HomePage,
             modifier = Modifier.fillMaxSize(),
+            enterTransition = { slideIntoContainer(towards = AnimatedContentScope.SlideDirection.Up) },
+            exitTransition = { fadeOut() },
+            popExitTransition = { slideOutOfContainer(towards = AnimatedContentScope.SlideDirection.Down) },
             builder = {
                 composable(NavDestination.HomePage) {
                     HomePageView(navigationController, matchManager)

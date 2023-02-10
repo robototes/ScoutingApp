@@ -5,7 +5,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +27,7 @@ import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.MediumButton
+import com.scouting.app.components.SettingsDivider
 import com.scouting.app.components.SettingsPreference
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.theme.NeutralGrayLight
@@ -49,7 +53,13 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                     title = stringResource(id = R.string.settings_header_title),
                     navController = navController
                 )
-                Column(modifier = Modifier.padding(top = 20.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp)
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     SettingsPreference(
                         title = stringResource(id = R.string.settings_tablet_configuration_title),
                         endContent = {
@@ -121,12 +131,13 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                     )
                                 )
                             },
-                            modifier = Modifier.padding(top = 50.dp),
+                           modifier = Modifier.padding(top = 50.dp),
                             onClickAction = {
                                 viewModel.showingCompetitionModeDialog.value = true
                             }
                         )
                     }
+                    SettingsDivider(modifier = Modifier.padding(vertical = 50.dp))
                     SettingsPreference(
                         title = stringResource(id = R.string.settings_choose_default_template_title),
                         endContent = {
@@ -142,7 +153,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                 color = NeutralGrayLight
                             )
                         },
-                        modifier = Modifier.padding(top = 50.dp)
+                        //modifier = Modifier.padding(top = 50.dp)
                     )
                     SettingsPreference(
                         title = stringResource(id = R.string.settings_choose_default_output_location_title),
@@ -160,6 +171,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                         },
                         modifier = Modifier.padding(top = 50.dp)
                     )
+                    SettingsDivider(modifier = Modifier.padding(vertical = 50.dp))
                     SettingsPreference(
                         title = stringResource(id = R.string.settings_choose_default_template_pit_title),
                         endContent = {
@@ -175,7 +187,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                 color = NeutralGrayLight
                             )
                         },
-                        modifier = Modifier.padding(top = 50.dp)
+                       // modifier = Modifier.padding(top = 50.dp)
                     )
                     SettingsPreference(
                         title = stringResource(id = R.string.settings_choose_default_pit_output_location_title),
