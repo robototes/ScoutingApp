@@ -75,6 +75,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         },
                         modifier = Modifier.padding(top = 15.dp)
                     )
+                    SettingsDivider(modifier = Modifier.padding(top = 50.dp))
                     SettingsPreference(
                         title = stringResource(id = R.string.settings_load_competition_schedule_title),
                         endContent = {

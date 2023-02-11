@@ -22,6 +22,7 @@ import com.scouting.app.model.TemplateItem
 import com.tencent.mmkv.MMKV
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 
 class ScoutingViewModel : ViewModel() {
 
@@ -125,14 +126,14 @@ class ScoutingViewModel : ViewModel() {
         }
         val templateType = if (scoutingType.value) "PIT" else "MATCH"
         val specialColumnName = if (scoutingType.value) "name" else "match"
+        val contentResolver = context.contentResolver
 
         // Add device name, scout name, match number and team number
         // OR if pit scouting add team name in place of match number
         val tabletName = preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED") + "-" +
                 preferences.decodeInt("DEVICE_ROBOT_POSITION", 1).toString()
         csvRowDraft += "$tabletName,${scoutName.value.text}," +
-                "${
-                    if (scoutingType.value) {
+                "${if (scoutingType.value) {
                         currentTeamNameMonitoring.value.text
                     } else {
                         currentMatchMonitoring.value.text
@@ -151,32 +152,42 @@ class ScoutingViewModel : ViewModel() {
             }
         }
 
+        val csvHeaderRow = "device,scout,$specialColumnName,team," + saveKeyOrderList.value!!.joinToString(",")
+        val userSelectedOutputFileName = preferences.decodeString(
+            "DEFAULT_OUTPUT_FILE_NAME_$templateType",
+            "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
+        )!!
         // Write all data to the specified output file name
-        val outputFile = File(
-            preferences.decodeString(
-                "DEFAULT_OUTPUT_FILE_NAME_$templateType",
-                "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
-            )!!
-        )
+        var outputFile = File(userSelectedOutputFileName)
         if (!outputFile.exists()) {
             outputFile.createNewFile()
+        } else {
+            // If the output file already exists, then check to see if the first row
+            // of items (save keys) is the same as the order of save keys that we are
+            // intending to save to. If the save keys are different then we create a new
+            // file with the same user-selected name and appended UUID, so that it's not
+            // confusing when reading the output file with a mess of data that isn't labeled
+            // This will only come into effect when the user changes the template but doesn't
+            // change the output file name 👍
+            contentResolver.openInputStream(outputFile.toUri())?.use {
+                if (it.reader().readLines()[0] != csvHeaderRow) {
+                    outputFile = File("$userSelectedOutputFileName-${UUID.randomUUID()}")
+                    outputFile.createNewFile()
+                }
+            }
         }
+
         // need to verify existing file text to make sure it isn't a different template
         if (outputFile.exists()) {
             lateinit var previousFileText: String
-            context.contentResolver.openInputStream(outputFile.toUri()).use {
+            contentResolver.openInputStream(outputFile.toUri()).use {
                 previousFileText = it!!.reader().readText()
                 it.close()
             }
             FileOutputStream(outputFile).use { outputStream ->
                 outputStream.bufferedWriter().use {
                     // If the file is newly created, add the save keys as the first row
-                    it.write("${
-                        previousFileText.ifEmpty {
-                            "device,scout,$specialColumnName,team," +
-                                    saveKeyOrderList.value!!.joinToString(",")
-                        }
-                    }\n$csvRowDraft")
+                    it.write("${previousFileText.ifEmpty { csvHeaderRow }}\n$csvRowDraft")
                 }
                 outputStream.close()
             }
