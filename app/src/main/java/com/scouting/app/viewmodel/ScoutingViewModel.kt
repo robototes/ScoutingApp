@@ -173,7 +173,7 @@ class ScoutingViewModel : ViewModel() {
             }
         }
         if (preferences.getBoolean("COMPETITION_MODE", false)) {
-            matchManager.currentMatchNumber++
+            matchManager.moveToNextMatch(context)
         }
     }
 

@@ -29,10 +29,13 @@ class MatchManager {
                 currentCompetitionScheduleCSV.add(item.split(","))
             }
         }
-        preferences.edit().putString(
-            "COMPETITION_SCHEDULE_CACHED",
-            currentCompetitionScheduleCSV.joinToString("%")
-        ).apply()
+        preferences.edit()
+            .putString(
+                "COMPETITION_SCHEDULE_CACHED",
+                currentCompetitionScheduleCSV.joinToString("%")
+            )
+            .putInt("COMPETITION_MODE_CURRENT_MATCH", 0)
+            .apply()
     }
 
     fun loadCachedCompetitionSchedule(context: MainActivity) {
@@ -44,6 +47,7 @@ class MatchManager {
             cachedCompSchedule.split("%").forEach {
                 currentCompetitionScheduleCSV.add(it.removeSurrounding("[", "]").split(", "))
             }
+            currentMatchNumber = preferences.getInt("COMPETITION_MODE_CURRENT_MATCH", 0)
         }
     }
 
@@ -60,5 +64,13 @@ class MatchManager {
 
     fun getCurrentTeam() : String =
         currentCompetitionScheduleCSV[currentMatchNumber][monitoringTeamPositionIndex]
+
+    fun moveToNextMatch(context: MainActivity) {
+        currentMatchNumber++
+        context.getPreferences(MODE_PRIVATE)
+            .edit()
+            .putInt("COMPETITION_MODE_CURRENT_MATCH", currentMatchNumber)
+            .apply()
+    }
 
 }
