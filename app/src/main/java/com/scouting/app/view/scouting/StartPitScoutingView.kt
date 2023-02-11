@@ -23,6 +23,7 @@ import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.AffirmativeGreen
+import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.ScoutingViewModel
@@ -89,7 +90,8 @@ fun StartPitScoutingView(navController: NavController) {
                         }
                     },
                     color = AffirmativeGreen,
-                    modifier = Modifier.padding(horizontal = 30.dp, vertical = 50.dp)
+                    modifier = Modifier.padding(horizontal = 30.dp, vertical = 50.dp),
+                    colorBorder = AffirmativeGreenDark
                 )
             }
         }

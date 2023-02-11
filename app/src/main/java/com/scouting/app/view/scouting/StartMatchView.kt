@@ -25,6 +25,7 @@ import com.scouting.app.components.SpacedRow
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.AffirmativeGreen
+import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.ScoutingViewModel
@@ -116,7 +117,8 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
                         }
                     },
                     color = AffirmativeGreen,
-                    modifier = Modifier.padding(horizontal = 30.dp, vertical = itemSpacing)
+                    modifier = Modifier.padding(horizontal = 30.dp, vertical = itemSpacing),
+                    colorBorder = AffirmativeGreenDark
                 )
             }
         }

@@ -39,6 +39,9 @@ import com.scouting.app.R
 import com.scouting.app.components.LargeButton
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.theme.AffirmativeGreenDark
+import com.scouting.app.theme.ErrorRedDark
+import com.scouting.app.theme.SecondaryPurpleDark
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.settings.DevicePositionDialog
 import com.scouting.app.view.template.TemplateTypeDialog
@@ -67,7 +70,7 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val allianceColor = if (preferences.getString("DEVICE_ALLIANCE_POSITION", "RED")!! == "RED") {
+                val allianceColor = if (settingsViewModel.deviceAlliancePosition.value == "RED") {
                     Color(0xFFEC4076)
                 } else {
                     Color(0xFF4284F5)
@@ -90,7 +93,7 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                 ) {
                     Text(
                         text = preferences.let {
-                            "${it.getString("DEVICE_ALLIANCE_POSITION", "RED")!!} ${it.getInt("DEVICE_ROBOT_POSITION", 1)}"
+                            "${settingsViewModel.deviceAlliancePosition.value} ${settingsViewModel.deviceRobotPosition.value}"
                         },
                         style = MaterialTheme.typography.headlineSmall,
                         color = allianceColor
@@ -158,7 +161,8 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                             navController.navigate(NavDestination.StartMatchScouting)
                         },
                         color = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.padding(bottom = 20.dp)
+                        modifier = Modifier.padding(bottom = 20.dp),
+                        colorBorder = AffirmativeGreenDark
                     )
                     LargeButton(
                         text = stringResource(id = R.string.home_page_button_create_text),
@@ -168,7 +172,8 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                             viewModel.showingTemplateTypeDialog = true
                         },
                         color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(bottom = 20.dp)
+                        modifier = Modifier.padding(bottom = 20.dp),
+                        colorBorder = ErrorRedDark
                     )
                     LargeButton(
                         text = stringResource(id = R.string.home_page_button_pit_text),
@@ -176,7 +181,8 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                         contentDescription = stringResource(id = R.string.ic_pit_stand_content_desc),
                         onClick = { navController.navigate(NavDestination.StartPitScouting) },
                         color = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.padding(bottom = 20.dp)
+                        modifier = Modifier.padding(bottom = 20.dp),
+                        colorBorder = SecondaryPurpleDark
                     )
                 }
             }

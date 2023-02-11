@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -31,13 +32,19 @@ fun LargeButton(
     contentDescription: String? = null,
     onClick: () -> Unit,
     color: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    colorBorder: Color
 ) {
     Button(
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp)
-            .clip(MaterialTheme.shapes.large),
+            .clip(MaterialTheme.shapes.large)
+            .border(
+                width = 3.5.dp,
+                color = colorBorder,
+                shape = MaterialTheme.shapes.large
+            ),
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         elevation = ButtonDefaults.buttonElevation(0.dp),

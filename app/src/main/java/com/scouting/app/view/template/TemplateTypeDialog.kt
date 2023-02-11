@@ -12,6 +12,7 @@ import com.scouting.app.R
 import com.scouting.app.components.DialogScaffold
 import com.scouting.app.components.LargeButton
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.theme.NeutralGrayDark
 import com.scouting.app.theme.NeutralGrayMedium
 import com.scouting.app.viewmodel.HomePageViewModel
 
@@ -39,7 +40,8 @@ fun TemplateTypeDialog(
                         viewModel.showingTemplateTypeDialog = false
                     },
                     color = NeutralGrayMedium,
-                    modifier = Modifier.padding(bottom = 15.dp)
+                    modifier = Modifier.padding(bottom = 15.dp),
+                    colorBorder = NeutralGrayDark
                 )
                 LargeButton(
                     text = stringResource(id = R.string.home_page_template_type_dialog_pit),
@@ -47,7 +49,8 @@ fun TemplateTypeDialog(
                         navController.navigate("${NavDestination.TemplateEditor}/pit")
                         viewModel.showingTemplateTypeDialog = false
                     },
-                    color = NeutralGrayMedium
+                    color = NeutralGrayMedium,
+                    colorBorder = NeutralGrayDark
                 )
             }
         }

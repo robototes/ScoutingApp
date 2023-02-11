@@ -16,6 +16,8 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.fragment.app.FragmentManager.BackStackEntry
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -64,9 +66,15 @@ class MainActivity : ComponentActivity() {
             navController = navigationController,
             startDestination = NavDestination.HomePage,
             modifier = Modifier.fillMaxSize(),
-            enterTransition = { slideIntoContainer(towards = AnimatedContentScope.SlideDirection.Up) },
-            exitTransition = { fadeOut() },
-            popExitTransition = { slideOutOfContainer(towards = AnimatedContentScope.SlideDirection.Down) },
+            enterTransition = {
+                slideIntoContainer(towards = AnimatedContentScope.SlideDirection.Up)
+            },
+            exitTransition = {
+                fadeOut()
+            },
+            popExitTransition = {
+                slideOutOfContainer(towards = AnimatedContentScope.SlideDirection.Down)
+            },
             builder = {
                 composable(NavDestination.HomePage) {
                     HomePageView(navigationController, matchManager)
