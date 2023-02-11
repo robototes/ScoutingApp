@@ -7,11 +7,14 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toLowerCase
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.scouting.app.MainActivity
 import com.scouting.app.R
+import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.MatchManager
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
@@ -117,7 +120,7 @@ class ScoutingViewModel : ViewModel() {
         // Add device name, scout name, match number and team number
         // OR if pit scouting add team name in place of match number
         val tabletName = preferences.getString("DEVICE_ALLIANCE_POSITION", "RED") + "-"
-                preferences.getInt("DEVICE_ROBOT_POSITION", 1)
+                preferences.getInt("DEVICE_ROBOT_POSITION", 1).toString()
         csvRowDraft += "$tabletName,${scoutName.value.text}," +
                 "${
                     if (scoutingType.value) { 
@@ -143,12 +146,13 @@ class ScoutingViewModel : ViewModel() {
         val outputFile = File(
             context.getPreferences(MODE_PRIVATE).getString(
                 "DEFAULT_OUTPUT_FILE_NAME_$templateType",
-                "output.csv"
+                "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
             )!!
         )
         if (!outputFile.exists()) {
             outputFile.createNewFile()
         }
+        // need to verify existing file text to make sure it isn't a different template
         if (outputFile.exists()) {
             lateinit var previousFileText: String
             context.contentResolver.openInputStream(outputFile.toUri()).use {
