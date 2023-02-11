@@ -115,6 +115,7 @@
     <string name="start_match_alliance_label_red">RED</string>
     <string name="start_match_alliance_label_blue">BLUE</string>
     <string name="start_match_begin_button_text">Start</string>
+    <string name="start_match_fill_out_fields_toast_text">You must fill in all fields before continuing!</string>
 
     <string name="start_pit_scouting_header_title">Start pit scouting</string>
     <string name="start_pit_scouting_team_number_prefix">Team number</string>

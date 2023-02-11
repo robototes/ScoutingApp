@@ -1,6 +1,7 @@
 package com.scouting.app.view.scouting
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -106,11 +107,19 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
-                        if (context.getPreferences(Context.MODE_PRIVATE).getString(
-                                "DEFAULT_TEMPLATE_FILE_PATH_MATCH", ""
-                            )!!.isEmpty()
+                        if (context.getPreferences(Context.MODE_PRIVATE)
+                                .getString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")!!.isEmpty()
                         ) {
                             viewModel.showingNoTemplateDialog.value = true
+                        } else if (
+                            viewModel.currentMatchMonitoring.value.text.isBlank() ||
+                                    viewModel.currentTeamNumberMonitoring.value.text.isBlank()
+                        ) {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.start_match_fill_out_fields_toast_text),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             viewModel.resetMatchConfig()
                             navController.navigate("${NavDestination.Scouting}/" + true)

@@ -1,6 +1,7 @@
 package com.scouting.app.view.scouting
 
 import android.content.Context.MODE_PRIVATE
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -79,11 +80,19 @@ fun StartPitScoutingView(navController: NavController) {
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
-                        if (context.getPreferences(MODE_PRIVATE).getString(
-                                "DEFAULT_TEMPLATE_FILE_PATH_PIT", ""
-                            )!!.isEmpty()
+                        if (context.getPreferences(MODE_PRIVATE)
+                                .getString("DEFAULT_TEMPLATE_FILE_PATH_PIT", "")!!.isEmpty()
                         ) {
                             viewModel.showingNoTemplateDialog.value = true
+                        } else if (
+                            viewModel.currentTeamNameMonitoring.value.text.isBlank() ||
+                            viewModel.currentTeamNumberMonitoring.value.text.isBlank()
+                        ) {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.start_match_fill_out_fields_toast_text),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             viewModel.resetMatchConfig()
                             navController.navigate("${NavDestination.Scouting}/" + false)
