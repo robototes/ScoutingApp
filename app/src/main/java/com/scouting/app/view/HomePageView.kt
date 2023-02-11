@@ -1,6 +1,5 @@
 package com.scouting.app.view
 
-import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,15 +46,17 @@ import com.scouting.app.view.settings.DevicePositionDialog
 import com.scouting.app.view.template.TemplateTypeDialog
 import com.scouting.app.viewmodel.HomePageViewModel
 import com.scouting.app.viewmodel.SettingsViewModel
+import com.tencent.mmkv.MMKV
 
 @Composable
 fun HomePageView(navController: NavController, matchManager: MatchManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(HomePageViewModel::class.java)
-    val settingsViewModel = context.getViewModel(SettingsViewModel::class.java) // might be bad practice lolz
-    val preferences = context.getPreferences(MODE_PRIVATE)
+    val settingsViewModel =
+        context.getViewModel(SettingsViewModel::class.java) // might be bad practice lolz
+    val preferences = MMKV.defaultMMKV()
     LaunchedEffect(true) {
-        settingsViewModel.loadSavedPreferences(context)
+        settingsViewModel.loadSavedPreferences()
     }
     Surface {
         Column(
@@ -147,7 +148,7 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                 }
                 Column {
                     LargeButton(
-                        text = if (preferences.getBoolean("COMPETITION_MODE", false)) {
+                        text = if (preferences.decodeBool("COMPETITION_MODE", false)) {
                             String.format(
                                 stringResource(id = R.string.home_page_button_competition_start_format),
                                 matchManager.currentMatchNumber + 1

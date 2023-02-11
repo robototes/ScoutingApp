@@ -20,11 +20,7 @@ import com.scouting.app.components.SmallButton
 import com.scouting.app.viewmodel.SettingsViewModel
 
 @Composable
-fun FileNameDialog(
-    viewModel: SettingsViewModel,
-    navController: NavController
-) {
-    val context = navController.context as MainActivity
+fun FileNameDialog(viewModel: SettingsViewModel) {
     val currentEditingTextFieldValue = viewModel.let {
         if (it.fileNameEditingType.value) {
             it.defaultPitOutputFileName
@@ -61,7 +57,7 @@ fun FileNameDialog(
                     onClick = {
                         viewModel.apply {
                             showingFileNameDialog.value = false
-                            applyOutputFileNameChange(context, currentEditingTextFieldValue.value.text)
+                            applyOutputFileNameChange(currentEditingTextFieldValue.value.text)
                             currentEditingTextFieldValue.value = TextFieldValue(
                                 viewModel.processDefaultOutputFileName(
                                     currentEditingTextFieldValue.value.text

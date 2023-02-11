@@ -1,6 +1,5 @@
 package com.scouting.app.view.scouting
 
-import android.content.Context.MODE_PRIVATE
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +27,7 @@ import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.ScoutingViewModel
+import com.tencent.mmkv.MMKV
 
 @Composable
 fun StartPitScoutingView(navController: NavController) {
@@ -36,7 +36,7 @@ fun StartPitScoutingView(navController: NavController) {
     LaunchedEffect(true) {
         viewModel.apply {
             scoutingType.value = true
-            loadTemplateItems(context)
+            loadTemplateItems()
         }
     }
     ScoutingTheme {
@@ -80,8 +80,8 @@ fun StartPitScoutingView(navController: NavController) {
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
-                        if (context.getPreferences(MODE_PRIVATE)
-                                .getString("DEFAULT_TEMPLATE_FILE_PATH_PIT", "")!!.isEmpty()
+                        if (MMKV.defaultMMKV()
+                                .decodeString("DEFAULT_TEMPLATE_FILE_PATH_PIT", "")!!.isEmpty()
                         ) {
                             viewModel.showingNoTemplateDialog.value = true
                         } else if (

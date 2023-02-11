@@ -31,7 +31,8 @@ fun LargeHeaderBar(
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 25.dp, start = 25.dp, end = 25.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -66,7 +67,8 @@ fun MediumHeaderBar(
     onIconLeftClick: (() -> Unit)? = null
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(top = 25.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -88,7 +90,9 @@ fun MediumHeaderBar(
             style = MaterialTheme.typography.headlineLarge
         )
         if (iconLeft == null) {
-            Box(modifier = Modifier.size(30.dp).padding(end = 25.dp))
+            Box(modifier = Modifier
+                .size(30.dp)
+                .padding(end = 25.dp))
         } else {
             IconButton(
                 onClick = onIconLeftClick!!,

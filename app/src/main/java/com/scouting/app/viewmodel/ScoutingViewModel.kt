@@ -1,6 +1,5 @@
 package com.scouting.app.viewmodel
 
-import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -20,6 +19,7 @@ import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
 import com.scouting.app.model.TemplateItem
+import com.tencent.mmkv.MMKV
 import java.io.File
 import java.io.FileOutputStream
 
@@ -35,6 +35,7 @@ class ScoutingViewModel : ViewModel() {
 
     // true = blue, false = red
     var currentAllianceMonitoring = mutableStateOf(true)
+
     // 0 = auto, 1 = teleop
     var currentMatchStage = mutableStateOf(0)
     var currentTeamNumberMonitoring = mutableStateOf(TextFieldValue())
@@ -45,11 +46,12 @@ class ScoutingViewModel : ViewModel() {
     var showingNoTemplateDialog = mutableStateOf(false)
 
     lateinit var matchManager: MatchManager
+    private val preferences = MMKV.defaultMMKV()
 
-    fun loadTemplateItems(context: MainActivity) {
-        val preferences = context.getPreferences(MODE_PRIVATE)
+    fun loadTemplateItems() {
         val templateType = if (scoutingType.value) "PIT" else "MATCH"
-        val defaultTemplate = preferences.getString("DEFAULT_TEMPLATE_FILE_PATH_$templateType", "")
+        val defaultTemplate =
+            preferences.decodeString("DEFAULT_TEMPLATE_FILE_PATH_$templateType", "")
         if (defaultTemplate?.isNotBlank() == true) {
             File(defaultTemplate).bufferedReader().use { file ->
                 val serializedTemplate = Gson().fromJson(
@@ -84,12 +86,12 @@ class ScoutingViewModel : ViewModel() {
         }
     }
 
-    fun populateMatchDataIfCompetition(context: MainActivity) {
-        val preferences = context.getPreferences(MODE_PRIVATE)
-        if (preferences.getBoolean("COMPETITION_MODE", false)) {
+    fun populateMatchDataIfCompetition() {
+        if (preferences.decodeBool("COMPETITION_MODE", false)) {
             currentAllianceMonitoring.value =
-                preferences.getString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE"
-            currentMatchMonitoring.value = TextFieldValue((matchManager.currentMatchNumber + 1).toString())
+                preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE"
+            currentMatchMonitoring.value =
+                TextFieldValue((matchManager.currentMatchNumber + 1).toString())
             currentTeamNumberMonitoring.value = TextFieldValue(matchManager.getCurrentTeam())
         }
     }
@@ -99,8 +101,8 @@ class ScoutingViewModel : ViewModel() {
     }
 
     @Composable
-    fun getCorrespondingMatchStageName(matchStage: Int) : String {
-        return when(matchStage) {
+    fun getCorrespondingMatchStageName(matchStage: Int): String {
+        return when (matchStage) {
             0 -> stringResource(id = R.string.in_match_stage_autonomous_label)
             else -> stringResource(id = R.string.in_match_stage_teleoperated_label)
         }
@@ -113,19 +115,18 @@ class ScoutingViewModel : ViewModel() {
         } else {
             autoListItems.toList() + teleListItems.toList()
         }
-        val preferences = context.getPreferences(MODE_PRIVATE)
         val templateType = if (scoutingType.value) "PIT" else "MATCH"
         val specialColumnName = if (scoutingType.value) "name" else "match"
 
         // Add device name, scout name, match number and team number
         // OR if pit scouting add team name in place of match number
-        val tabletName = preferences.getString("DEVICE_ALLIANCE_POSITION", "RED") + "-" +
-                preferences.getInt("DEVICE_ROBOT_POSITION", 1).toString()
+        val tabletName = preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED") + "-" +
+                preferences.decodeInt("DEVICE_ROBOT_POSITION", 1).toString()
         csvRowDraft += "$tabletName,${scoutName.value.text}," +
                 "${
-                    if (scoutingType.value) { 
-                        currentTeamNameMonitoring.value.text 
-                    } else { 
+                    if (scoutingType.value) {
+                        currentTeamNameMonitoring.value.text
+                    } else {
                         currentMatchMonitoring.value.text
                     }
                 },${currentTeamNumberMonitoring.value.text},"
@@ -144,7 +145,7 @@ class ScoutingViewModel : ViewModel() {
 
         // Write all data to the specified output file name
         val outputFile = File(
-            context.getPreferences(MODE_PRIVATE).getString(
+            preferences.decodeString(
                 "DEFAULT_OUTPUT_FILE_NAME_$templateType",
                 "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
             )!!
@@ -172,35 +173,36 @@ class ScoutingViewModel : ViewModel() {
                 outputStream.close()
             }
         }
-        if (preferences.getBoolean("COMPETITION_MODE", false)) {
-            matchManager.moveToNextMatch(context)
+        if (preferences.decodeBool("COMPETITION_MODE", false)) {
+            matchManager.moveToNextMatch()
         }
     }
 
-    private fun List<TemplateItem>.findItemValueWithKey(key: String) : Any? {
+    private fun List<TemplateItem>.findItemValueWithKey(key: String): Any? {
         var foundItem: Any? = null
         forEachIndexed { _, item ->
             Log.e("DDD", item.type.name)
             when (key) {
-                    item.saveKey -> {
-                        foundItem = when (item.type) {
-                            TemplateTypes.CHECK_BOX -> item.itemValueBoolean!!.value
-                            TemplateTypes.TEXT_FIELD -> item.itemValueString!!.value
-                            else /* SCORE_BAR, RATING_BAR OR TRI_SCORING */ -> item.itemValueInt!!.value
-                        }
-                        return@forEachIndexed
+                item.saveKey -> {
+                    foundItem = when (item.type) {
+                        TemplateTypes.CHECK_BOX -> item.itemValueBoolean!!.value
+                        TemplateTypes.TEXT_FIELD -> item.itemValueString!!.value
+                        else /* SCORE_BAR, RATING_BAR OR TRI_SCORING */ -> item.itemValueInt!!.value
                     }
-                    // We know that the only component that uses saveKey2 and 3 is
-                    // the TRI_SCORING, which is always an integer value
-                    item.saveKey2 -> {
-                        foundItem = item.itemValue2Int!!.value
-                        return@forEachIndexed
-                    }
-                    item.saveKey3 -> {
-                        foundItem = item.itemValue3Int!!.value
-                        return@forEachIndexed
-                    }
+                    return@forEachIndexed
                 }
+                // We know that the only component that uses saveKey2 and 3 is
+                // the TRI_SCORING, which is always an integer value
+                item.saveKey2 -> {
+                    foundItem = item.itemValue2Int!!.value
+                    return@forEachIndexed
+                }
+
+                item.saveKey3 -> {
+                    foundItem = item.itemValue3Int!!.value
+                    return@forEachIndexed
+                }
+            }
         }
         return foundItem
     }

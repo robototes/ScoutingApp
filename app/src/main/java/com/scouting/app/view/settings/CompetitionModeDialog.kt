@@ -1,6 +1,5 @@
 package com.scouting.app.view.settings
 
-import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,12 +15,11 @@ import com.scouting.app.components.DialogScaffold
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.viewmodel.SettingsViewModel
+import com.tencent.mmkv.MMKV
 
 @Composable
 fun CompetitionModeDialog(viewModel: SettingsViewModel, navController: NavController) {
-    val context = navController.context as MainActivity
-    val preferences = context.getPreferences(MODE_PRIVATE)
-    val competitionMode = preferences.getBoolean("COMPETITION_MODE", false)
+    val competitionMode = MMKV.defaultMMKV().decodeBool("COMPETITION_MODE", false)
     if (viewModel.showingCompetitionModeDialog.value) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_rotate_180),
@@ -59,7 +57,7 @@ fun CompetitionModeDialog(viewModel: SettingsViewModel, navController: NavContro
                     contentDescription = stringResource(id = R.string.ic_checkmark_outline_content_desc),
                     onClick = {
                         viewModel.apply {
-                            setCompetitionMode(context, !competitionMode)
+                            setCompetitionMode(!competitionMode)
                             viewModel.competitionMode.value = !competitionMode
                             showingCompetitionModeDialog.value = false
                         }

@@ -1,6 +1,5 @@
 package com.scouting.app.view.scouting
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +29,7 @@ import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.ScoutingViewModel
+import com.tencent.mmkv.MMKV
 
 @Composable
 fun StartMatchView(navController: NavController, matchManager: MatchManager) {
@@ -39,9 +39,9 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
     LaunchedEffect(true) {
         viewModel.apply {
             scoutingType.value = false
-            loadTemplateItems(context)
+            loadTemplateItems()
             this.matchManager = matchManager
-            populateMatchDataIfCompetition(context)
+            populateMatchDataIfCompetition()
         }
     }
     ScoutingTheme {
@@ -107,13 +107,13 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
-                        if (context.getPreferences(Context.MODE_PRIVATE)
-                                .getString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")!!.isEmpty()
+                        if (MMKV.defaultMMKV()
+                                .decodeString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")!!.isEmpty()
                         ) {
                             viewModel.showingNoTemplateDialog.value = true
                         } else if (
                             viewModel.currentMatchMonitoring.value.text.isBlank() ||
-                                    viewModel.currentTeamNumberMonitoring.value.text.isBlank()
+                            viewModel.currentTeamNumberMonitoring.value.text.isBlank()
                         ) {
                             Toast.makeText(
                                 context,

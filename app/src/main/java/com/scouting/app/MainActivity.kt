@@ -10,14 +10,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOut
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.fragment.app.FragmentManager.BackStackEntry
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -39,6 +34,7 @@ import com.scouting.app.view.template.EditCSVOrderView
 import com.scouting.app.view.template.TemplateEditorView
 import com.scouting.app.view.template.TemplateSaveView
 import com.scouting.app.viewmodel.SettingsViewModel
+import com.tencent.mmkv.MMKV
 import java.io.File
 
 
@@ -49,15 +45,16 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MMKV.initialize(this)
         configureStorage()
-        matchManager.loadCachedCompetitionSchedule(this)
+        matchManager.loadCachedCompetitionSchedule()
         setContent {
             ScoutingTheme {
                 NavigationHost()
             }
         }
     }
-    
+
     @Composable
     @OptIn(ExperimentalAnimationApi::class)
     fun NavigationHost() {
@@ -106,7 +103,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     ScoutingView(
                         navController = navigationController,
-                        scoutingMatch = it.arguments?.getBoolean("type", true) ?: false                  )
+                        scoutingMatch = it.arguments?.getBoolean("type", true) ?: false
+                    )
                 }
                 composable(NavDestination.Settings) {
                     SettingsView(navigationController, matchManager)
@@ -156,6 +154,7 @@ class MainActivity : ComponentActivity() {
                                 matchTemplate = true
                             )
                         }
+
                         2414 -> {
                             processSettingsFilePickerResult(
                                 filePath = data.getStringArrayListExtra("filePaths")!![0],
@@ -163,6 +162,7 @@ class MainActivity : ComponentActivity() {
                                 matchTemplate = false
                             )
                         }
+
                         2413 -> {
                             processScheduleFilePickerResult(
                                 filePath = data.getStringArrayListExtra("filePaths")!![0],

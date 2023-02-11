@@ -55,7 +55,8 @@ fun TemplateEditorView(
 ) {
 
     val viewModel = navController.context.getViewModel(TemplateEditorViewModel::class.java)
-    val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val bottomSheetState =
+        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val pagerState = rememberPagerState(initialPage = 0)
 
     viewModel.currentTemplateType = type
@@ -92,6 +93,7 @@ fun TemplateEditorView(
                                 bottomSheetState,
                                 viewModel.autoListItems
                             )
+
                             1 -> TemplateEditorList(
                                 viewModel,
                                 bottomSheetState,
@@ -145,7 +147,7 @@ fun TemplateEditorHeader(
                     stringResource(id = R.string.template_editor_tele_header)
                 ),
                 selection = remember {
-                    derivedStateOf { pagerState.targetPage }
+                    derivedStateOf { pagerState.currentPage }
                 },
                 onSelectionChange = {
                     async.launch { pagerState.animateScrollToPage(it) }
@@ -259,6 +261,7 @@ fun ListItemFromType(item: TemplateItem) {
                 enabled = false
             )
         }
+
         TemplateTypes.RATING_BAR -> {
             LabeledRatingBar(
                 text = item.text,
@@ -268,6 +271,7 @@ fun ListItemFromType(item: TemplateItem) {
                 enabled = false
             )
         }
+
         TemplateTypes.TEXT_FIELD -> {
             BasicInputField(
                 icon = painterResource(id = R.drawable.ic_text_format_center),
@@ -279,6 +283,7 @@ fun ListItemFromType(item: TemplateItem) {
                 enabled = false
             )
         }
+
         TemplateTypes.CHECK_BOX -> {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
@@ -294,6 +299,7 @@ fun ListItemFromType(item: TemplateItem) {
                 )
             }
         }
+
         TemplateTypes.PLAIN_TEXT -> {
             Text(
                 text = item.text,
@@ -301,6 +307,7 @@ fun ListItemFromType(item: TemplateItem) {
                 modifier = Modifier.padding(start = 10.dp, end = 20.dp)
             )
         }
+
         TemplateTypes.TRI_SCORING -> {
             LabeledTriCounter(
                 text1 = item.text,
@@ -312,6 +319,7 @@ fun ListItemFromType(item: TemplateItem) {
                 enabled = false
             )
         }
+
         TemplateTypes.TRI_BUTTON -> {
             TriButtonBlock(
                 headerText = item.text,

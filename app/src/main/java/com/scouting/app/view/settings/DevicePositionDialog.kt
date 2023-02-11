@@ -67,7 +67,7 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
                     onClick = {
                         viewModel.apply {
                             showingDevicePositionDialog.value = false
-                            applyDevicePositionChange(context)
+                            applyDevicePositionChange()
                         }
                     },
                     color = MaterialTheme.colorScheme.secondary,

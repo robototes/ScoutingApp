@@ -1,7 +1,6 @@
 package com.scouting.app.viewmodel
 
 import abhishekti7.unicorn.filepicker.UnicornFilePicker
-import android.content.Context.MODE_PRIVATE
 import android.os.Environment
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +10,7 @@ import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.MatchManager
+import com.tencent.mmkv.MMKV
 import org.json.JSONObject
 import java.io.File
 
@@ -34,32 +34,32 @@ class SettingsViewModel : ViewModel() {
     var showingCompetitionModeDialog = mutableStateOf(false)
 
     lateinit var matchManager: MatchManager
+    private val preferences = MMKV.defaultMMKV()
 
-    fun loadSavedPreferences(context: MainActivity) {
-        val preferences = context.getPreferences(MODE_PRIVATE)
-        deviceRobotPosition.value =
-            preferences.getInt("DEVICE_ROBOT_POSITION", 1)
-        deviceAlliancePosition.value =
-            preferences.getString("DEVICE_ALLIANCE_POSITION", "RED")!!
-        defaultMatchTemplateFileName.value = File(
-            preferences.getString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "NONE")!!
-        ).name
-        defaultPitTemplateFileName.value = File(
-            preferences.getString("DEFAULT_TEMPLATE_FILE_PATH_PIT", "NONE")!!
-        ).name
-        competitionScheduleFileName.value =
-            preferences.getString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")!!
-        defaultMatchOutputFileName.value = TextFieldValue(
-            File(
-                preferences.getString("DEFAULT_OUTPUT_FILE_NAME_MATCH", "output-match.csv")!!
+    fun loadSavedPreferences() {
+        preferences.apply {
+            deviceRobotPosition.value = decodeInt("DEVICE_ROBOT_POSITION", 1)
+            deviceAlliancePosition.value = decodeString("DEVICE_ALLIANCE_POSITION", "RED")!!
+            defaultMatchTemplateFileName.value = File(
+                decodeString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "NONE")!!
             ).name
-        )
-        defaultPitOutputFileName.value = TextFieldValue(
-            File(
-                preferences.getString("DEFAULT_OUTPUT_FILE_NAME_PIT", "output-pit.csv")!!
+            defaultPitTemplateFileName.value = File(
+                decodeString("DEFAULT_TEMPLATE_FILE_PATH_PIT", "NONE")!!
             ).name
-        )
-        competitionMode.value = preferences.getBoolean("COMPETITION_MODE", false)
+            competitionScheduleFileName.value =
+                decodeString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")!!
+            defaultMatchOutputFileName.value = TextFieldValue(
+                File(
+                    decodeString("DEFAULT_OUTPUT_FILE_NAME_MATCH", "output-match.csv")!!
+                ).name
+            )
+            defaultPitOutputFileName.value = TextFieldValue(
+                File(
+                    decodeString("DEFAULT_OUTPUT_FILE_NAME_PIT", "output-pit.csv")!!
+                ).name
+            )
+            competitionMode.value = decodeBool("COMPETITION_MODE", false)
+        }
     }
 
     fun requestFilePicker(context: MainActivity, code: Int, type: String) {
@@ -81,13 +81,12 @@ class SettingsViewModel : ViewModel() {
         matchTemplate: Boolean
     ) {
         if (checkIfTemplateIsMatch(filePath) == matchTemplate) {
-            val preferences = context.getPreferences(MODE_PRIVATE)
             val fileName = File(filePath).name
             val prefKeyEnding = if (matchTemplate) "MATCH" else "PIT"
-            preferences.edit()
-                .putString("DEFAULT_TEMPLATE_FILE_PATH_$prefKeyEnding", filePath)
-                .putString("DEFAULT_TEMPLATE_FILE_NAME_$prefKeyEnding", fileName)
-                .apply()
+            preferences.apply {
+                encode("DEFAULT_TEMPLATE_FILE_PATH_$prefKeyEnding", filePath)
+                encode("DEFAULT_TEMPLATE_FILE_NAME_$prefKeyEnding", fileName)
+            }
             if (matchTemplate) {
                 defaultMatchTemplateFileName.value = fileName
             } else {
@@ -102,7 +101,7 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
-    private fun checkIfTemplateIsMatch(filePath: String) : Boolean {
+    private fun checkIfTemplateIsMatch(filePath: String): Boolean {
         return File(filePath).bufferedReader().use {
             // Read as JSONObject instead of serializing because match and
             // pit templates are different and would cause a crash if fed into
@@ -115,53 +114,45 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun processScheduleFilePickerResult(filePath: String, context: MainActivity) {
-        val preferences = context.getPreferences(MODE_PRIVATE)
         val fileName = File(filePath).name
-        preferences.edit()
-            .putString("COMPETITION_SCHEDULE_FILE_PATH", filePath)
-            .putString("COMPETITION_SCHEDULE_FILE_NAME", fileName)
-            .apply()
+        preferences.apply {
+            encode("COMPETITION_SCHEDULE_FILE_PATH", filePath)
+            encode("COMPETITION_SCHEDULE_FILE_NAME", fileName)
+        }
         competitionScheduleFileName.value = fileName
         matchManager.apply {
             loadCompetitionScheduleFromFile(filePath, context)
-            resetManager(context)
+            resetManager()
         }
     }
 
-    fun applyDevicePositionChange(context: MainActivity) {
-        context.getPreferences(MODE_PRIVATE)
-            .edit()
-            .putString("DEVICE_ALLIANCE_POSITION", deviceAlliancePosition.value)
-            .putInt("DEVICE_ROBOT_POSITION", deviceRobotPosition.value)
-            .apply()
+    fun applyDevicePositionChange() {
+        preferences.apply {
+            encode("DEVICE_ALLIANCE_POSITION", deviceAlliancePosition.value)
+            encode("DEVICE_ROBOT_POSITION", deviceRobotPosition.value)
+        }
     }
 
-    fun applyOutputFileNameChange(context: MainActivity, fileName: String) {
-        context.getPreferences(MODE_PRIVATE)
-            .edit()
-            .putString(
-                if (fileNameEditingType.value) {
-                    "DEFAULT_OUTPUT_FILE_NAME_PIT"
-                } else {
-                    "DEFAULT_OUTPUT_FILE_NAME_MATCH"
-                },
-                FilePaths.DATA_DIRECTORY.plus("/${processDefaultOutputFileName(fileName)}")
-            )
-            .apply()
+    fun applyOutputFileNameChange(fileName: String) {
+        preferences.encode(
+            if (fileNameEditingType.value) {
+                "DEFAULT_OUTPUT_FILE_NAME_PIT"
+            } else {
+                "DEFAULT_OUTPUT_FILE_NAME_MATCH"
+            },
+            FilePaths.DATA_DIRECTORY.plus("/${processDefaultOutputFileName(fileName)}")
+        )
     }
 
-    fun processDefaultOutputFileName(textToConvert: String) : String {
+    fun processDefaultOutputFileName(textToConvert: String): String {
         return textToConvert.let {
             if (it.contains(".csv")) it else "$it.csv"
         }
     }
 
-    fun setCompetitionMode(context: MainActivity, value: Boolean) {
-        context.getPreferences(MODE_PRIVATE)
-            .edit()
-            .putBoolean("COMPETITION_MODE", value)
-            .apply()
-        matchManager.resetManager(context)
+    fun setCompetitionMode(value: Boolean) {
+        preferences.encode("COMPETITION_MODE", value)
+        matchManager.resetManager()
     }
 
 }

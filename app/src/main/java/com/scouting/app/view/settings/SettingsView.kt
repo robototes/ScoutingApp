@@ -1,6 +1,5 @@
 package com.scouting.app.view.settings
 
-import android.content.Context.MODE_PRIVATE
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,15 +33,16 @@ import com.scouting.app.theme.NeutralGrayLight
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.SettingsViewModel
+import com.tencent.mmkv.MMKV
 
 @Composable
 fun SettingsView(navController: NavController, matchManager: MatchManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(SettingsViewModel::class.java)
-    val preferences = context.getPreferences(MODE_PRIVATE)
+    val preferences = MMKV.defaultMMKV()
     LaunchedEffect(true) {
         viewModel.apply {
-            loadSavedPreferences(context)
+            loadSavedPreferences()
             this.matchManager = matchManager
         }
     }
@@ -94,11 +94,11 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                 AnimatedVisibility(visible = viewModel.competitionScheduleFileName.value != "NONE") {
                                     IconButton(
                                         onClick = {
-                                            matchManager.resetManager(context)
-                                            preferences.edit()
-                                                .putBoolean("COMPETITION_MODE", false)
-                                                .putString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")
-                                                .apply()
+                                            matchManager.resetManager()
+                                            preferences.apply {
+                                                encode("COMPETITION_MODE", false)
+                                                encode("COMPETITION_SCHEDULE_FILE_NAME", "NONE")
+                                            }
                                             viewModel.apply {
                                                 competitionMode.value = false
                                                 competitionScheduleFileName.value = "NONE"
@@ -131,7 +131,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                     )
                                 )
                             },
-                           modifier = Modifier.padding(top = 50.dp),
+                            modifier = Modifier.padding(top = 50.dp),
                             onClickAction = {
                                 viewModel.showingCompetitionModeDialog.value = true
                             }
@@ -187,7 +187,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                 color = NeutralGrayLight
                             )
                         },
-                       // modifier = Modifier.padding(top = 50.dp)
+                        // modifier = Modifier.padding(top = 50.dp)
                     )
                     SettingsPreference(
                         title = stringResource(id = R.string.settings_choose_default_pit_output_location_title),
@@ -207,7 +207,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                     )
                 }
             }
-            FileNameDialog(viewModel, navController)
+            FileNameDialog(viewModel)
             DevicePositionDialog(viewModel, navController)
             CompetitionModeDialog(viewModel, navController)
         }

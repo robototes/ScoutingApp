@@ -141,18 +141,18 @@ fun TemplateListSheet(
         }
         BorderedCard(
             modifier = Modifier.clickable {
-                    viewModel.currentListResource.add(
-                        TemplateItem(
-                            id = UUID
-                                .randomUUID()
-                                .toString(),
-                            text = "",
-                            type = TemplateTypes.CHECK_BOX,
-                            saveKey = ""
-                        )
+                viewModel.currentListResource.add(
+                    TemplateItem(
+                        id = UUID
+                            .randomUUID()
+                            .toString(),
+                        text = "",
+                        type = TemplateTypes.CHECK_BOX,
+                        saveKey = ""
                     )
-                    coroutineScope.launch { sheetState.hide() }
-                }
+                )
+                coroutineScope.launch { sheetState.hide() }
+            }
         ) {
             SpacedRow(modifier = Modifier.padding(vertical = 30.dp)) {
                 Text(
@@ -175,22 +175,22 @@ fun TemplateListSheet(
         }
         BorderedCard(
             modifier = Modifier.clickable {
-                    viewModel.currentListResource.add(
-                        TemplateItem(
-                            id = UUID
-                                .randomUUID()
-                                .toString(),
-                            text = "",
-                            text2 = "",
-                            text3 = "",
-                            type = TemplateTypes.TRI_SCORING,
-                            saveKey = "",
-                            saveKey2 = "",
-                            saveKey3 = ""
-                        )
+                viewModel.currentListResource.add(
+                    TemplateItem(
+                        id = UUID
+                            .randomUUID()
+                            .toString(),
+                        text = "",
+                        text2 = "",
+                        text3 = "",
+                        type = TemplateTypes.TRI_SCORING,
+                        saveKey = "",
+                        saveKey2 = "",
+                        saveKey3 = ""
                     )
-                    coroutineScope.launch { sheetState.hide() }
-                }
+                )
+                coroutineScope.launch { sheetState.hide() }
+            }
         ) {
             LabeledTriCounter(
                 text1 = stringResource(id = R.string.template_editor_label_1_preview),

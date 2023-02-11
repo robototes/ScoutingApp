@@ -53,7 +53,8 @@ fun FinishScoutingView(navController: NavController) {
                     )
                 }
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 30.dp, vertical = 50.dp),
                     horizontalArrangement = Arrangement.End
                 ) {

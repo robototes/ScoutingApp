@@ -95,7 +95,7 @@ class TemplateEditorViewModel : ViewModel() {
         }
     }
 
-    private fun createExportedSaveKeyList() : List<String> {
+    private fun createExportedSaveKeyList(): List<String> {
         val exportedSaveKeyList = mutableListOf<String>()
         saveKeyList.forEach { triple ->
             exportedSaveKeyList.add(triple.first)
@@ -103,7 +103,7 @@ class TemplateEditorViewModel : ViewModel() {
         return exportedSaveKeyList
     }
 
-    private fun processFinalFileName() : String {
+    private fun processFinalFileName(): String {
         return finalFileName.text.let {
             if (it.contains(".json")) it else "$it.json"
         }

@@ -147,7 +147,9 @@ fun TriButtonBlock(
 ) {
     var currentSelection by remember { mutableStateOf(initialSelection) }
     Column(
-        modifier = Modifier.fillMaxWidth().then(modifier)
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
     ) {
         Text(
             text = headerText,
