@@ -23,6 +23,7 @@ import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.misc.ScoutingScheduleManager
+import com.scouting.app.misc.ScoutingType
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
@@ -36,7 +37,7 @@ fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: 
     val viewModel = context.getViewModel(ScoutingViewModel::class.java)
     LaunchedEffect(true) {
         viewModel.apply {
-            scoutingType.value = true
+            scoutingType = ScoutingType.PIT
             loadTemplateItems()
             this.scoutingScheduleManager = scoutingScheduleManager
             populatePitDataIfScheduled()
@@ -55,10 +56,10 @@ fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: 
                         style = MaterialTheme.typography.headlineSmall
                     )
                     BasicInputField(
-                        hint = viewModel.currentTeamNumberMonitoring.value.text,
-                        textFieldValue = viewModel.currentTeamNumberMonitoring.value,
+                        hint = viewModel.currentTeamNumberMonitoring.text,
+                        textFieldValue = viewModel.currentTeamNumberMonitoring,
                         onValueChange = { newText ->
-                            viewModel.currentTeamNumberMonitoring.value = newText
+                            viewModel.currentTeamNumberMonitoring = newText
                         },
                         icon = painterResource(id = R.drawable.ic_list_numbered),
                         modifier = Modifier.width(130.dp)
@@ -70,10 +71,10 @@ fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: 
                         style = MaterialTheme.typography.headlineSmall
                     )
                     BasicInputField(
-                        hint = viewModel.currentTeamNameMonitoring.value.text,
-                        textFieldValue = viewModel.currentTeamNameMonitoring.value,
+                        hint = viewModel.currentTeamNameMonitoring.text,
+                        textFieldValue = viewModel.currentTeamNameMonitoring,
                         onValueChange = { newText ->
-                            viewModel.currentTeamNameMonitoring.value = newText
+                            viewModel.currentTeamNameMonitoring = newText
                         },
                         icon = painterResource(id = R.drawable.ic_machine_learning)
                     )
@@ -86,10 +87,10 @@ fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: 
                         if (MMKV.defaultMMKV()
                                 .decodeString("DEFAULT_TEMPLATE_FILE_PATH_PIT", "")!!.isEmpty()
                         ) {
-                            viewModel.showingNoTemplateDialog.value = true
+                            viewModel.showingNoTemplateDialog = true
                         } else if (
-                            viewModel.currentTeamNameMonitoring.value.text.isBlank() ||
-                            viewModel.currentTeamNumberMonitoring.value.text.isBlank()
+                            viewModel.currentTeamNameMonitoring.text.isBlank() ||
+                            viewModel.currentTeamNumberMonitoring.text.isBlank()
                         ) {
                             Toast.makeText(
                                 context,

@@ -8,49 +8,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.scouting.app.R
 import com.scouting.app.components.DialogScaffold
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
+import com.scouting.app.misc.ScoutingType
 import com.scouting.app.viewmodel.SettingsViewModel
 import com.tencent.mmkv.MMKV
 
 @Composable
 fun CompetitionModeDialog(viewModel: SettingsViewModel) {
-    val scoutingType = viewModel.scheduledScoutingModeType.value
-    val preferenceKeyPrefix = if (scoutingType) "COMPETITION" else "PIT_SCOUTING"
+    val scoutingType = viewModel.scheduledScoutingModeType
+    val preferenceKeyPrefix = if (scoutingType == ScoutingType.MATCH) "COMPETITION" else "PIT_SCOUTING"
     val preferenceValue = MMKV.defaultMMKV().decodeBool("${preferenceKeyPrefix}_MODE", false)
-    if (viewModel.showingScheduledScoutingModeDialog.value) {
+    if (viewModel.showingScheduledScoutingModeDialog) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_rotate_180),
             contentDescription = stringResource(id = R.string.ic_rotate_180_content_desc),
             title = if (preferenceValue) {
-                if (scoutingType) {
+                if (scoutingType == ScoutingType.MATCH) {
                     stringResource(id = R.string.settings_competition_mode_dialog_disable_title)
                 } else {
                     stringResource(id = R.string.settings_pit_scouting_mode_dialog_disable_title)
                 }
             } else {
-                if (scoutingType) {
+                if (scoutingType == ScoutingType.MATCH) {
                     stringResource(id = R.string.settings_competition_mode_dialog_enable_title)
                 } else {
                     stringResource(id = R.string.settings_pit_scouting_mode_dialog_enable_title)
                 }
             },
             onDismissRequest = {
-                viewModel.showingScheduledScoutingModeDialog.value = false
+                viewModel.showingScheduledScoutingModeDialog = false
             }
         ) {
             Text(
                 text = if (preferenceValue) {
-                    if (scoutingType) {
+                    if (scoutingType == ScoutingType.MATCH) {
                         stringResource(id = R.string.settings_competition_mode_dialog_disable_subtitle)
                     } else {
                         stringResource(id = R.string.settings_pit_scouting_mode_dialog_disable_subtitle)
                     }
                 } else {
-                    if (scoutingType) {
+                    if (scoutingType == ScoutingType.MATCH) {
                         stringResource(id = R.string.settings_competition_mode_dialog_enable_subtitle)
                     } else {
                         stringResource(id = R.string.settings_pit_scouting_mode_dialog_enable_subtitle)
@@ -64,7 +64,7 @@ fun CompetitionModeDialog(viewModel: SettingsViewModel) {
                     icon = painterResource(id = R.drawable.ic_close_outline),
                     contentDescription = stringResource(id = R.string.ic_close_outline_content_desc),
                     onClick = {
-                        viewModel.showingScheduledScoutingModeDialog.value = false
+                        viewModel.showingScheduledScoutingModeDialog = false
                     },
                     color = MaterialTheme.colorScheme.error
                 )
@@ -74,14 +74,14 @@ fun CompetitionModeDialog(viewModel: SettingsViewModel) {
                     contentDescription = stringResource(id = R.string.ic_checkmark_outline_content_desc),
                     onClick = {
                         viewModel.apply {
-                            if (scoutingType) {
-                                setCompetitionMode(!competitionMode.value)
-                                competitionMode.value = !competitionMode.value
+                            if (scoutingType == ScoutingType.MATCH) {
+                                changeCompetitionMode(!competitionMode)
+                                competitionMode = !competitionMode
                             } else {
-                                setPitScoutingMode(!pitScoutingMode.value)
-                                pitScoutingMode.value = !pitScoutingMode.value
+                                changePitScoutingMode(!pitScoutingMode)
+                                pitScoutingMode = !pitScoutingMode
                             }
-                            showingScheduledScoutingModeDialog.value = false
+                            showingScheduledScoutingModeDialog = false
                         }
                     },
                     color = MaterialTheme.colorScheme.secondary

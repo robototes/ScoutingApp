@@ -73,14 +73,14 @@ fun HomePageView(navController: NavController, scoutingScheduleManager: Scouting
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val allianceColor = if (settingsViewModel.deviceAlliancePosition.value == "RED") {
+                val allianceColor = if (settingsViewModel.deviceAlliancePosition == "RED") {
                     Color(0xFFEC4076)
                 } else {
                     Color(0xFF4284F5)
                 }
                 Button(
                     onClick = {
-                        settingsViewModel.showingDevicePositionDialog.value = true
+                        settingsViewModel.showingDevicePositionDialog = true
                     },
                     modifier = Modifier
                         .height(50.dp)
@@ -96,7 +96,7 @@ fun HomePageView(navController: NavController, scoutingScheduleManager: Scouting
                 ) {
                     Text(
                         text = preferences.let {
-                            "${settingsViewModel.deviceAlliancePosition.value} ${settingsViewModel.deviceRobotPosition.value}"
+                            "${settingsViewModel.deviceAlliancePosition} ${settingsViewModel.deviceRobotPosition}"
                         },
                         style = MaterialTheme.typography.headlineSmall,
                         color = allianceColor

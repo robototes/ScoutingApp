@@ -29,6 +29,7 @@ import com.scouting.app.components.MediumButton
 import com.scouting.app.components.SettingsDivider
 import com.scouting.app.components.SettingsPreference
 import com.scouting.app.misc.ScoutingScheduleManager
+import com.scouting.app.misc.ScoutingType
 import com.scouting.app.theme.NeutralGrayLight
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
@@ -64,9 +65,9 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         title = stringResource(id = R.string.settings_tablet_configuration_title),
                         endContent = {
                             MediumButton(
-                                text = "${viewModel.deviceAlliancePosition.value} ${viewModel.deviceRobotPosition.value}",
-                                onClick = { viewModel.showingDevicePositionDialog.value = true },
-                                color = if (viewModel.deviceAlliancePosition.value == "RED") {
+                                text = "${viewModel.deviceAlliancePosition} ${viewModel.deviceRobotPosition}",
+                                onClick = { viewModel.showingDevicePositionDialog = true },
+                                color = if (viewModel.deviceAlliancePosition == "RED") {
                                     MaterialTheme.colorScheme.error
                                 } else {
                                     MaterialTheme.colorScheme.primary
@@ -81,7 +82,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         endContent = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 MediumButton(
-                                    text = viewModel.competitionScheduleFileName.value,
+                                    text = viewModel.competitionScheduleFileName,
                                     onClick = {
                                         viewModel.requestFilePicker(
                                             context = context,
@@ -92,7 +93,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                     color = NeutralGrayLight,
                                     modifier = Modifier.padding(start = 10.dp)
                                 )
-                                AnimatedVisibility(visible = viewModel.competitionScheduleFileName.value != "NONE") {
+                                AnimatedVisibility(visible = viewModel.competitionScheduleFileName != "NONE") {
                                     IconButton(
                                         onClick = {
                                             scoutingScheduleManager.resetManagerMatch()
@@ -101,8 +102,8 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                                 encode("COMPETITION_SCHEDULE_FILE_NAME", "NONE")
                                             }
                                             viewModel.apply {
-                                                competitionMode.value = false
-                                                competitionScheduleFileName.value = "NONE"
+                                                competitionMode = false
+                                                competitionScheduleFileName = "NONE"
                                             }
                                         }
                                     ) {
@@ -120,7 +121,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         title = stringResource(id = R.string.settings_load_pit_schedule_title),
                         endContent = {
                             MediumButton(
-                                text = viewModel.pitScheduleFileName.value,
+                                text = viewModel.pitScheduleFileName,
                                 onClick = {
                                     viewModel.requestFilePicker(
                                         context = context,
@@ -131,7 +132,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                 color = NeutralGrayLight,
                                 modifier = Modifier.padding(start = 10.dp)
                             )
-                            AnimatedVisibility(visible = viewModel.pitScheduleFileName.value != "NONE") {
+                            AnimatedVisibility(visible = viewModel.pitScheduleFileName != "NONE") {
                                 IconButton(
                                     onClick = {
                                         preferences.apply {
@@ -139,8 +140,8 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                             encode("PIT_SCHEDULE_FILE_NAME", "NONE")
                                         }
                                         viewModel.apply {
-                                            pitScoutingMode.value = false
-                                            pitScheduleFileName.value = "NONE"
+                                            pitScoutingMode = false
+                                            pitScheduleFileName = "NONE"
                                         }
                                     }
                                 ) {
@@ -153,16 +154,16 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         },
                         modifier = Modifier.padding(top = 50.dp)
                     )
-                    AnimatedVisibility(visible = viewModel.pitScheduleFileName.value != "NONE") {
+                    AnimatedVisibility(visible = viewModel.pitScheduleFileName != "NONE") {
                         SettingsPreference(
                             title = stringResource(id = R.string.settings_pit_scouting_mode_title),
                             endContent = {
                                 Switch(
-                                    checked = viewModel.pitScoutingMode.value,
+                                    checked = viewModel.pitScoutingMode,
                                     onCheckedChange = {
                                         viewModel.apply {
-                                            scheduledScoutingModeType.value = false
-                                            showingScheduledScoutingModeDialog.value = true
+                                            scheduledScoutingModeType = ScoutingType.PIT
+                                            showingScheduledScoutingModeDialog = true
                                         }
                                     },
                                     colors = SwitchDefaults.colors(
@@ -174,18 +175,18 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                             },
                             modifier = Modifier.padding(top = 50.dp),
                             onClickAction = {
-                                viewModel.showingScheduledScoutingModeDialog.value = true
+                                viewModel.showingScheduledScoutingModeDialog = true
                             }
                         )
                     }
-                    AnimatedVisibility(visible = viewModel.competitionScheduleFileName.value != "NONE") {
+                    AnimatedVisibility(visible = viewModel.competitionScheduleFileName != "NONE") {
                         SettingsPreference(
                             title = stringResource(id = R.string.settings_competition_mode_toggle_title),
                             endContent = {
                                 Switch(
-                                    checked = viewModel.competitionMode.value,
+                                    checked = viewModel.competitionMode,
                                     onCheckedChange = {
-                                        viewModel.showingScheduledScoutingModeDialog.value = true
+                                        viewModel.showingScheduledScoutingModeDialog = true
                                     },
                                     colors = SwitchDefaults.colors(
                                         uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(
@@ -196,7 +197,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                             },
                             modifier = Modifier.padding(top = 50.dp),
                             onClickAction = {
-                                viewModel.showingScheduledScoutingModeDialog.value = true
+                                viewModel.showingScheduledScoutingModeDialog = true
                             }
                         )
                     }
@@ -205,7 +206,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         title = stringResource(id = R.string.settings_choose_default_template_title),
                         endContent = {
                             MediumButton(
-                                text = viewModel.defaultMatchTemplateFileName.value,
+                                text = viewModel.defaultMatchTemplateFileName,
                                 onClick = {
                                     viewModel.requestFilePicker(
                                         context = context,
@@ -222,11 +223,11 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         title = stringResource(id = R.string.settings_choose_default_output_location_title),
                         endContent = {
                             MediumButton(
-                                text = viewModel.defaultMatchOutputFileName.value.text,
+                                text = viewModel.defaultMatchOutputFileName.text,
                                 onClick = {
                                     viewModel.apply {
-                                        fileNameEditingType.value = false
-                                        showingFileNameDialog.value = true
+                                        fileNameEditingType = ScoutingType.MATCH
+                                        showingFileNameDialog = true
                                     }
                                 },
                                 color = NeutralGrayLight
@@ -239,7 +240,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         title = stringResource(id = R.string.settings_choose_default_template_pit_title),
                         endContent = {
                             MediumButton(
-                                text = viewModel.defaultPitTemplateFileName.value,
+                                text = viewModel.defaultPitTemplateFileName,
                                 onClick = {
                                     viewModel.requestFilePicker(
                                         context = context,
@@ -256,11 +257,11 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         title = stringResource(id = R.string.settings_choose_default_pit_output_location_title),
                         endContent = {
                             MediumButton(
-                                text = viewModel.defaultPitOutputFileName.value.text,
+                                text = viewModel.defaultPitOutputFileName.text,
                                 onClick = {
                                     viewModel.apply {
-                                        fileNameEditingType.value = true
-                                        showingFileNameDialog.value = true
+                                        fileNameEditingType = ScoutingType.PIT
+                                        showingFileNameDialog = true
                                     }
                                 },
                                 color = NeutralGrayLight

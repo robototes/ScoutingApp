@@ -3,69 +3,69 @@ package com.scouting.app.viewmodel
 import abhishekti7.unicorn.filepicker.UnicornFilePicker
 import android.os.Environment
 import android.widget.Toast
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.ScoutingScheduleManager
+import com.scouting.app.misc.ScoutingType.*
 import com.tencent.mmkv.MMKV
 import org.json.JSONObject
 import java.io.File
 
 class SettingsViewModel : ViewModel() {
 
-    var defaultMatchTemplateFileName = mutableStateOf("NONE")
-    var defaultMatchOutputFileName = mutableStateOf(TextFieldValue("output-match.csv"))
-    var defaultPitTemplateFileName = mutableStateOf("NONE")
-    var defaultPitOutputFileName = mutableStateOf(TextFieldValue("output-pit.csv"))
+    var defaultMatchTemplateFileName by mutableStateOf("NONE")
+    var defaultMatchOutputFileName by mutableStateOf(TextFieldValue("output-match.csv"))
+    var defaultPitTemplateFileName by mutableStateOf("NONE")
+    var defaultPitOutputFileName by mutableStateOf(TextFieldValue("output-pit.csv"))
 
-    var competitionScheduleFileName = mutableStateOf("NONE")
-    var pitScheduleFileName = mutableStateOf("NONE")
-    var deviceAlliancePosition = mutableStateOf("RED")
-    var deviceRobotPosition = mutableStateOf(0)
-    var competitionMode = mutableStateOf(false)
-    var pitScoutingMode = mutableStateOf(false)
+    var competitionScheduleFileName by mutableStateOf("NONE")
+    var pitScheduleFileName by mutableStateOf("NONE")
+    var deviceAlliancePosition by mutableStateOf("RED")
+    var deviceRobotPosition by mutableStateOf(0)
+    var competitionMode by mutableStateOf(false)
+    var pitScoutingMode by mutableStateOf(false)
 
-    // false = match, true = pit
-    var fileNameEditingType = mutableStateOf(false)
+    var fileNameEditingType by mutableStateOf(MATCH)
 
-    var showingFileNameDialog = mutableStateOf(false)
-    var showingDevicePositionDialog = mutableStateOf(false)
-    var showingScheduledScoutingModeDialog = mutableStateOf(false)
-    // true = match, false = pit
-    var scheduledScoutingModeType = mutableStateOf(true)
+    var showingFileNameDialog by mutableStateOf(false)
+    var showingDevicePositionDialog by mutableStateOf(false)
+    var showingScheduledScoutingModeDialog by mutableStateOf(false)
+    var scheduledScoutingModeType by mutableStateOf(MATCH)
 
     lateinit var scoutingScheduleManager: ScoutingScheduleManager
     private val preferences = MMKV.defaultMMKV()
 
     fun loadSavedPreferences() {
         preferences.apply {
-            deviceRobotPosition.value = decodeInt("DEVICE_ROBOT_POSITION", 1)
-            deviceAlliancePosition.value = decodeString("DEVICE_ALLIANCE_POSITION", "RED")!!
-            defaultMatchTemplateFileName.value = File(
+            deviceRobotPosition = decodeInt("DEVICE_ROBOT_POSITION", 1)
+            deviceAlliancePosition = decodeString("DEVICE_ALLIANCE_POSITION", "RED")!!
+            defaultMatchTemplateFileName = File(
                 decodeString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "NONE")!!
             ).name
-            defaultPitTemplateFileName.value = File(
+            defaultPitTemplateFileName = File(
                 decodeString("DEFAULT_TEMPLATE_FILE_PATH_PIT", "NONE")!!
             ).name
-            competitionScheduleFileName.value =
-                decodeString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")!!
-            pitScheduleFileName.value =
+            competitionScheduleFileName = decodeString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")!!
+            pitScheduleFileName =
                 decodeString("PIT_SCHEDULE_FILE_NAME", "NONE")!!
-            defaultMatchOutputFileName.value = TextFieldValue(
+            defaultMatchOutputFileName = TextFieldValue(
                 File(
                     decodeString("DEFAULT_OUTPUT_FILE_NAME_MATCH", "output-match.csv")!!
                 ).name
             )
-            defaultPitOutputFileName.value = TextFieldValue(
+            defaultPitOutputFileName = TextFieldValue(
                 File(
                     decodeString("DEFAULT_OUTPUT_FILE_NAME_PIT", "output-pit.csv")!!
                 ).name
             )
-            competitionMode.value = decodeBool("COMPETITION_MODE", false)
-            pitScoutingMode.value = decodeBool("PIT_SCOUTING_MODE", false)
+            competitionMode = decodeBool("COMPETITION_MODE", false)
+            pitScoutingMode = decodeBool("PIT_SCOUTING_MODE", false)
         }
     }
 
@@ -95,9 +95,9 @@ class SettingsViewModel : ViewModel() {
                 encode("DEFAULT_TEMPLATE_FILE_NAME_$prefKeyEnding", fileName)
             }
             if (matchTemplate) {
-                defaultMatchTemplateFileName.value = fileName
+                defaultMatchTemplateFileName = fileName
             } else {
-                defaultPitTemplateFileName.value = fileName
+                defaultPitTemplateFileName = fileName
             }
         } else {
             Toast.makeText(
@@ -127,7 +127,11 @@ class SettingsViewModel : ViewModel() {
             encode("${typePrefix}_SCHEDULE_FILE_PATH", filePath)
             encode("${typePrefix}_SCHEDULE_FILE_NAME", fileName)
         }
-        (if (matchSchedule) competitionScheduleFileName else pitScheduleFileName).value = fileName
+        if (matchSchedule) {
+            competitionScheduleFileName = fileName
+        } else {
+            pitScheduleFileName = fileName
+        }
         scoutingScheduleManager.apply {
             loadScheduleFromFile(filePath, context, matchSchedule)
             if (matchSchedule) { resetManagerMatch() }
@@ -136,14 +140,14 @@ class SettingsViewModel : ViewModel() {
 
     fun applyDevicePositionChange() {
         preferences.apply {
-            encode("DEVICE_ALLIANCE_POSITION", deviceAlliancePosition.value)
-            encode("DEVICE_ROBOT_POSITION", deviceRobotPosition.value)
+            encode("DEVICE_ALLIANCE_POSITION", deviceAlliancePosition)
+            encode("DEVICE_ROBOT_POSITION", deviceRobotPosition)
         }
     }
 
     fun applyOutputFileNameChange(fileName: String) {
         preferences.encode(
-            if (fileNameEditingType.value) {
+            if (fileNameEditingType == PIT) {
                 "DEFAULT_OUTPUT_FILE_NAME_PIT"
             } else {
                 "DEFAULT_OUTPUT_FILE_NAME_MATCH"
@@ -158,12 +162,12 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
-    fun setCompetitionMode(value: Boolean) {
+    fun changeCompetitionMode(value: Boolean) {
         preferences.encode("COMPETITION_MODE", value)
         scoutingScheduleManager.resetManagerMatch()
     }
 
-    fun setPitScoutingMode(value: Boolean) {
+    fun changePitScoutingMode(value: Boolean) {
         preferences.encode("PIT_SCOUTING_MODE", value)
     }
 

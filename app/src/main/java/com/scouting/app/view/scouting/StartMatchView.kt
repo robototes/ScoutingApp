@@ -22,8 +22,10 @@ import com.scouting.app.components.LargeButton
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.RatingBar
 import com.scouting.app.components.SpacedRow
+import com.scouting.app.misc.AllianceType
 import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.misc.ScoutingType
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
@@ -38,7 +40,7 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
     val itemSpacing = 50.dp
     LaunchedEffect(true) {
         viewModel.apply {
-            scoutingType.value = false
+            scoutingType = ScoutingType.MATCH
             loadTemplateItems()
             this.scoutingScheduleManager = scoutingScheduleManager
             populateMatchDataIfCompetition()
@@ -57,10 +59,10 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                         style = MaterialTheme.typography.headlineSmall
                     )
                     BasicInputField(
-                        hint = viewModel.currentMatchMonitoring.value.text,
-                        textFieldValue = viewModel.currentMatchMonitoring.value,
+                        hint = viewModel.currentMatchMonitoring.text,
+                        textFieldValue = viewModel.currentMatchMonitoring,
                         onValueChange = { newText ->
-                            viewModel.currentMatchMonitoring.value = newText
+                            viewModel.currentMatchMonitoring = newText
                         },
                         icon = painterResource(id = R.drawable.ic_time),
                         modifier = Modifier.width(115.dp)
@@ -72,10 +74,10 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                         style = MaterialTheme.typography.headlineSmall
                     )
                     BasicInputField(
-                        hint = viewModel.currentTeamNumberMonitoring.value.text,
-                        textFieldValue = viewModel.currentTeamNumberMonitoring.value,
+                        hint = viewModel.currentTeamNumberMonitoring.text,
+                        textFieldValue = viewModel.currentTeamNumberMonitoring,
                         onValueChange = { newText ->
-                            viewModel.currentTeamNumberMonitoring.value = newText
+                            viewModel.currentTeamNumberMonitoring = newText
                         },
                         icon = painterResource(id = R.drawable.ic_machine_learning),
                         modifier = Modifier.width(125.dp)
@@ -89,9 +91,9 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                     RatingBar(
                         values = 2,
                         onValueChange = { value ->
-                            viewModel.currentAllianceMonitoring.value = when (value) {
-                                1 -> false
-                                else -> true
+                            viewModel.currentAllianceMonitoring = when (value) {
+                                1 -> AllianceType.RED
+                                else -> AllianceType.BLUE
                             }
                         },
                         customTextValues = listOf(
@@ -99,7 +101,9 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                             stringResource(id = R.string.start_match_alliance_label_blue)
                         ),
                         allianceSelectionColor = true,
-                        startingSelectedIndex = if (viewModel.currentAllianceMonitoring.value) 1 else 0
+                        startingSelectedIndex = if (
+                            viewModel.currentAllianceMonitoring == AllianceType.RED
+                        ) 1 else 0
                     )
                 }
                 LargeButton(
@@ -110,10 +114,10 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                         if (MMKV.defaultMMKV()
                                 .decodeString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")!!.isEmpty()
                         ) {
-                            viewModel.showingNoTemplateDialog.value = true
+                            viewModel.showingNoTemplateDialog = true
                         } else if (
-                            viewModel.currentMatchMonitoring.value.text.isBlank() ||
-                            viewModel.currentTeamNumberMonitoring.value.text.isBlank()
+                            viewModel.currentMatchMonitoring.text.isBlank() ||
+                            viewModel.currentTeamNumberMonitoring.text.isBlank()
                         ) {
                             Toast.makeText(
                                 context,

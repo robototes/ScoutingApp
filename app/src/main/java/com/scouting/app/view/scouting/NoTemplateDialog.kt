@@ -19,14 +19,14 @@ import com.scouting.app.viewmodel.ScoutingViewModel
 
 @Composable
 fun NoTemplateDialog(viewModel: ScoutingViewModel, navController: NavController) {
-    if (viewModel.showingNoTemplateDialog.value) {
+    if (viewModel.showingNoTemplateDialog) {
         ScoutingTheme {
             DialogScaffold(
                 icon = painterResource(id = R.drawable.ic_help),
                 contentDescription = stringResource(id = R.string.ic_help_content_desc),
                 title = stringResource(id = R.string.start_scouting_dialog_no_template_title),
                 onDismissRequest = {
-                    viewModel.showingNoTemplateDialog.value = false
+                    viewModel.showingNoTemplateDialog = false
                 }
             ) {
                 Text(
@@ -49,7 +49,7 @@ fun NoTemplateDialog(viewModel: ScoutingViewModel, navController: NavController)
                         icon = painterResource(id = R.drawable.ic_checkmark_outline),
                         contentDescription = stringResource(id = R.string.ic_checkmark_outline_content_desc),
                         onClick = {
-                            viewModel.showingNoTemplateDialog.value = false
+                            viewModel.showingNoTemplateDialog = false
                         },
                         color = MaterialTheme.colorScheme.secondary
                     )

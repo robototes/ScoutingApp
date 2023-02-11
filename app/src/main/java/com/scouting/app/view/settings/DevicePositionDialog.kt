@@ -21,13 +21,13 @@ import com.scouting.app.viewmodel.SettingsViewModel
 @Composable
 fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavController) {
     val context = navController.context as MainActivity
-    if (viewModel.showingDevicePositionDialog.value) {
+    if (viewModel.showingDevicePositionDialog) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_machine_learning),
             contentDescription = stringResource(id = R.string.ic_machine_learning_content_desc),
             title = stringResource(id = R.string.settings_tablet_configuration_title),
             onDismissRequest = {
-                viewModel.showingDevicePositionDialog.value = false
+                viewModel.showingDevicePositionDialog = false
             }
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -41,23 +41,23 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
                         values = 2,
                         customTextValues = alliancePositionValues.asList(),
                         onValueChange = {
-                            viewModel.deviceAlliancePosition.value = alliancePositionValues[it - 1]
+                            viewModel.deviceAlliancePosition = alliancePositionValues[it - 1]
                         },
                         allianceSelectionColor = true,
                         startingSelectedIndex = alliancePositionValues.indexOf(
-                            viewModel.deviceAlliancePosition.value
+                            viewModel.deviceAlliancePosition
                         ) + 1
                     )
                     RatingBar(
                         values = 3,
                         onValueChange = {
-                            viewModel.deviceRobotPosition.value = it
+                            viewModel.deviceRobotPosition = it
                         },
-                        customColor = when (viewModel.deviceAlliancePosition.value) {
+                        customColor = when (viewModel.deviceAlliancePosition) {
                             "RED" -> MaterialTheme.colorScheme.error
                             else -> MaterialTheme.colorScheme.primary
                         },
-                        startingSelectedIndex = viewModel.deviceRobotPosition.value
+                        startingSelectedIndex = viewModel.deviceRobotPosition
                     )
                 }
                 SmallButton(
@@ -66,7 +66,7 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
                     contentDescription = stringResource(id = R.string.ic_checkmark_outline_content_desc),
                     onClick = {
                         viewModel.apply {
-                            showingDevicePositionDialog.value = false
+                            showingDevicePositionDialog = false
                             applyDevicePositionChange()
                         }
                     },

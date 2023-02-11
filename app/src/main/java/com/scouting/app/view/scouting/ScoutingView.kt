@@ -41,6 +41,8 @@ import com.scouting.app.components.LabeledTriCounter
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.components.TriButtonBlock
+import com.scouting.app.misc.AllianceType
+import com.scouting.app.misc.MatchStage
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateItem
@@ -68,25 +70,25 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                             Text(
                                 text = String.format(
                                     stringResource(id = R.string.in_match_header_match_number_format),
-                                    viewModel.currentMatchMonitoring.value.text
+                                    viewModel.currentMatchMonitoring.text
                                 ),
                                 style = MaterialTheme.typography.headlineLarge
                             )
                             Text(
                                 text = String.format(
                                     stringResource(id = R.string.in_match_header_team_number_format),
-                                    viewModel.currentTeamNumberMonitoring.value.text
+                                    viewModel.currentTeamNumberMonitoring.text
                                 ),
                                 style = MaterialTheme.typography.headlineSmall
                             )
                             Text(
-                                text = if (viewModel.currentAllianceMonitoring.value) {
+                                text = if (viewModel.currentAllianceMonitoring == AllianceType.BLUE) {
                                     stringResource(id = R.string.in_match_header_alliance_blue)
                                 } else {
                                     stringResource(id = R.string.in_match_header_alliance_red)
                                 },
                                 style = MaterialTheme.typography.headlineSmall,
-                                color = if (viewModel.currentAllianceMonitoring.value) {
+                                color = if (viewModel.currentAllianceMonitoring == AllianceType.BLUE) {
                                     Color.Blue
                                 } else {
                                     Color.Red
@@ -98,16 +100,17 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                 shape = MaterialTheme.shapes.medium,
                                 elevation = CardDefaults.cardElevation(0.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = when (viewModel.currentMatchStage.value) {
-                                        0 -> SecondaryPurple
-                                        else -> AffirmativeGreen
+                                    containerColor = if (viewModel.currentMatchStage == MatchStage.AUTO) {
+                                        SecondaryPurple
+                                    } else {
+                                        AffirmativeGreen
                                     }
                                 )
                             ) {
                                 Text(
                                     text = viewModel.let {
                                         it.getCorrespondingMatchStageName(
-                                            matchStage = it.currentMatchStage.value
+                                            matchStage = it.currentMatchStage
                                         )
                                     },
                                     style = MaterialTheme.typography.headlineMedium
@@ -121,13 +124,13 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                             }
                             SmallButton(
                                 text = viewModel.let {
-                                    if (it.currentMatchStage.value >= 1) {
+                                    if (it.currentMatchStage == MatchStage.TELEOP) {
                                         stringResource(id = R.string.in_match_stage_finish_scout_text)
                                     } else {
                                         String.format(
                                             stringResource(id = R.string.in_match_stage_move_on_format),
                                             viewModel.getCorrespondingMatchStageName(
-                                                matchStage = it.currentMatchStage.value + 1
+                                                matchStage = it.currentMatchStage
                                             )
                                         )
                                     }
@@ -135,11 +138,11 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                 icon = painterResource(id = R.drawable.ic_arrow_forward),
                                 contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                                 onClick = {
-                                    viewModel.currentMatchStage.let {
-                                        if (it.value >= 1) {
+                                    viewModel.let {
+                                        if (it.currentMatchStage == MatchStage.TELEOP) {
                                             navController.navigate(NavDestination.FinishScouting)
                                         } else {
-                                            it.value++
+                                            it.currentMatchStage = MatchStage.TELEOP
                                         }
                                     }
                                 },
@@ -159,13 +162,13 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                             Text(
                                 text = String.format(
                                     stringResource(id = R.string.in_pit_scouting_primary_subtitle_text),
-                                    viewModel.currentTeamNumberMonitoring.value.text
+                                    viewModel.currentTeamNumberMonitoring.text
                                 ),
                                 style = MaterialTheme.typography.headlineSmall,
                                 modifier = Modifier.padding(top = 5.dp)
                             )
                             Text(
-                                text = viewModel.currentTeamNameMonitoring.value.text,
+                                text = viewModel.currentTeamNameMonitoring.text,
                                 style = MaterialTheme.typography.headlineSmall +
                                         TextStyle(fontWeight = FontWeight.Normal)
                             )
@@ -190,10 +193,10 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                     // is good behavior of LazyColumn) but in our case we want to recompose
                     // it so that the value of say, a counter is not persisted through
                     // match stage changes, confusing the user and messing up our data
-                    AnimatedVisibility(visible = viewModel.currentMatchStage.value == 0) {
+                    AnimatedVisibility(visible = viewModel.currentMatchStage == MatchStage.AUTO) {
                         ScoutingTemplateLoadView(list = viewModel.autoListItems)
                     }
-                    AnimatedVisibility(visible = viewModel.currentMatchStage.value == 1) {
+                    AnimatedVisibility(visible = viewModel.currentMatchStage == MatchStage.TELEOP) {
                         ScoutingTemplateLoadView(list = viewModel.teleListItems)
                     }
                 } else {

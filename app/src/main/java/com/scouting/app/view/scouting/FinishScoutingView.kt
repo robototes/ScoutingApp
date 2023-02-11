@@ -46,9 +46,9 @@ fun FinishScoutingView(navController: NavController) {
                     )
                     BasicInputField(
                         hint = stringResource(id = R.string.finish_match_name_confirmation_hint),
-                        textFieldValue = viewModel.scoutName.value,
+                        textFieldValue = viewModel.scoutName,
                         onValueChange = {
-                            viewModel.scoutName.value = it
+                            viewModel.scoutName = it
                         },
                         icon = painterResource(id = R.drawable.ic_user_avatar)
                     )
@@ -64,7 +64,7 @@ fun FinishScoutingView(navController: NavController) {
                         icon = painterResource(id = R.drawable.ic_save_file),
                         contentDescription = stringResource(id = R.string.ic_save_file_content_desc),
                         onClick = {
-                            if (viewModel.scoutName.value.text.isBlank()) {
+                            if (viewModel.scoutName.text.isBlank()) {
                                 Toast.makeText(
                                     context,
                                     context.getString(R.string.finish_match_scout_name_blank_toast_text),

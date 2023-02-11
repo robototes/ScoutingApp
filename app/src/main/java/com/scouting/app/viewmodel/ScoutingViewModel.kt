@@ -2,8 +2,10 @@ package com.scouting.app.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.intl.Locale
@@ -15,6 +17,10 @@ import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.ScoutingScheduleManager
+import com.scouting.app.misc.ScoutingType.*
+import com.scouting.app.misc.AllianceType.*
+import com.scouting.app.misc.MatchStage
+import com.scouting.app.misc.MatchStage.*
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
@@ -26,51 +32,46 @@ import java.util.UUID
 
 class ScoutingViewModel : ViewModel() {
 
-    // true = pit, false = match
-    var scoutingType = mutableStateOf(false)
-
     var autoListItems = mutableStateListOf<TemplateItem>()
     var teleListItems = mutableStateListOf<TemplateItem>()
     var pitListItems = mutableStateListOf<TemplateItem>()
-    var saveKeyOrderList = mutableStateOf<List<String>?>(null)
+    var saveKeyOrderList by mutableStateOf<List<String>?>(null)
 
-    // true = blue, false = red
-    var currentAllianceMonitoring = mutableStateOf(true)
+    var scoutingType by mutableStateOf(PIT)
+    var currentMatchStage by mutableStateOf(AUTO)
+    var currentAllianceMonitoring by mutableStateOf(RED)
+    var currentTeamNumberMonitoring by mutableStateOf(TextFieldValue())
+    var currentTeamNameMonitoring by mutableStateOf(TextFieldValue())
+    var currentMatchMonitoring by mutableStateOf(TextFieldValue())
+    var scoutName by mutableStateOf(TextFieldValue())
 
-    // 0 = auto, 1 = teleop
-    var currentMatchStage = mutableStateOf(0)
-    var currentTeamNumberMonitoring = mutableStateOf(TextFieldValue())
-    var currentTeamNameMonitoring = mutableStateOf(TextFieldValue())
-    var currentMatchMonitoring = mutableStateOf(TextFieldValue())
-    var scoutName = mutableStateOf(TextFieldValue())
-
-    var showingNoTemplateDialog = mutableStateOf(false)
+    var showingNoTemplateDialog by mutableStateOf(false)
 
     lateinit var scoutingScheduleManager: ScoutingScheduleManager
     private val preferences = MMKV.defaultMMKV()
 
     fun loadTemplateItems() {
-        val templateType = if (scoutingType.value) "PIT" else "MATCH"
+        val templateType = if (scoutingType == PIT) "PIT" else "MATCH"
         val defaultTemplate =
             preferences.decodeString("DEFAULT_TEMPLATE_FILE_PATH_$templateType", "")
         if (defaultTemplate?.isNotBlank() == true) {
             File(defaultTemplate).bufferedReader().use { file ->
                 val serializedTemplate = Gson().fromJson(
                     file.readText(),
-                    if (scoutingType.value) {
+                    if (scoutingType == PIT) {
                         TemplateFormatPit::class.java
                     } else {
                         TemplateFormatMatch::class.java
                     }
                 )
                 file.close()
-                if (scoutingType.value) {
+                if (scoutingType == PIT) {
                     serializedTemplate as TemplateFormatPit
                     pitListItems.apply {
                         clear()
                         addAll(serializedTemplate.templateItems)
                     }
-                    saveKeyOrderList.value = serializedTemplate.saveOrderByKey
+                    saveKeyOrderList = serializedTemplate.saveOrderByKey
                 } else {
                     serializedTemplate as TemplateFormatMatch
                     autoListItems.apply {
@@ -81,7 +82,7 @@ class ScoutingViewModel : ViewModel() {
                         clear()
                         addAll(serializedTemplate.teleTemplateItems)
                     }
-                    saveKeyOrderList.value = serializedTemplate.saveOrderByKey
+                    saveKeyOrderList = serializedTemplate.saveOrderByKey
                 }
             }
         }
@@ -89,47 +90,48 @@ class ScoutingViewModel : ViewModel() {
 
     fun populateMatchDataIfCompetition() {
         if (preferences.decodeBool("COMPETITION_MODE", false)) {
-            currentAllianceMonitoring.value =
+            currentAllianceMonitoring = if (
                 preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE"
-            currentMatchMonitoring.value =
+            ) BLUE else RED
+            currentMatchMonitoring =
                 TextFieldValue((scoutingScheduleManager.currentMatchScoutingIteration + 1).toString())
-            currentTeamNumberMonitoring.value = TextFieldValue(scoutingScheduleManager.getCurrentTeam())
+            currentTeamNumberMonitoring = TextFieldValue(scoutingScheduleManager.getCurrentTeam())
         } else {
             // Clear values from previous scouting session as the ViewModel persists
-            currentMatchMonitoring.value = TextFieldValue()
-            currentTeamNumberMonitoring.value = TextFieldValue()
+            currentMatchMonitoring = TextFieldValue()
+            currentTeamNumberMonitoring = TextFieldValue()
         }
     }
 
     fun populatePitDataIfScheduled() {
         if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
             val teamInfo = scoutingScheduleManager.getCurrentPitInfo()
-            currentTeamNameMonitoring.value = TextFieldValue(teamInfo.second)
-            currentTeamNumberMonitoring.value = TextFieldValue(teamInfo.first)
+            currentTeamNameMonitoring = TextFieldValue(teamInfo.second)
+            currentTeamNumberMonitoring = TextFieldValue(teamInfo.first)
         } else {
-            currentTeamNumberMonitoring.value = TextFieldValue()
-            currentTeamNameMonitoring.value = TextFieldValue()
+            currentTeamNumberMonitoring = TextFieldValue()
+            currentTeamNameMonitoring = TextFieldValue()
         }
     }
 
     fun resetMatchConfig() {
-        currentMatchStage.value = 0
+        currentMatchStage = AUTO
     }
 
     @Composable
-    fun getCorrespondingMatchStageName(matchStage: Int): String {
+    fun getCorrespondingMatchStageName(matchStage: MatchStage): String {
         return when (matchStage) {
-            0 -> stringResource(id = R.string.in_match_stage_autonomous_label)
+            AUTO -> stringResource(id = R.string.in_match_stage_autonomous_label)
             else -> stringResource(id = R.string.in_match_stage_teleoperated_label)
         }
     }
 
     fun saveScoutingDataToFile(context: MainActivity) {
         var csvRowDraft = ""
-        val templateType = if (scoutingType.value) "PIT" else "MATCH"
-        val specialColumnName = if (scoutingType.value) "name" else "match"
+        val templateType = if (scoutingType == PIT) "PIT" else "MATCH"
+        val specialColumnName = if (scoutingType == PIT) "name" else "match"
         val contentResolver = context.contentResolver
-        val itemList = if (scoutingType.value) {
+        val itemList = if (scoutingType == PIT) {
             pitListItems
         } else {
             autoListItems.toList() + teleListItems.toList()
@@ -143,16 +145,16 @@ class ScoutingViewModel : ViewModel() {
             "DEFAULT_OUTPUT_FILE_NAME_$templateType",
             "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
         )!!
-        val csvHeaderRow = "device,scout,$specialColumnName,team," + saveKeyOrderList.value!!.joinToString(",")
-        csvRowDraft += "$tabletName,${scoutName.value.text},${
-            if (scoutingType.value) { currentTeamNameMonitoring.value.text } 
-            else { currentMatchMonitoring.value.text }
-        },${currentTeamNumberMonitoring.value.text},"
+        val csvHeaderRow = "device,scout,$specialColumnName,team," + saveKeyOrderList!!.joinToString(",")
+        csvRowDraft += "$tabletName,${scoutName.text},${
+            if (scoutingType == PIT) { currentTeamNameMonitoring.text } 
+            else { currentMatchMonitoring.text }
+        },${currentTeamNumberMonitoring.text},"
 
         // Append ordered, user-inputted match data
         repeat(itemList.size) { index ->
             itemList.findItemValueWithKey(
-                saveKeyOrderList.value?.get(index).toString()
+                saveKeyOrderList?.get(index).toString()
             ).let { data ->
                 csvRowDraft += data
                 if (index < itemList.size - 1) {
@@ -198,7 +200,7 @@ class ScoutingViewModel : ViewModel() {
             }
         }
 
-        if (scoutingType.value) {
+        if (scoutingType == PIT) {
             if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
                 scoutingScheduleManager.moveToNextPit()
             }
