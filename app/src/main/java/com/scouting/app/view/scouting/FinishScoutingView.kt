@@ -1,5 +1,6 @@
 package com.scouting.app.view.scouting
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,8 +64,16 @@ fun FinishScoutingView(navController: NavController) {
                         icon = painterResource(id = R.drawable.ic_save_file),
                         contentDescription = stringResource(id = R.string.ic_save_file_content_desc),
                         onClick = {
-                            viewModel.saveScoutingDataToFile(context)
-                            navController.navigate(NavDestination.HomePage)
+                            if (viewModel.scoutName.value.text.isBlank()) {
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.finish_match_scout_name_blank_toast_text),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                viewModel.saveScoutingDataToFile(context)
+                                navController.navigate(NavDestination.HomePage)
+                            }
                         },
                         color = AffirmativeGreen
                     )

@@ -53,14 +53,17 @@ fun TemplateEditorView(
     navController: NavController,
     type: String
 ) {
-
     val viewModel = navController.context.getViewModel(TemplateEditorViewModel::class.java)
-    val bottomSheetState =
-        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val pagerState = rememberPagerState(initialPage = 0)
-
     viewModel.currentTemplateType = type
-
+    LaunchedEffect(true) {
+        viewModel.apply {
+            autoListItems.clear()
+            teleListItems.clear()
+            pitListItems.clear()
+        }
+    }
     Surface {
         ModalBottomSheetLayout(
             sheetContent = {

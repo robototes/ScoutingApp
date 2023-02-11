@@ -141,6 +141,7 @@
     <string name="finish_match_name_confirmation">Enter your name</string>
     <string name="finish_match_name_confirmation_hint">Scout name</string>
     <string name="finish_match_done_button_text">Save data</string>
+    <string name="finish_match_scout_name_blank_toast_text">You must enter a name!</string>
 
     <string name="settings_header_title">Configuration</string>
     <string name="settings_choose_default_template_title">Current match template</string>

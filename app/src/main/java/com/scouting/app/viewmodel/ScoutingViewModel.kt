@@ -94,6 +94,10 @@ class ScoutingViewModel : ViewModel() {
             currentMatchMonitoring.value =
                 TextFieldValue((scoutingScheduleManager.currentMatchScoutingIteration + 1).toString())
             currentTeamNumberMonitoring.value = TextFieldValue(scoutingScheduleManager.getCurrentTeam())
+        } else {
+            // Clear values from previous scouting session as the ViewModel persists
+            currentMatchMonitoring.value = TextFieldValue()
+            currentTeamNumberMonitoring.value = TextFieldValue()
         }
     }
 
@@ -102,6 +106,9 @@ class ScoutingViewModel : ViewModel() {
             val teamInfo = scoutingScheduleManager.getCurrentPitInfo()
             currentTeamNameMonitoring.value = TextFieldValue(teamInfo.second)
             currentTeamNumberMonitoring.value = TextFieldValue(teamInfo.first)
+        } else {
+            currentTeamNumberMonitoring.value = TextFieldValue()
+            currentTeamNameMonitoring.value = TextFieldValue()
         }
     }
 
@@ -119,28 +126,30 @@ class ScoutingViewModel : ViewModel() {
 
     fun saveScoutingDataToFile(context: MainActivity) {
         var csvRowDraft = ""
+        val templateType = if (scoutingType.value) "PIT" else "MATCH"
+        val specialColumnName = if (scoutingType.value) "name" else "match"
+        val contentResolver = context.contentResolver
         val itemList = if (scoutingType.value) {
             pitListItems
         } else {
             autoListItems.toList() + teleListItems.toList()
         }
-        val templateType = if (scoutingType.value) "PIT" else "MATCH"
-        val specialColumnName = if (scoutingType.value) "name" else "match"
-        val contentResolver = context.contentResolver
 
         // Add device name, scout name, match number and team number
         // OR if pit scouting add team name in place of match number
         val tabletName = preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED") + "-" +
                 preferences.decodeInt("DEVICE_ROBOT_POSITION", 1).toString()
-        csvRowDraft += "$tabletName,${scoutName.value.text}," +
-                "${if (scoutingType.value) {
-                        currentTeamNameMonitoring.value.text
-                    } else {
-                        currentMatchMonitoring.value.text
-                    }
-                },${currentTeamNumberMonitoring.value.text},"
+        val userSelectedOutputFileName = preferences.decodeString(
+            "DEFAULT_OUTPUT_FILE_NAME_$templateType",
+            "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
+        )!!
+        val csvHeaderRow = "device,scout,$specialColumnName,team," + saveKeyOrderList.value!!.joinToString(",")
+        csvRowDraft += "$tabletName,${scoutName.value.text},${
+            if (scoutingType.value) { currentTeamNameMonitoring.value.text } 
+            else { currentMatchMonitoring.value.text }
+        },${currentTeamNumberMonitoring.value.text},"
 
-        // Append ordered user-inputted match data
+        // Append ordered, user-inputted match data
         repeat(itemList.size) { index ->
             itemList.findItemValueWithKey(
                 saveKeyOrderList.value?.get(index).toString()
@@ -152,13 +161,8 @@ class ScoutingViewModel : ViewModel() {
             }
         }
 
-        val csvHeaderRow = "device,scout,$specialColumnName,team," + saveKeyOrderList.value!!.joinToString(",")
-        val userSelectedOutputFileName = preferences.decodeString(
-            "DEFAULT_OUTPUT_FILE_NAME_$templateType",
-            "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
-        )!!
-        // Write all data to the specified output file name
         var outputFile = File(userSelectedOutputFileName)
+
         if (!outputFile.exists()) {
             outputFile.createNewFile()
         } else {
@@ -177,21 +181,23 @@ class ScoutingViewModel : ViewModel() {
             }
         }
 
-        // need to verify existing file text to make sure it isn't a different template
         if (outputFile.exists()) {
             lateinit var previousFileText: String
+            // Check first line to determine whether there is a labeled save key row already there
             contentResolver.openInputStream(outputFile.toUri()).use {
                 previousFileText = it!!.reader().readText()
                 it.close()
             }
             FileOutputStream(outputFile).use { outputStream ->
                 outputStream.bufferedWriter().use {
-                    // If the file is newly created, add the save keys as the first row
+                    // If the file is newly created, add the save keys as the first row, then the
+                    // data as the rest of the file's contents
                     it.write("${previousFileText.ifEmpty { csvHeaderRow }}\n$csvRowDraft")
                 }
                 outputStream.close()
             }
         }
+
         if (scoutingType.value) {
             if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
                 scoutingScheduleManager.moveToNextPit()
