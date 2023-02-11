@@ -119,7 +119,7 @@ class ScoutingViewModel : ViewModel() {
 
         // Add device name, scout name, match number and team number
         // OR if pit scouting add team name in place of match number
-        val tabletName = preferences.getString("DEVICE_ALLIANCE_POSITION", "RED") + "-"
+        val tabletName = preferences.getString("DEVICE_ALLIANCE_POSITION", "RED") + "-" +
                 preferences.getInt("DEVICE_ROBOT_POSITION", 1).toString()
         csvRowDraft += "$tabletName,${scoutName.value.text}," +
                 "${
