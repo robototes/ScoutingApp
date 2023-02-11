@@ -28,7 +28,7 @@ import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.MediumButton
 import com.scouting.app.components.SettingsDivider
 import com.scouting.app.components.SettingsPreference
-import com.scouting.app.misc.MatchManager
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.theme.NeutralGrayLight
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
@@ -36,14 +36,14 @@ import com.scouting.app.viewmodel.SettingsViewModel
 import com.tencent.mmkv.MMKV
 
 @Composable
-fun SettingsView(navController: NavController, matchManager: MatchManager) {
+fun SettingsView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(SettingsViewModel::class.java)
     val preferences = MMKV.defaultMMKV()
     LaunchedEffect(true) {
         viewModel.apply {
             loadSavedPreferences()
-            this.matchManager = matchManager
+            this.scoutingScheduleManager = scoutingScheduleManager
         }
     }
     ScoutingTheme {
@@ -94,7 +94,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                                 AnimatedVisibility(visible = viewModel.competitionScheduleFileName.value != "NONE") {
                                     IconButton(
                                         onClick = {
-                                            matchManager.resetManager()
+                                            scoutingScheduleManager.resetManagerMatch()
                                             preferences.apply {
                                                 encode("COMPETITION_MODE", false)
                                                 encode("COMPETITION_SCHEDULE_FILE_NAME", "NONE")
@@ -115,14 +115,54 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                         },
                         modifier = Modifier.padding(top = 50.dp)
                     )
-                    AnimatedVisibility(visible = viewModel.competitionScheduleFileName.value != "NONE") {
+                    SettingsPreference(
+                        title = stringResource(id = R.string.settings_load_pit_schedule_title),
+                        endContent = {
+                            MediumButton(
+                                text = viewModel.pitScheduleFileName.value,
+                                onClick = {
+                                    viewModel.requestFilePicker(
+                                        context = context,
+                                        code = 2415,
+                                        type = "csv"
+                                    )
+                                },
+                                color = NeutralGrayLight,
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                            AnimatedVisibility(visible = viewModel.pitScheduleFileName.value != "NONE") {
+                                IconButton(
+                                    onClick = {
+                                        preferences.apply {
+                                            encode("PIT_SCOUTING_MODE", false)
+                                            encode("PIT_SCHEDULE_FILE_NAME", "NONE")
+                                        }
+                                        viewModel.apply {
+                                            pitScoutingMode.value = false
+                                            pitScheduleFileName.value = "NONE"
+                                        }
+                                    }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_trash_can),
+                                        contentDescription = stringResource(id = R.string.ic_trash_can_content_desc)
+                                    )
+                                }
+                            }
+                        },
+                        modifier = Modifier.padding(top = 50.dp)
+                    )
+                    AnimatedVisibility(visible = viewModel.pitScheduleFileName.value != "NONE") {
                         SettingsPreference(
-                            title = stringResource(id = R.string.settings_competition_mode_toggle_title),
+                            title = stringResource(id = R.string.settings_pit_scouting_mode_title),
                             endContent = {
                                 Switch(
-                                    checked = viewModel.competitionMode.value,
+                                    checked = viewModel.pitScoutingMode.value,
                                     onCheckedChange = {
-                                        viewModel.showingCompetitionModeDialog.value = true
+                                        viewModel.apply {
+                                            scheduledScoutingModeType.value = false
+                                            showingScheduledScoutingModeDialog.value = true
+                                        }
                                     },
                                     colors = SwitchDefaults.colors(
                                         uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(
@@ -133,7 +173,29 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
                             },
                             modifier = Modifier.padding(top = 50.dp),
                             onClickAction = {
-                                viewModel.showingCompetitionModeDialog.value = true
+                                viewModel.showingScheduledScoutingModeDialog.value = true
+                            }
+                        )
+                    }
+                    AnimatedVisibility(visible = viewModel.competitionScheduleFileName.value != "NONE") {
+                        SettingsPreference(
+                            title = stringResource(id = R.string.settings_competition_mode_toggle_title),
+                            endContent = {
+                                Switch(
+                                    checked = viewModel.competitionMode.value,
+                                    onCheckedChange = {
+                                        viewModel.showingScheduledScoutingModeDialog.value = true
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(
+                                            0.2F
+                                        )
+                                    )
+                                )
+                            },
+                            modifier = Modifier.padding(top = 50.dp),
+                            onClickAction = {
+                                viewModel.showingScheduledScoutingModeDialog.value = true
                             }
                         )
                     }
@@ -209,7 +271,7 @@ fun SettingsView(navController: NavController, matchManager: MatchManager) {
             }
             FileNameDialog(viewModel)
             DevicePositionDialog(viewModel, navController)
-            CompetitionModeDialog(viewModel, navController)
+            CompetitionModeDialog(viewModel)
         }
     }
 }

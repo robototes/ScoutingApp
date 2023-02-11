@@ -22,7 +22,7 @@ import com.scouting.app.components.LargeButton
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.RatingBar
 import com.scouting.app.components.SpacedRow
-import com.scouting.app.misc.MatchManager
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.AffirmativeGreenDark
@@ -32,7 +32,7 @@ import com.scouting.app.viewmodel.ScoutingViewModel
 import com.tencent.mmkv.MMKV
 
 @Composable
-fun StartMatchView(navController: NavController, matchManager: MatchManager) {
+fun StartMatchView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(ScoutingViewModel::class.java)
     val itemSpacing = 50.dp
@@ -40,7 +40,7 @@ fun StartMatchView(navController: NavController, matchManager: MatchManager) {
         viewModel.apply {
             scoutingType.value = false
             loadTemplateItems()
-            this.matchManager = matchManager
+            this.scoutingScheduleManager = scoutingScheduleManager
             populateMatchDataIfCompetition()
         }
     }

@@ -35,6 +35,8 @@
     <string name="home_page_subtitle_text">Created by TEAM 2412</string>
     <string name="home_page_button_start_text">Start a match</string>
     <string name="home_page_button_competition_start_format">Start match #%1$s</string>
+    <string name="home_page_button_pit_start_format">Scout team %1$s\'s pit</string>
+    <string name="home_page_pit_scouting_status_chip_format">You have %1$s pits left to scout</string>
     <string name="home_page_button_create_text">Create a template</string>
     <string name="home_page_button_pit_text">Record pit data</string>
     <string name="home_page_device_edit_dialog_title">Scout name</string>
@@ -149,11 +151,17 @@
     <string name="settings_choose_default_output_location_dialog_title">Default output file name</string>
     <string name="settings_tablet_configuration_title">Device position</string>
     <string name="settings_load_competition_schedule_title">Competition schedule</string>
+    <string name="settings_load_pit_schedule_title">Pit scouting schedule</string>
+    <string name="settings_pit_scouting_mode_title">Pit scouting mode</string>
     <string name="settings_competition_mode_toggle_title">Competition mode</string>
     <string name="settings_competition_mode_dialog_enable_title">Enable competition mode?</string>
     <string name="settings_competition_mode_dialog_disable_title">Disable competition mode?</string>
     <string name="settings_competition_mode_dialog_enable_subtitle">Enabling competition mode will auto-populate match scouting team numbers, starting with the first match on your selected competition schedule.</string>
     <string name="settings_competition_mode_dialog_disable_subtitle">Are you sure you wish to disable competition mode? This will RESET match auto-population of team numbers, so if you are in the middle of the qualification matches, it\'s probably not a good idea to do this unless directed by the scouting lead.</string>
+    <string name="settings_pit_scouting_mode_dialog_enable_title">Enable pit scouting mode?</string>
+    <string name="settings_pit_scouting_mode_dialog_disable_title">Disable pit scouting mode?</string>
+    <string name="settings_pit_scouting_mode_dialog_enable_subtitle">Enabling pit scouting mode will auto-populate pit scouting team numbers and team names, and show a status on the home page that lets your scouts know which pits they are assigned to scout</string>
+    <string name="settings_pit_scouting_mode_dialog_disable_subtitle">Are you sure you wish to disable pit scouting mode? This will RESET the pit scouting schedule-following system, so scouts will have to manually enter team numbers and names on their own. If you are partway through pit scouting, it\'s probably not a good idea to do this unless you are directed to do so.</string>
     <string name="settings_competition_mode_dialog_positive_button_label">Yes</string>
     <string name="settings_competition_mode_dialog_negative_button_label">No, go back</string>
     <string name="settings_pick_incorrect_template_toast_text">Error! You must choose the correct type of template!</string>

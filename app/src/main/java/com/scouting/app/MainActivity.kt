@@ -20,7 +20,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.scouting.app.misc.FilePaths
-import com.scouting.app.misc.MatchManager
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
@@ -41,13 +41,16 @@ import java.io.File
 class MainActivity : ComponentActivity() {
 
     private lateinit var navigationController: NavHostController
-    private val matchManager = MatchManager()
+    private val scoutingScheduleManager = ScoutingScheduleManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MMKV.initialize(this)
         configureStorage()
-        matchManager.loadCachedCompetitionSchedule()
+        scoutingScheduleManager.apply {
+            loadCachedSchedule(true)
+            loadCachedSchedule(false)
+        }
         setContent {
             ScoutingTheme {
                 NavigationHost()
@@ -74,7 +77,7 @@ class MainActivity : ComponentActivity() {
             },
             builder = {
                 composable(NavDestination.HomePage) {
-                    HomePageView(navigationController, matchManager)
+                    HomePageView(navigationController, scoutingScheduleManager)
                 }
                 composable(
                     route = "${NavDestination.TemplateEditor}/{type}",
@@ -92,10 +95,10 @@ class MainActivity : ComponentActivity() {
                     TemplateSaveView(navigationController)
                 }
                 composable(NavDestination.StartMatchScouting) {
-                    StartMatchView(navigationController, matchManager)
+                    StartMatchView(navigationController, scoutingScheduleManager)
                 }
                 composable(NavDestination.StartPitScouting) {
-                    StartPitScoutingView(navigationController)
+                    StartPitScoutingView(navigationController, scoutingScheduleManager)
                 }
                 composable(
                     route = "${NavDestination.Scouting}/{type}",
@@ -107,7 +110,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable(NavDestination.Settings) {
-                    SettingsView(navigationController, matchManager)
+                    SettingsView(navigationController, scoutingScheduleManager)
                 }
                 composable(NavDestination.FinishScouting) {
                     FinishScoutingView(navigationController)
@@ -163,10 +166,11 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        2413 -> {
+                        2413, 2415 -> {
                             processScheduleFilePickerResult(
                                 filePath = data.getStringArrayListExtra("filePaths")!![0],
-                                context = this@MainActivity
+                                context = this@MainActivity,
+                                matchSchedule = requestCode == 2413
                             )
                         }
                     }

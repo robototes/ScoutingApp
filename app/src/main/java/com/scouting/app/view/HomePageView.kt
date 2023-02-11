@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +38,7 @@ import androidx.navigation.NavController
 import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.LargeButton
-import com.scouting.app.misc.MatchManager
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ErrorRedDark
@@ -49,7 +51,7 @@ import com.scouting.app.viewmodel.SettingsViewModel
 import com.tencent.mmkv.MMKV
 
 @Composable
-fun HomePageView(navController: NavController, matchManager: MatchManager) {
+fun HomePageView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(HomePageViewModel::class.java)
     val settingsViewModel =
@@ -145,13 +147,34 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                         },
                         style = MaterialTheme.typography.titleLarge
                     )
+                    if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
+                        Card(
+                            shape =  MaterialTheme.shapes.large,
+                            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                            modifier = Modifier.padding(top = 25.dp)
+                                .border(
+                                    width = 2.dp,
+                                    shape = MaterialTheme.shapes.large,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                        ) {
+                            Text(
+                                text = String.format(
+                                    stringResource(id = R.string.home_page_pit_scouting_status_chip_format),
+                                    scoutingScheduleManager.getPitsLeftToScout()
+                                ),
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(vertical = 10.dp, horizontal = 15.dp)
+                            )
+                        }
+                    }
                 }
                 Column {
                     LargeButton(
                         text = if (preferences.decodeBool("COMPETITION_MODE", false)) {
                             String.format(
                                 stringResource(id = R.string.home_page_button_competition_start_format),
-                                matchManager.currentMatchNumber + 1
+                                scoutingScheduleManager.currentMatchScoutingIteration + 1
                             )
                         } else {
                             stringResource(id = R.string.home_page_button_start_text)
@@ -166,6 +189,22 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                         colorBorder = AffirmativeGreenDark
                     )
                     LargeButton(
+                        text = if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
+                            String.format(
+                                stringResource(id = R.string.home_page_button_pit_start_format),
+                                scoutingScheduleManager.getCurrentPitInfo().first
+                            )
+                        } else {
+                            stringResource(id = R.string.home_page_button_pit_text)
+                        },
+                        icon = painterResource(id = R.drawable.ic_pit_stand),
+                        contentDescription = stringResource(id = R.string.ic_pit_stand_content_desc),
+                        onClick = { navController.navigate(NavDestination.StartPitScouting) },
+                        color = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.padding(bottom = 20.dp),
+                        colorBorder = SecondaryPurpleDark
+                    )
+                    LargeButton(
                         text = stringResource(id = R.string.home_page_button_create_text),
                         icon = painterResource(id = R.drawable.ic_server_wired),
                         contentDescription = stringResource(id = R.string.ic_server_wired_content_desc),
@@ -175,15 +214,6 @@ fun HomePageView(navController: NavController, matchManager: MatchManager) {
                         color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(bottom = 20.dp),
                         colorBorder = ErrorRedDark
-                    )
-                    LargeButton(
-                        text = stringResource(id = R.string.home_page_button_pit_text),
-                        icon = painterResource(id = R.drawable.ic_pit_stand),
-                        contentDescription = stringResource(id = R.string.ic_pit_stand_content_desc),
-                        onClick = { navController.navigate(NavDestination.StartPitScouting) },
-                        color = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.padding(bottom = 20.dp),
-                        colorBorder = SecondaryPurpleDark
                     )
                 }
             }

@@ -22,6 +22,7 @@ import com.scouting.app.components.LargeButton
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
@@ -30,13 +31,15 @@ import com.scouting.app.viewmodel.ScoutingViewModel
 import com.tencent.mmkv.MMKV
 
 @Composable
-fun StartPitScoutingView(navController: NavController) {
+fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(ScoutingViewModel::class.java)
     LaunchedEffect(true) {
         viewModel.apply {
             scoutingType.value = true
             loadTemplateItems()
+            this.scoutingScheduleManager = scoutingScheduleManager
+            populatePitDataIfScheduled()
         }
     }
     ScoutingTheme {

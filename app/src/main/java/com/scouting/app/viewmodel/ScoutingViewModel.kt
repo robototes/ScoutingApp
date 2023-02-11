@@ -14,7 +14,7 @@ import com.google.gson.Gson
 import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.misc.FilePaths
-import com.scouting.app.misc.MatchManager
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
@@ -45,7 +45,7 @@ class ScoutingViewModel : ViewModel() {
 
     var showingNoTemplateDialog = mutableStateOf(false)
 
-    lateinit var matchManager: MatchManager
+    lateinit var scoutingScheduleManager: ScoutingScheduleManager
     private val preferences = MMKV.defaultMMKV()
 
     fun loadTemplateItems() {
@@ -91,8 +91,16 @@ class ScoutingViewModel : ViewModel() {
             currentAllianceMonitoring.value =
                 preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE"
             currentMatchMonitoring.value =
-                TextFieldValue((matchManager.currentMatchNumber + 1).toString())
-            currentTeamNumberMonitoring.value = TextFieldValue(matchManager.getCurrentTeam())
+                TextFieldValue((scoutingScheduleManager.currentMatchScoutingIteration + 1).toString())
+            currentTeamNumberMonitoring.value = TextFieldValue(scoutingScheduleManager.getCurrentTeam())
+        }
+    }
+
+    fun populatePitDataIfScheduled() {
+        if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
+            val teamInfo = scoutingScheduleManager.getCurrentPitInfo()
+            currentTeamNameMonitoring.value = TextFieldValue(teamInfo.second)
+            currentTeamNumberMonitoring.value = TextFieldValue(teamInfo.first)
         }
     }
 
@@ -108,7 +116,7 @@ class ScoutingViewModel : ViewModel() {
         }
     }
 
-    fun saveMatchDataToFile(context: MainActivity) {
+    fun saveScoutingDataToFile(context: MainActivity) {
         var csvRowDraft = ""
         val itemList = if (scoutingType.value) {
             pitListItems
@@ -173,8 +181,14 @@ class ScoutingViewModel : ViewModel() {
                 outputStream.close()
             }
         }
-        if (preferences.decodeBool("COMPETITION_MODE", false)) {
-            matchManager.moveToNextMatch()
+        if (scoutingType.value) {
+            if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
+                scoutingScheduleManager.moveToNextPit()
+            }
+        } else {
+            if (preferences.decodeBool("COMPETITION_MODE", false)) {
+                scoutingScheduleManager.moveToNextMatch()
+            }
         }
     }
 

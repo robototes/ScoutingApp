@@ -63,7 +63,7 @@ fun FinishScoutingView(navController: NavController) {
                         icon = painterResource(id = R.drawable.ic_save_file),
                         contentDescription = stringResource(id = R.string.ic_save_file_content_desc),
                         onClick = {
-                            viewModel.saveMatchDataToFile(context)
+                            viewModel.saveScoutingDataToFile(context)
                             navController.navigate(NavDestination.HomePage)
                         },
                         color = AffirmativeGreen

@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.misc.FilePaths
-import com.scouting.app.misc.MatchManager
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.tencent.mmkv.MMKV
 import org.json.JSONObject
 import java.io.File
@@ -21,19 +21,23 @@ class SettingsViewModel : ViewModel() {
     var defaultPitTemplateFileName = mutableStateOf("NONE")
     var defaultPitOutputFileName = mutableStateOf(TextFieldValue("output-pit.csv"))
 
-    var competitionScheduleFileName = mutableStateOf("none")
+    var competitionScheduleFileName = mutableStateOf("NONE")
+    var pitScheduleFileName = mutableStateOf("NONE")
     var deviceAlliancePosition = mutableStateOf("RED")
     var deviceRobotPosition = mutableStateOf(0)
     var competitionMode = mutableStateOf(false)
+    var pitScoutingMode = mutableStateOf(false)
 
     // false = match, true = pit
     var fileNameEditingType = mutableStateOf(false)
 
     var showingFileNameDialog = mutableStateOf(false)
     var showingDevicePositionDialog = mutableStateOf(false)
-    var showingCompetitionModeDialog = mutableStateOf(false)
+    var showingScheduledScoutingModeDialog = mutableStateOf(false)
+    // true = match, false = pit
+    var scheduledScoutingModeType = mutableStateOf(true)
 
-    lateinit var matchManager: MatchManager
+    lateinit var scoutingScheduleManager: ScoutingScheduleManager
     private val preferences = MMKV.defaultMMKV()
 
     fun loadSavedPreferences() {
@@ -48,6 +52,8 @@ class SettingsViewModel : ViewModel() {
             ).name
             competitionScheduleFileName.value =
                 decodeString("COMPETITION_SCHEDULE_FILE_NAME", "NONE")!!
+            pitScheduleFileName.value =
+                decodeString("PIT_SCHEDULE_FILE_NAME", "NONE")!!
             defaultMatchOutputFileName.value = TextFieldValue(
                 File(
                     decodeString("DEFAULT_OUTPUT_FILE_NAME_MATCH", "output-match.csv")!!
@@ -59,6 +65,7 @@ class SettingsViewModel : ViewModel() {
                 ).name
             )
             competitionMode.value = decodeBool("COMPETITION_MODE", false)
+            pitScoutingMode.value = decodeBool("PIT_SCOUTING_MODE", false)
         }
     }
 
@@ -113,16 +120,17 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
-    fun processScheduleFilePickerResult(filePath: String, context: MainActivity) {
+    fun processScheduleFilePickerResult(filePath: String, context: MainActivity, matchSchedule: Boolean) {
         val fileName = File(filePath).name
+        val typePrefix = if (matchSchedule) "COMPETITION" else "PIT"
         preferences.apply {
-            encode("COMPETITION_SCHEDULE_FILE_PATH", filePath)
-            encode("COMPETITION_SCHEDULE_FILE_NAME", fileName)
+            encode("${typePrefix}_SCHEDULE_FILE_PATH", filePath)
+            encode("${typePrefix}_SCHEDULE_FILE_NAME", fileName)
         }
-        competitionScheduleFileName.value = fileName
-        matchManager.apply {
-            loadCompetitionScheduleFromFile(filePath, context)
-            resetManager()
+        (if (matchSchedule) competitionScheduleFileName else pitScheduleFileName).value = fileName
+        scoutingScheduleManager.apply {
+            loadScheduleFromFile(filePath, context, matchSchedule)
+            if (matchSchedule) { resetManagerMatch() }
         }
     }
 
@@ -152,7 +160,11 @@ class SettingsViewModel : ViewModel() {
 
     fun setCompetitionMode(value: Boolean) {
         preferences.encode("COMPETITION_MODE", value)
-        matchManager.resetManager()
+        scoutingScheduleManager.resetManagerMatch()
+    }
+
+    fun setPitScoutingMode(value: Boolean) {
+        preferences.encode("PIT_SCOUTING_MODE", value)
     }
 
 }
