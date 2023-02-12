@@ -123,10 +123,7 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                     if (it.currentMatchStage == MatchStage.TELEOP) {
                                         stringResource(id = R.string.in_match_stage_finish_scout_text)
                                     } else {
-                                        String.format(
-                                            stringResource(id = R.string.in_match_stage_move_on_format),
-                                            viewModel.currentMatchStage.name
-                                        )
+                                        stringResource(id = R.string.in_match_stage_move_on)
                                     }
                                 },
                                 icon = painterResource(id = R.drawable.ic_arrow_forward),

@@ -134,7 +134,7 @@
     <string name="in_match_header_alliance_blue">Blue alliance</string>
     <string name="in_match_stage_autonomous_label">AUTO</string>
     <string name="in_match_stage_teleoperated_label">TELEOP</string>
-    <string name="in_match_stage_move_on_format">Move to %1$s</string>
+    <string name="in_match_stage_move_on">Move to TELEOP</string>
     <string name="in_match_stage_finish_scout_text">Finish match</string>
 
     <string name="finish_match_header_title">Finalize data</string>
