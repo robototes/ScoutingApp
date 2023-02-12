@@ -41,7 +41,7 @@
     <string name="home_page_button_pit_text">Record pit data</string>
     <string name="home_page_device_edit_dialog_title">Scout name</string>
     <string name="home_page_device_edit_dialog_hint">Enter device name</string>
-    <string name="home_page_device_edit_dialog_save_button">Save changes</string>
+    <string name="home_page_device_edit_dialog_save_button">Done</string>
     <string name="home_page_template_type_dialog_title">Choose template type</string>
     <string name="home_page_template_type_dialog_match">Match template</string>
     <string name="home_page_template_type_dialog_pit">Pit data template</string>

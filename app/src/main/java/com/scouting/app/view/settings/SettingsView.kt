@@ -28,6 +28,8 @@ import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.MediumButton
 import com.scouting.app.components.SettingsDivider
 import com.scouting.app.components.SettingsPreference
+import com.scouting.app.misc.AllianceType
+import com.scouting.app.misc.RequestCode
 import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.misc.ScoutingType
 import com.scouting.app.theme.NeutralGrayLight
@@ -65,9 +67,9 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         title = stringResource(id = R.string.settings_tablet_configuration_title),
                         endContent = {
                             MediumButton(
-                                text = "${viewModel.deviceAlliancePosition} ${viewModel.deviceRobotPosition}",
+                                text = "${viewModel.deviceAlliancePosition.name} ${viewModel.deviceRobotPosition}",
                                 onClick = { viewModel.showingDevicePositionDialog = true },
-                                color = if (viewModel.deviceAlliancePosition == "RED") {
+                                color = if (viewModel.deviceAlliancePosition == AllianceType.RED) {
                                     MaterialTheme.colorScheme.error
                                 } else {
                                     MaterialTheme.colorScheme.primary
@@ -86,7 +88,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                     onClick = {
                                         viewModel.requestFilePicker(
                                             context = context,
-                                            code = 2413,
+                                            code = RequestCode.COMPETITION_SCHEDULE_FILE_PICK,
                                             type = "csv"
                                         )
                                     },
@@ -125,7 +127,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                 onClick = {
                                     viewModel.requestFilePicker(
                                         context = context,
-                                        code = 2415,
+                                        code = RequestCode.PIT_SCOUTING_SCHEUDLE_FILE_PICK,
                                         type = "csv"
                                     )
                                 },
@@ -210,7 +212,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                 onClick = {
                                     viewModel.requestFilePicker(
                                         context = context,
-                                        code = 2412,
+                                        code = RequestCode.MATCH_TEMPLATE_FILE_PICK,
                                         type = "json"
                                     )
                                 },
@@ -244,7 +246,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                 onClick = {
                                     viewModel.requestFilePicker(
                                         context = context,
-                                        code = 2414,
+                                        code = RequestCode.PIT_TEMPLATE_FILE_PICK,
                                         type = "json"
                                     )
                                 },

@@ -16,12 +16,22 @@ class ScoutingScheduleManager {
     private val currentPitScheduleCSV = mutableListOf<List<String>>()
 
     // The index inside of the list of teams participating in each match
-    // 0 corresponds to red 1, an index of 2 would go to red 3, etc.
+    // 0 corresponds to red/blue 1, an index of 2 would go to red/blue 3, etc.
     private var monitoringTeamPositionIndex = 0
 
     var currentMatchScoutingIteration by mutableStateOf(0)
     var currentPitScoutingIteration by mutableStateOf(0)
 
+    /**
+     * Read a CSV file containing a pit or match scouting schedule, and add
+     * it to the lists in the ScoutingScheduleManager then save the entire CSV
+     * to MMKV and set the current iteration to 0
+     *
+     * @param filePath - The file path pointing to the schedule that is being loaded
+     * @param context - MainActivity context so that we can read the files using
+     * a ContentResolver to open an input stream
+     * @param matchSchedule - Whether the file being loaded is a match or pit schedule
+     */
     fun loadScheduleFromFile(filePath: String, context: MainActivity, matchSchedule: Boolean) {
         val scheduleFile = File(filePath)
         val preferences = MMKV.defaultMMKV()
@@ -44,6 +54,14 @@ class ScoutingScheduleManager {
         }
     }
 
+    /**
+     * Called when the app is first opened, if there is an existing match or pit
+     * schedule and the corresponding scouting mode is turned on in settings, load
+     * that schedule into the ScoutingScheduleManager so that we can pick up where
+     * we left off when the app was last closed
+     *
+     * @param matchSchedule - Whether to load a cached pit or match schedule
+     */
     fun loadCachedSchedule(matchSchedule: Boolean) {
         val preferences = MMKV.defaultMMKV()
         val type = if (matchSchedule) "COMPETITION" else "PIT"
@@ -53,9 +71,9 @@ class ScoutingScheduleManager {
             currentPitScheduleCSV
         }
         val cachedSchedule = preferences.decodeString("${type}_SCHEDULE_CACHED", "")!!
-        if (matchSchedule) { resetManagerMatch() }
-        currentListResource.clear()
         if (cachedSchedule.isNotBlank()) {
+            if (matchSchedule) { resetManagerMatch() }
+            currentListResource.clear()
             cachedSchedule.split("%").forEach {
                 currentListResource.add(it.removeSurrounding("[", "]").split(", "))
             }
@@ -69,6 +87,10 @@ class ScoutingScheduleManager {
         }
     }
 
+    /**
+     * Reset the ScoutingScheduleManager match data, starting at match 1 again
+     * and setting the monitoringTeamPositionIndex based on the set device position
+     */
     fun resetManagerMatch() {
         monitoringTeamPositionIndex = 0
         currentMatchScoutingIteration = 0
@@ -80,22 +102,40 @@ class ScoutingScheduleManager {
         }
     }
 
+    /**
+     * In match scouting mode, get the team corresponding to the user's device position
+     * and the current match number
+     */
     fun getCurrentTeam(): String =
         currentCompetitionScheduleCSV[currentMatchScoutingIteration][monitoringTeamPositionIndex]
 
-    // teamNumber, teamName
+    /**
+     * Fetch information about the current pit being scouted
+     *
+     * @return Triple holding the team number as first and team name as second
+     */
     fun getCurrentPitInfo() : Pair<String, String> {
         val item = currentPitScheduleCSV[currentPitScoutingIteration]
         return Pair(item[0], item[1])
     }
 
-    fun getPitsLeftToScout() : Int = currentPitScheduleCSV.size -currentPitScoutingIteration
+    /**
+     * Return how many pits the device has left to scout based on the schedule
+     */
+    fun getPitsLeftToScout() : Int = currentPitScheduleCSV.size - currentPitScoutingIteration
 
+    /**
+     * Increment the match number counter and save this with MMKV
+     */
     fun moveToNextMatch() {
         currentMatchScoutingIteration++
         MMKV.defaultMMKV().encode("COMPETITION_SCHEDULE_CURRENT_ITERATION", currentMatchScoutingIteration)
     }
 
+    /**
+     * Increment the current row of the pit scouting schedule we're
+     * on and save this to MMKV
+     */
     fun moveToNextPit() {
         currentPitScoutingIteration++
         MMKV.defaultMMKV().encode("PIT_SCHEDULE_CURRENT_ITERATION", currentPitScoutingIteration)

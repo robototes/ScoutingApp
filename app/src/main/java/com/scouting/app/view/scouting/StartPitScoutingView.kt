@@ -98,7 +98,6 @@ fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: 
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
-                            viewModel.resetMatchConfig()
                             navController.navigate("${NavDestination.Scouting}/" + false)
                         }
                     },

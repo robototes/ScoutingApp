@@ -108,11 +108,7 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                 )
                             ) {
                                 Text(
-                                    text = viewModel.let {
-                                        it.getCorrespondingMatchStageName(
-                                            matchStage = it.currentMatchStage
-                                        )
-                                    },
+                                    text = viewModel.currentMatchStage.name,
                                     style = MaterialTheme.typography.headlineMedium
                                             + TextStyle(fontWeight = FontWeight.SemiBold),
                                     modifier = Modifier.padding(
@@ -129,9 +125,7 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                     } else {
                                         String.format(
                                             stringResource(id = R.string.in_match_stage_move_on_format),
-                                            viewModel.getCorrespondingMatchStageName(
-                                                matchStage = it.currentMatchStage
-                                            )
+                                            viewModel.currentMatchStage.name
                                         )
                                     }
                                 },

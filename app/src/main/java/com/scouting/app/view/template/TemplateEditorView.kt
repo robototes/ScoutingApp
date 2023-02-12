@@ -36,6 +36,7 @@ import com.scouting.app.components.SmallButton
 import com.scouting.app.components.TabLayout
 import com.scouting.app.components.TriButtonBlock
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.misc.ScoutingType
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateItem
 import com.scouting.app.utilities.getViewModel
@@ -49,21 +50,11 @@ import org.burnoutcrew.reorderable.reorderable
 
 @Composable
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
-fun TemplateEditorView(
-    navController: NavController,
-    type: String
-) {
+fun TemplateEditorView(navController: NavController, type: String) {
     val viewModel = navController.context.getViewModel(TemplateEditorViewModel::class.java)
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val pagerState = rememberPagerState(initialPage = 0)
-    viewModel.currentTemplateType = type
-    LaunchedEffect(true) {
-        viewModel.apply {
-            autoListItems.clear()
-            teleListItems.clear()
-            pitListItems.clear()
-        }
-    }
+    viewModel.currentTemplateType = ScoutingType.valueOf(type)
     Surface {
         ModalBottomSheetLayout(
             sheetContent = {

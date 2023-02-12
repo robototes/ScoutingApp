@@ -23,8 +23,9 @@ import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.RatingBar
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.misc.AllianceType
-import com.scouting.app.misc.ScoutingScheduleManager
+import com.scouting.app.misc.MatchStage
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.misc.ScoutingType
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.AffirmativeGreenDark
@@ -37,7 +38,6 @@ import com.tencent.mmkv.MMKV
 fun StartMatchView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(ScoutingViewModel::class.java)
-    val itemSpacing = 50.dp
     LaunchedEffect(true) {
         viewModel.apply {
             scoutingType = ScoutingType.MATCH
@@ -53,7 +53,7 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                     title = stringResource(id = R.string.start_match_header_title),
                     navController = navController
                 )
-                SpacedRow(modifier = Modifier.padding(top = itemSpacing)) {
+                SpacedRow(modifier = Modifier.padding(top = 50.dp)) {
                     Text(
                         text = stringResource(id = R.string.start_match_match_number_text),
                         style = MaterialTheme.typography.headlineSmall
@@ -68,7 +68,7 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                         modifier = Modifier.width(115.dp)
                     )
                 }
-                SpacedRow(modifier = Modifier.padding(top = itemSpacing)) {
+                SpacedRow(modifier = Modifier.padding(top = 50.dp)) {
                     Text(
                         text = stringResource(id = R.string.start_match_team_number_text),
                         style = MaterialTheme.typography.headlineSmall
@@ -83,7 +83,7 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                         modifier = Modifier.width(125.dp)
                     )
                 }
-                SpacedRow(modifier = Modifier.padding(top = itemSpacing)) {
+                SpacedRow(modifier = Modifier.padding(top = 50.dp)) {
                     Text(
                         text = stringResource(id = R.string.start_match_alliance_selection_text),
                         style = MaterialTheme.typography.headlineSmall
@@ -101,9 +101,7 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                             stringResource(id = R.string.start_match_alliance_label_blue)
                         ),
                         allianceSelectionColor = true,
-                        startingSelectedIndex = if (
-                            viewModel.currentAllianceMonitoring == AllianceType.RED
-                        ) 1 else 0
+                        startingSelectedIndex = if (viewModel.currentAllianceMonitoring == AllianceType.RED) 1 else 2
                     )
                 }
                 LargeButton(
@@ -111,9 +109,8 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
-                        if (MMKV.defaultMMKV()
-                                .decodeString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")!!.isEmpty()
-                        ) {
+                        if (MMKV.defaultMMKV().decodeString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")!!
+                                .isEmpty()) {
                             viewModel.showingNoTemplateDialog = true
                         } else if (
                             viewModel.currentMatchMonitoring.text.isBlank() ||
@@ -125,12 +122,12 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
-                            viewModel.resetMatchConfig()
+                            viewModel.currentMatchStage = MatchStage.AUTO
                             navController.navigate("${NavDestination.Scouting}/" + true)
                         }
                     },
                     color = AffirmativeGreen,
-                    modifier = Modifier.padding(horizontal = 30.dp, vertical = itemSpacing),
+                    modifier = Modifier.padding(horizontal = 30.dp, vertical = 50.dp),
                     colorBorder = AffirmativeGreenDark
                 )
             }

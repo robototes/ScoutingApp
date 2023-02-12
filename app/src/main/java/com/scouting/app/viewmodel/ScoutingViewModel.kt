@@ -1,12 +1,9 @@
 package com.scouting.app.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
@@ -14,13 +11,12 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.scouting.app.MainActivity
-import com.scouting.app.R
+import com.scouting.app.misc.AllianceType
+import com.scouting.app.misc.AllianceType.RED
 import com.scouting.app.misc.FilePaths
+import com.scouting.app.misc.MatchStage.AUTO
 import com.scouting.app.misc.ScoutingScheduleManager
-import com.scouting.app.misc.ScoutingType.*
-import com.scouting.app.misc.AllianceType.*
-import com.scouting.app.misc.MatchStage
-import com.scouting.app.misc.MatchStage.*
+import com.scouting.app.misc.ScoutingType.PIT
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
@@ -50,10 +46,14 @@ class ScoutingViewModel : ViewModel() {
     lateinit var scoutingScheduleManager: ScoutingScheduleManager
     private val preferences = MMKV.defaultMMKV()
 
+    /**
+     * Deserialize template items from user-selected and created JSON template
+     * to list variables stored in the ViewModel, to later be interpreted and
+     * laid out accordingly by the view
+     */
     fun loadTemplateItems() {
         val templateType = if (scoutingType == PIT) "PIT" else "MATCH"
-        val defaultTemplate =
-            preferences.decodeString("DEFAULT_TEMPLATE_FILE_PATH_$templateType", "")
+        val defaultTemplate = preferences.decodeString("DEFAULT_TEMPLATE_FILE_PATH_$templateType", "")
         if (defaultTemplate?.isNotBlank() == true) {
             File(defaultTemplate).bufferedReader().use { file ->
                 val serializedTemplate = Gson().fromJson(
@@ -88,21 +88,27 @@ class ScoutingViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Reset text fields when in the StartMatchView, either as blank or if a
+     * competition schedule has been loaded, with the according team number,
+     * match number and alliance according to the set device position
+     */
     fun populateMatchDataIfCompetition() {
         if (preferences.decodeBool("COMPETITION_MODE", false)) {
-            currentAllianceMonitoring = if (
-                preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE"
-            ) BLUE else RED
-            currentMatchMonitoring =
-                TextFieldValue((scoutingScheduleManager.currentMatchScoutingIteration + 1).toString())
+            currentAllianceMonitoring = AllianceType.valueOf(preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED")!!)
+            currentMatchMonitoring = TextFieldValue((scoutingScheduleManager.currentMatchScoutingIteration + 1).toString())
             currentTeamNumberMonitoring = TextFieldValue(scoutingScheduleManager.getCurrentTeam())
         } else {
-            // Clear values from previous scouting session as the ViewModel persists
             currentMatchMonitoring = TextFieldValue()
             currentTeamNumberMonitoring = TextFieldValue()
         }
     }
 
+    /**
+     * Reset text fields in the StartPitScoutingView with the team name and the
+     * team number according to the pit scouting schedule, or as blank if pit
+     * scouting mode is disabled.
+     */
     fun populatePitDataIfScheduled() {
         if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
             val teamInfo = scoutingScheduleManager.getCurrentPitInfo()
@@ -114,18 +120,12 @@ class ScoutingViewModel : ViewModel() {
         }
     }
 
-    fun resetMatchConfig() {
-        currentMatchStage = AUTO
-    }
-
-    @Composable
-    fun getCorrespondingMatchStageName(matchStage: MatchStage): String {
-        return when (matchStage) {
-            AUTO -> stringResource(id = R.string.in_match_stage_autonomous_label)
-            else -> stringResource(id = R.string.in_match_stage_teleoperated_label)
-        }
-    }
-
+    /**
+     * Append to or write to a new file the match data inputted by the user,
+     * to a CSV file named by the user in the settings menu. The items in the
+     * file conform to the save key order created by the user when making the
+     * template.
+     */
     fun saveScoutingDataToFile(context: MainActivity) {
         var csvRowDraft = ""
         val templateType = if (scoutingType == PIT) "PIT" else "MATCH"
@@ -137,15 +137,12 @@ class ScoutingViewModel : ViewModel() {
             autoListItems.toList() + teleListItems.toList()
         }
 
-        // Add device name, scout name, match number and team number
-        // OR if pit scouting add team name in place of match number
         val tabletName = preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED") + "-" +
                 preferences.decodeInt("DEVICE_ROBOT_POSITION", 1).toString()
-        val userSelectedOutputFileName = preferences.decodeString(
-            "DEFAULT_OUTPUT_FILE_NAME_$templateType",
-            "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
-        )!!
         val csvHeaderRow = "device,scout,$specialColumnName,team," + saveKeyOrderList!!.joinToString(",")
+
+        // Add device name, scout name, match number and team number
+        // OR if pit scouting add team name in place of match number
         csvRowDraft += "$tabletName,${scoutName.text},${
             if (scoutingType == PIT) { currentTeamNameMonitoring.text } 
             else { currentMatchMonitoring.text }
@@ -163,6 +160,10 @@ class ScoutingViewModel : ViewModel() {
             }
         }
 
+        val userSelectedOutputFileName = preferences.decodeString(
+            "DEFAULT_OUTPUT_FILE_NAME_$templateType",
+            "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
+        )!!
         var outputFile = File(userSelectedOutputFileName)
 
         if (!outputFile.exists()) {
@@ -211,10 +212,12 @@ class ScoutingViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Fetch the corresponding item value using the save key
+     */
     private fun List<TemplateItem>.findItemValueWithKey(key: String): Any? {
         var foundItem: Any? = null
         forEachIndexed { _, item ->
-            Log.e("DDD", item.type.name)
             when (key) {
                 item.saveKey -> {
                     foundItem = when (item.type) {
@@ -224,8 +227,8 @@ class ScoutingViewModel : ViewModel() {
                     }
                     return@forEachIndexed
                 }
-                // We know that the only component that uses saveKey2 and 3 is
-                // the TRI_SCORING, which is always an integer value
+                // We know that the only component that uses saveKey2 and saveKey3
+                // is the TRI_SCORING component, which is always an integer value
                 item.saveKey2 -> {
                     foundItem = item.itemValue2Int!!.value
                     return@forEachIndexed

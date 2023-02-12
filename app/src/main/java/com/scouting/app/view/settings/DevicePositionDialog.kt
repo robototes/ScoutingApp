@@ -16,6 +16,7 @@ import com.scouting.app.components.DialogScaffold
 import com.scouting.app.components.RatingBar
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
+import com.scouting.app.misc.AllianceType
 import com.scouting.app.viewmodel.SettingsViewModel
 
 @Composable
@@ -41,12 +42,10 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
                         values = 2,
                         customTextValues = alliancePositionValues.asList(),
                         onValueChange = {
-                            viewModel.deviceAlliancePosition = alliancePositionValues[it - 1]
+                            viewModel.deviceAlliancePosition = AllianceType.valueOf(alliancePositionValues[it - 1])
                         },
                         allianceSelectionColor = true,
-                        startingSelectedIndex = alliancePositionValues.indexOf(
-                            viewModel.deviceAlliancePosition
-                        ) + 1
+                        startingSelectedIndex = alliancePositionValues.indexOf(viewModel.deviceAlliancePosition.name) + 1
                     )
                     RatingBar(
                         values = 3,
@@ -54,7 +53,7 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
                             viewModel.deviceRobotPosition = it
                         },
                         customColor = when (viewModel.deviceAlliancePosition) {
-                            "RED" -> MaterialTheme.colorScheme.error
+                            AllianceType.RED -> MaterialTheme.colorScheme.error
                             else -> MaterialTheme.colorScheme.primary
                         },
                         startingSelectedIndex = viewModel.deviceRobotPosition

@@ -290,7 +290,6 @@ fun RatingBar(
                 ),
                 elevation = CardDefaults.cardElevation(0.dp),
                 modifier = Modifier
-                    //.size(50.dp)
                     .padding(start = 10.dp)
                     .composed {
                         if (enabled) {

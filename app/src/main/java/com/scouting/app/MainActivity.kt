@@ -20,8 +20,12 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.scouting.app.misc.FilePaths
-import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.misc.RequestCode.COMPETITION_SCHEDULE_FILE_PICK
+import com.scouting.app.misc.RequestCode.MATCH_TEMPLATE_FILE_PICK
+import com.scouting.app.misc.RequestCode.PIT_SCOUTING_SCHEUDLE_FILE_PICK
+import com.scouting.app.misc.RequestCode.PIT_TEMPLATE_FILE_PICK
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.HomePageView
@@ -150,27 +154,18 @@ class MainActivity : ComponentActivity() {
             resultData?.let { data ->
                 getViewModel(SettingsViewModel::class.java).apply {
                     when (requestCode) {
-                        2412 -> {
-                            processSettingsFilePickerResult(
+                        MATCH_TEMPLATE_FILE_PICK, PIT_TEMPLATE_FILE_PICK -> {
+                            processTemplateFilePickerResult(
                                 filePath = data.getStringArrayListExtra("filePaths")!![0],
                                 context = this@MainActivity,
-                                matchTemplate = true
+                                matchTemplate = requestCode == MATCH_TEMPLATE_FILE_PICK
                             )
                         }
-
-                        2414 -> {
-                            processSettingsFilePickerResult(
-                                filePath = data.getStringArrayListExtra("filePaths")!![0],
-                                context = this@MainActivity,
-                                matchTemplate = false
-                            )
-                        }
-
-                        2413, 2415 -> {
+                        COMPETITION_SCHEDULE_FILE_PICK, PIT_SCOUTING_SCHEUDLE_FILE_PICK -> {
                             processScheduleFilePickerResult(
                                 filePath = data.getStringArrayListExtra("filePaths")!![0],
                                 context = this@MainActivity,
-                                matchSchedule = requestCode == 2413
+                                matchSchedule = requestCode == COMPETITION_SCHEDULE_FILE_PICK
                             )
                         }
                     }

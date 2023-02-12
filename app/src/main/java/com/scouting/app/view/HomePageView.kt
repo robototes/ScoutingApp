@@ -38,8 +38,9 @@ import androidx.navigation.NavController
 import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.LargeButton
-import com.scouting.app.misc.ScoutingScheduleManager
+import com.scouting.app.misc.AllianceType
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ErrorRedDark
 import com.scouting.app.theme.SecondaryPurpleDark
@@ -73,7 +74,7 @@ fun HomePageView(navController: NavController, scoutingScheduleManager: Scouting
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val allianceColor = if (settingsViewModel.deviceAlliancePosition == "RED") {
+                val allianceColor = if (settingsViewModel.deviceAlliancePosition == AllianceType.RED) {
                     Color(0xFFEC4076)
                 } else {
                     Color(0xFF4284F5)
