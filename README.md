@@ -31,6 +31,9 @@ See the documentation for instructions on how to use all features of the app ðŸ¤
 - [abhishekti7/UnicornFilePicker](https://github.com/abhishekti7/UnicornFilePicker)
 - [google/gson](https://github.com/google/gson)
 
+## Build notes
+If you intend to build this project, make sure that you are using [Android Studio Flamingo](https://developer.android.com/studio/preview) or newer and that you have Java 11. This app is compatible with Android 5.0 (SDK 21) and any newer versions, and is designed for tablets with a screen size of at least 7.0" 
+
 ## License
 ```
 Copyright 2023 Sebastian Hriscu
