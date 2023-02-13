@@ -7,22 +7,22 @@ This app isn't game or year specific. Instead of creating a new app every year w
 ## Screenshots
 <div class="flex" align="center">
   <img src="media/Preview-HomePage.png" width="24%"/>
-  <img src="media/Preview-TemplateEditor.png" width="24%" />
   <img src="media/Preview-InMatch.png" width="24%" />
+  <img src="media/Preview-TemplateEditor.png" width="24%" />
   <img src="media/Preview-Configuration.png" width="24%" />
 </div>
 
 ## Features
 - Drag and drop template editor
 - Separate lists for autonomous and teleoperated stages
-- Pit scouting
+- Pit & Match scouting
 - Load match schedules / assign pits to scout
 - Customize order that data appears in output file
 - Save to CSV file (openable in Excel, Google Sheets, etc.)
 - Doesn't require internet access
 
 ## How to use
-See the documentation for instructions on how to use all features of the app 🤓
+See the documentation (WIP) for instructions on how to use all features of the app 🤓
 
 ## External libraries used
 - [google/accompanist](https://github.com/google/accompanist)
