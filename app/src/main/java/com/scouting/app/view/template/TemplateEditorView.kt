@@ -70,7 +70,7 @@ fun TemplateEditorView(navController: NavController, type: String) {
                     navController = navController,
                     pagerState = pagerState
                 )
-                if (type == "match") {
+                if (type == ScoutingType.MATCH.name) {
                     viewModel.apply {
                         currentListResource = when (pagerState.currentPage) {
                             0 -> autoListItems

@@ -36,7 +36,7 @@ fun TemplateTypeDialog(
                 LargeButton(
                     text = stringResource(id = R.string.home_page_template_type_dialog_match),
                     onClick = {
-                        navController.navigate(NavDestination.TemplateEditor + "/match")
+                        navController.navigate("${NavDestination.TemplateEditor}/MATCH")
                         viewModel.showingTemplateTypeDialog = false
                     },
                     color = NeutralGrayMedium,
@@ -46,7 +46,7 @@ fun TemplateTypeDialog(
                 LargeButton(
                     text = stringResource(id = R.string.home_page_template_type_dialog_pit),
                     onClick = {
-                        navController.navigate("${NavDestination.TemplateEditor}/pit")
+                        navController.navigate("${NavDestination.TemplateEditor}/PIT")
                         viewModel.showingTemplateTypeDialog = false
                     },
                     color = NeutralGrayMedium,
