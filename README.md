@@ -6,10 +6,10 @@ This app isn't game or year specific. Instead of creating a new app every year w
 
 ## Screenshots
 <div class="flex" align="center">
-  <img src="media/Preview-HomePage.png" width="24%"/>
-  <img src="media/Preview-InMatch.png" width="24%" />
-  <img src="media/Preview-TemplateEditor.png" width="24%" />
-  <img src="media/Preview-Configuration.png" width="24%" />
+  <img src="media/Preview-HomePageView.png" width="24%"/>
+  <img src="media/Preview-InMatchView.png" width="24%" />
+  <img src="media/Preview-TemplateEditorView.png" width="24%" />
+  <img src="media/Preview-ConfigurationView.png" width="24%" />
 </div>
 
 ## Features
