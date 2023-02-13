@@ -1,8 +1,10 @@
 package com.scouting.app.view.scouting
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -200,7 +202,10 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
 
 @Composable
 fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
-    LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
+    LazyColumn(
+        modifier = Modifier.padding(top = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(45.dp)
+    ) {
         itemsIndexed(list) { _, item ->
             when (item.type) {
                 TemplateTypes.SCORE_BAR -> {
@@ -211,22 +216,26 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                             item.itemValueInt!!.value = it
                         },
                         incrementStep = 1,
-                        modifier = Modifier.padding(30.dp)
+                        modifier = Modifier.padding(horizontal = 30.dp)
                     )
                 }
 
                 TemplateTypes.CHECK_BOX -> {
                     item.itemValueBoolean = remember { mutableStateOf(false) }
                     Row(
-                        modifier = Modifier.padding(30.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                item.itemValueBoolean!!.let { it.value = !it.value }
+                            }
+                            .padding(start = 15.dp, end = 30.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Checkbox(
                             checked = item.itemValueBoolean!!.value,
                             onCheckedChange = {
                                 item.itemValueBoolean!!.value = it
-                            },
-                            modifier = Modifier.size(80.dp)
+                            }
                         )
                         Text(
                             text = item.text,
@@ -240,7 +249,7 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                     Text(
                         text = item.text,
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(30.dp)
+                        modifier = Modifier.padding(horizontal = 30.dp)
                     )
                 }
 
@@ -259,7 +268,7 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                         enabled = true,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(30.dp)
+                            .padding(horizontal = 30.dp)
                     )
                 }
 
@@ -269,7 +278,7 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                         text = item.text,
                         values = 5,
                         onValueChange = { item.itemValueInt!!.value = it },
-                        modifier = Modifier.padding(30.dp)
+                        modifier = Modifier.padding(horizontal = 30.dp)
                     )
                 }
 
@@ -300,7 +309,7 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                         modifier = Modifier.padding(
                             bottom = 10.dp,
                             start = 30.dp,
-                            end = 30.dp
+                            end = 30.dp,
                         )
                     )
                 }

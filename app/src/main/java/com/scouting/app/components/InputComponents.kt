@@ -249,7 +249,8 @@ fun LabeledTriCounter(
                 Text(
                     text = textItems[index],
                     style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(bottom = 15.dp)
+                    modifier = Modifier.padding(bottom = 15.dp),
+                    textAlign = TextAlign.Center
                 )
                 CounterBar(onValueChange = item, enabled = enabled)
             }
