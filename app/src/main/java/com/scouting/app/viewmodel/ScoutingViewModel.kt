@@ -237,6 +237,13 @@ class ScoutingViewModel : ViewModel() {
         return foundItem
     }
 
+    /**
+     * If the user is in competition mode and they edit the text in the match number field,
+     * then update the team number in the competition schedule only if it is a valid match
+     * number
+     *
+     * @param newValue - The new match number intended to be set
+     */
     fun updateTeamNumberAccordingToMatch(newValue: String) {
         scoutingScheduleManager.apply {
             if (newValue.toInt() < currentCompetitionScheduleCSV.size) {
