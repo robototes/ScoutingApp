@@ -10,6 +10,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,12 +42,14 @@ import com.tencent.mmkv.MMKV
 fun StartMatchView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(ScoutingViewModel::class.java)
+    var managedMatch by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
         viewModel.apply {
             scoutingType = ScoutingType.MATCH
             loadTemplateItems()
             this.scoutingScheduleManager = scoutingScheduleManager
             populateMatchDataIfCompetition()
+            managedMatch = MMKV.defaultMMKV().decodeBool("COMPETITION_MODE", false)
         }
     }
     ScoutingTheme {
@@ -62,10 +68,14 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                         hint = viewModel.currentMatchMonitoring.text,
                         textFieldValue = viewModel.currentMatchMonitoring,
                         onValueChange = { newText ->
+                            if (managedMatch && newText.text.isNotEmpty()) {
+                                viewModel.updateTeamNumberAccordingToMatch(newText.text)
+                            }
                             viewModel.currentMatchMonitoring = newText
                         },
                         icon = painterResource(id = R.drawable.ic_time),
-                        modifier = Modifier.width(115.dp)
+                        modifier = Modifier.width(115.dp),
+                        numberKeyboard = true
                     )
                 }
                 SpacedRow(modifier = Modifier.padding(top = 50.dp)) {
@@ -80,7 +90,8 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                             viewModel.currentTeamNumberMonitoring = newText
                         },
                         icon = painterResource(id = R.drawable.ic_machine_learning),
-                        modifier = Modifier.width(125.dp)
+                        modifier = Modifier.width(125.dp),
+                        numberKeyboard = true
                     )
                 }
                 SpacedRow(modifier = Modifier.padding(top = 50.dp)) {

@@ -62,7 +62,8 @@ fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: 
                             viewModel.currentTeamNumberMonitoring = newText
                         },
                         icon = painterResource(id = R.drawable.ic_list_numbered),
-                        modifier = Modifier.width(130.dp)
+                        modifier = Modifier.width(130.dp),
+                        numberKeyboard = true
                     )
                 }
                 SpacedRow(modifier = Modifier.padding(top = 50.dp)) {

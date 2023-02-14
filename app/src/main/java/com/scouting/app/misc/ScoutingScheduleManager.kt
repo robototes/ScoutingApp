@@ -11,7 +11,7 @@ import java.io.File
 class ScoutingScheduleManager {
 
     // Follows the format red 1, red 2, red 3, blue 1, blue 2, blue 3
-    private val currentCompetitionScheduleCSV = mutableListOf<List<String>>()
+    val currentCompetitionScheduleCSV = mutableListOf<List<String>>()
     // Follows the format teamNumber, teamName
     private val currentPitScheduleCSV = mutableListOf<List<String>>()
 
@@ -130,6 +130,16 @@ class ScoutingScheduleManager {
     fun moveToNextMatch() {
         currentMatchScoutingIteration++
         MMKV.defaultMMKV().encode("COMPETITION_SCHEDULE_CURRENT_ITERATION", currentMatchScoutingIteration)
+    }
+
+    /**
+     * Move to the specified match as the current one, useful if the user
+     * leaves and needs to jump a few matches forward or in some cases go back
+     *
+     * @param number - A non-zero based match number (as the user would input it)
+     */
+    fun jumpToMatch(number: Int) {
+        currentMatchScoutingIteration = number - 1
     }
 
     /**

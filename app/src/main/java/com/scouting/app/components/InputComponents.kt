@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,7 +34,8 @@ fun BasicInputField(
     textFieldValue: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
-    textAlign: TextAlign? = TextAlign.Start
+    textAlign: TextAlign? = TextAlign.Start,
+    numberKeyboard: Boolean = false
 ) {
     TextField(
         enabled = enabled,
@@ -43,7 +46,7 @@ fun BasicInputField(
             Text(
                 text = hint,
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onBackground.copy(0.7F),
                 textAlign = textAlign
             )
         },
@@ -67,7 +70,14 @@ fun BasicInputField(
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
-        }
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = if (numberKeyboard) {
+                KeyboardType.Number
+            } else {
+                KeyboardType.Text
+            }
+        )
     )
 }
 

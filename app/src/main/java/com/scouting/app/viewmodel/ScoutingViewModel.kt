@@ -237,4 +237,13 @@ class ScoutingViewModel : ViewModel() {
         return foundItem
     }
 
+    fun updateTeamNumberAccordingToMatch(newValue: String) {
+        scoutingScheduleManager.apply {
+            if (newValue.toInt() < currentCompetitionScheduleCSV.size) {
+                jumpToMatch(newValue.toInt())
+                currentTeamNumberMonitoring = TextFieldValue(getCurrentTeam())
+            }
+        }
+    }
+
 }
