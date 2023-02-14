@@ -1,5 +1,6 @@
 package com.scouting.app.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -149,22 +150,15 @@ class ScoutingViewModel : ViewModel() {
         },${currentTeamNumberMonitoring.text},"
 
         // Append ordered, user-inputted match data
-        repeat(itemList.size) { index ->
-            itemList.findItemValueWithKey(
-                saveKeyOrderList?.get(index).toString()
-            ).let { data ->
-                csvRowDraft += data
-                if (index < itemList.size - 1) {
-                    csvRowDraft += ","
-                }
-            }
-        }
+        csvRowDraft += saveKeyOrderList!!.map { key ->
+            itemList.findItemValueWithKey(key)
+        }.joinToString(",")
 
         val userSelectedOutputFileName = preferences.decodeString(
             "DEFAULT_OUTPUT_FILE_NAME_$templateType",
-            "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
+            "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}"
         )!!
-        var outputFile = File(userSelectedOutputFileName)
+        var outputFile = File("$userSelectedOutputFileName.csv")
 
         if (!outputFile.exists()) {
             outputFile.createNewFile()
@@ -178,7 +172,7 @@ class ScoutingViewModel : ViewModel() {
             // change the output file name 👍
             contentResolver.openInputStream(outputFile.toUri())?.use {
                 if (it.reader().readLines()[0] != csvHeaderRow) {
-                    outputFile = File("$userSelectedOutputFileName-${UUID.randomUUID()}")
+                    outputFile = File("$userSelectedOutputFileName-${UUID.randomUUID()}.csv")
                     outputFile.createNewFile()
                 }
             }
@@ -223,7 +217,7 @@ class ScoutingViewModel : ViewModel() {
                     foundItem = when (item.type) {
                         TemplateTypes.CHECK_BOX -> item.itemValueBoolean!!.value
                         TemplateTypes.TEXT_FIELD -> item.itemValueString!!.value
-                        else /* SCORE_BAR, RATING_BAR OR TRI_SCORING */ -> item.itemValueInt!!.value
+                        else /* SCORE_BAR, RATING_BAR, TRI_BUTTON OR TRI_SCORING */ -> item.itemValueInt!!.value
                     }
                     return@forEachIndexed
                 }
