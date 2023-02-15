@@ -52,7 +52,8 @@ fun TemplateTypeDialog(viewModel: HomePageViewModel, navController: NavControlle
                         viewModel.showingTemplateTypeDialog = false
                     },
                     color = NeutralGrayMedium,
-                    colorBorder = NeutralGrayDark
+                    colorBorder = NeutralGrayDark,
+                    modifier = Modifier.padding(bottom = 15.dp)
                 )
                 LargeButton(
                     text = stringResource(id = R.string.home_page_template_type_dialog_import),
@@ -62,8 +63,8 @@ fun TemplateTypeDialog(viewModel: HomePageViewModel, navController: NavControlle
                             type = "json"
                         )
                     },
-                    color = SecondaryPurple,
-                    colorBorder = SecondaryPurpleDark
+                    color = NeutralGrayMedium,
+                    colorBorder = NeutralGrayDark
                 )
             }
         }
