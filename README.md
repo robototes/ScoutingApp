@@ -22,7 +22,7 @@ This app isn't game or year specific. Instead of creating a new app every year w
 - Doesn't require internet access
 
 ## How to use
-See the documentation (WIP) for instructions on how to use all features of the app 🤓
+See [the documentation](https://github.com/galaxygoldfish/scouting/wiki) for instructions on how to use the app 🤓
 
 ## External libraries used
 - [google/accompanist](https://github.com/google/accompanist)
