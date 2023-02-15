@@ -22,7 +22,7 @@ This app isn't game or year specific. Instead of creating a new app every year w
 - Doesn't require internet access
 
 ## How to use
-See the documentation (WIP) for instructions on how to use all features of the app 🤓
+See [the documentation](https://github.com/robototes/ScoutingApp/wiki) for instructions on how to use the app 🤓
 
 ## External libraries used
 - [google/accompanist](https://github.com/google/accompanist)
@@ -36,7 +36,7 @@ If you intend to build this project, make sure that you are using [Android Studi
 
 ## License
 ```
-Copyright 2023 Sebastian Hriscu
+Copyright 2023 FRC Team 2412
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
