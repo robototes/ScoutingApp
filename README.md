@@ -36,7 +36,7 @@ If you intend to build this project, make sure that you are using [Android Studi
 
 ## License
 ```
-Copyright 2023 Sebastian Hriscu
+Copyright 2023 FRC Team 2412
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
