@@ -112,8 +112,8 @@ fun MediumButton(
 @Composable
 fun SmallButton(
     text: String,
-    icon: Painter,
-    contentDescription: String,
+    icon: Painter? = null,
+    contentDescription: String? = null,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     color: Color,
@@ -138,15 +138,21 @@ fun SmallButton(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = icon,
-                contentDescription = contentDescription
-            )
-            Text(
-                text = text,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 15.dp)
-            )
+            icon?.let {
+                Icon(
+                    painter = it,
+                    contentDescription = contentDescription
+                )
+            }
+            if (text.isNotEmpty()) {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(
+                        start = if (icon != null) 15.dp else 0.dp
+                    )
+                )
+            }
         }
     }
 }

@@ -128,6 +128,7 @@
     <string name="in_pit_scouting_header_text">Pit scouting</string>
     <string name="in_pit_scouting_primary_subtitle_text">Monitoring team %1$s</string>
     <string name="in_pit_scouting_end_button_text">Finish scouting</string>
+    <string name="in_match_scouting_end_button_text_short">DONE</string>
 
     <string name="in_match_header_match_number_format">Qualification #%1$s</string>
     <string name="in_match_header_team_number_format">Monitoring team %1$s</string>

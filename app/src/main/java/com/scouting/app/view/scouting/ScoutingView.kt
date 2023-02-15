@@ -46,6 +46,7 @@ import com.scouting.app.components.TriButtonBlock
 import com.scouting.app.misc.AllianceType
 import com.scouting.app.misc.MatchStage
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.misc.ScoutingType
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateItem
 import com.scouting.app.theme.AffirmativeGreen
@@ -120,29 +121,58 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                     color = MaterialTheme.colorScheme.onBackground
                                 )
                             }
-                            SmallButton(
-                                text = viewModel.let {
-                                    if (it.currentMatchStage == MatchStage.TELEOP) {
-                                        stringResource(id = R.string.in_match_stage_finish_scout_text)
-                                    } else {
-                                        stringResource(id = R.string.in_match_stage_move_on)
-                                    }
-                                },
-                                icon = painterResource(id = R.drawable.ic_arrow_forward),
-                                contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
-                                onClick = {
-                                    viewModel.let {
-                                        if (it.currentMatchStage == MatchStage.TELEOP) {
-                                            navController.navigate(NavDestination.FinishScouting)
+                            Row {
+                                if (viewModel.scoutingType == ScoutingType.MATCH) {
+                                    SmallButton(
+                                        text = "",
+                                        icon = painterResource(id = R.drawable.ic_arrow_back),
+                                        contentDescription = stringResource(id = R.string.ic_arrow_back_content_desc),
+                                        onClick = {
+                                            viewModel.let {
+                                                if (it.currentMatchStage == MatchStage.TELEOP) {
+                                                    it.currentMatchStage = MatchStage.AUTO
+                                                } else {
+                                                    navController.popBackStack()
+                                                }
+                                            }
+                                        },
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        modifier = Modifier.padding(top = 15.dp, end = 15.dp),
+                                        outlineStyle = true
+                                    )
+                                }
+                                SmallButton(
+                                    text = if (viewModel.scoutingType == ScoutingType.MATCH) {
+                                        if (viewModel.currentMatchStage == MatchStage.TELEOP) {
+                                            stringResource(id = R.string.in_match_scouting_end_button_text_short)
                                         } else {
-                                            it.currentMatchStage = MatchStage.TELEOP
+                                            ""
                                         }
-                                    }
-                                },
-                                color = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier.padding(top = 15.dp),
-                                outlineStyle = true
-                            )
+                                    } else {
+                                           stringResource(id = R.string.in_match_stage_finish_scout_text)
+                                    },
+                                    icon = viewModel.let {
+                                        if (it.scoutingType == ScoutingType.PIT || it.currentMatchStage == MatchStage.AUTO) {
+                                            painterResource(id = R.drawable.ic_arrow_forward)
+                                        } else {
+                                            null
+                                        }
+                                    },
+                                    contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
+                                    onClick = {
+                                        viewModel.let {
+                                            if (it.currentMatchStage == MatchStage.TELEOP) {
+                                                navController.navigate(NavDestination.FinishScouting)
+                                            } else {
+                                                it.currentMatchStage = MatchStage.TELEOP
+                                            }
+                                        }
+                                    },
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    modifier = Modifier.padding(top = 15.dp),
+                                    outlineStyle = true
+                                )
+                            }
                         }
                     }
                 } else {
