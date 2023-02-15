@@ -31,6 +31,10 @@ See [the documentation](https://github.com/robototes/ScoutingApp/wiki) for instr
 - [abhishekti7/UnicornFilePicker](https://github.com/abhishekti7/UnicornFilePicker)
 - [google/gson](https://github.com/google/gson)
 
+## External design resources
+- [IBM Carbon icons](https://carbondesignsystem.com/guidelines/icons/library)
+- [Inter font family](https://rsms.me/inter/)
+
 ## Build notes
 If you intend to build this project, make sure that you are using [Android Studio Flamingo](https://developer.android.com/studio/preview) or newer and that you have Java 11. This app is compatible with Android 5.0 (SDK 21) and any newer versions, and is designed for tablets with a screen size of at least 7.0" 
 
