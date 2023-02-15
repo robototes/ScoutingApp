@@ -86,8 +86,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                 MediumButton(
                                     text = viewModel.competitionScheduleFileName,
                                     onClick = {
-                                        viewModel.requestFilePicker(
-                                            context = context,
+                                        context.requestFilePicker(
                                             code = RequestCode.COMPETITION_SCHEDULE_FILE_PICK,
                                             type = "csv"
                                         )
@@ -125,9 +124,8 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                             MediumButton(
                                 text = viewModel.pitScheduleFileName,
                                 onClick = {
-                                    viewModel.requestFilePicker(
-                                        context = context,
-                                        code = RequestCode.PIT_SCOUTING_SCHEUDLE_FILE_PICK,
+                                    context.requestFilePicker(
+                                        code = RequestCode.PIT_SCOUTING_SCHEDULE_FILE_PICK,
                                         type = "csv"
                                     )
                                 },
@@ -210,8 +208,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                             MediumButton(
                                 text = viewModel.defaultMatchTemplateFileName,
                                 onClick = {
-                                    viewModel.requestFilePicker(
-                                        context = context,
+                                    context.requestFilePicker(
                                         code = RequestCode.MATCH_TEMPLATE_FILE_PICK,
                                         type = "json"
                                     )
@@ -244,8 +241,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                             MediumButton(
                                 text = viewModel.defaultPitTemplateFileName,
                                 onClick = {
-                                    viewModel.requestFilePicker(
-                                        context = context,
+                                    context.requestFilePicker(
                                         code = RequestCode.PIT_TEMPLATE_FILE_PICK,
                                         type = "json"
                                     )

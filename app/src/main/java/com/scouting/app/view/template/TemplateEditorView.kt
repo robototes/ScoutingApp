@@ -50,11 +50,11 @@ import org.burnoutcrew.reorderable.reorderable
 
 @Composable
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
-fun TemplateEditorView(navController: NavController, type: String) {
+fun TemplateEditorView(navController: NavController, type: String? = null) {
     val viewModel = navController.context.getViewModel(TemplateEditorViewModel::class.java)
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val pagerState = rememberPagerState(initialPage = 0)
-    viewModel.currentTemplateType = ScoutingType.valueOf(type)
+    type?.let { viewModel.currentTemplateType = ScoutingType.valueOf(it) }
     Surface {
         ModalBottomSheetLayout(
             sheetContent = {
@@ -65,12 +65,12 @@ fun TemplateEditorView(navController: NavController, type: String) {
         ) {
             Column {
                 TemplateEditorHeader(
-                    type = type,
+                    type = viewModel.currentTemplateType.name,
                     viewModel = viewModel,
                     navController = navController,
                     pagerState = pagerState
                 )
-                if (type == ScoutingType.MATCH.name) {
+                if (viewModel.currentTemplateType == ScoutingType.MATCH) {
                     viewModel.apply {
                         currentListResource = when (pagerState.currentPage) {
                             0 -> autoListItems

@@ -8,19 +8,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.DialogScaffold
 import com.scouting.app.components.LargeButton
 import com.scouting.app.misc.NavDestination
+import com.scouting.app.misc.RequestCode
 import com.scouting.app.theme.NeutralGrayDark
 import com.scouting.app.theme.NeutralGrayMedium
+import com.scouting.app.theme.SecondaryPurple
+import com.scouting.app.theme.SecondaryPurpleDark
 import com.scouting.app.viewmodel.HomePageViewModel
 
 @Composable
-fun TemplateTypeDialog(
-    viewModel: HomePageViewModel,
-    navController: NavController
-) {
+fun TemplateTypeDialog(viewModel: HomePageViewModel, navController: NavController) {
+    val context = navController.context as MainActivity
     if (viewModel.showingTemplateTypeDialog) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_server_wired),
@@ -51,6 +53,17 @@ fun TemplateTypeDialog(
                     },
                     color = NeutralGrayMedium,
                     colorBorder = NeutralGrayDark
+                )
+                LargeButton(
+                    text = stringResource(id = R.string.home_page_template_type_dialog_import),
+                    onClick = {
+                        context.requestFilePicker(
+                            code = RequestCode.TEMPLATE_EDITOR_IMPORT_FILE_PICK,
+                            type = "json"
+                        )
+                    },
+                    color = SecondaryPurple,
+                    colorBorder = SecondaryPurpleDark
                 )
             }
         }

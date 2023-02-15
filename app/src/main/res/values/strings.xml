@@ -45,6 +45,7 @@
     <string name="home_page_template_type_dialog_title">Choose template type</string>
     <string name="home_page_template_type_dialog_match">Match template</string>
     <string name="home_page_template_type_dialog_pit">Pit data template</string>
+    <string name="home_page_template_type_dialog_import">Import an existing template</string>
 
     <string name="template_config_header_title">Create a new\nmatch template</string>
     <string name="template_config_game_name_hint">Game name</string>

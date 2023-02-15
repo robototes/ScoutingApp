@@ -71,30 +71,6 @@ class SettingsViewModel : ViewModel() {
     }
 
     /**
-     * Use the UnicornFilePicker library to open a file picker, allowing the
-     * user to choose a competition schedule, match template, etc.
-     *
-     * @param context - Requires the MainActivity context to start an activity
-     * @param code - The code that will be sent with the Intent, to be later
-     * decoded in onActivityResult (MainActivity) that is used to determine what
-     * to do with the returned data
-     * @param type - The file type to be shown in the file picker. Some examples:
-     * "csv", "json", or "apk"
-     */
-    fun requestFilePicker(context: MainActivity, code: Int, type: String) {
-        UnicornFilePicker.from(context)
-            .addConfigBuilder()
-            .selectMultipleFiles(false)
-            .setRootDirectory(Environment.getExternalStorageDirectory().absolutePath)
-            .showHiddenFiles(false)
-            .addItemDivider(true)
-            .setFilters(arrayOf(type))
-            .theme(R.style.FilePickerTheme)
-            .build()
-            .forResult(code)
-    }
-
-    /**
      * Receive the data from the file picker when selecting a template, and save
      * the file name and path to MMKV. This function also checks whether the template
      * is of the correct type using checkIfTemplateIsMatch() and will display an error

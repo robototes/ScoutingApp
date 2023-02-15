@@ -158,7 +158,7 @@ class ScoutingViewModel : ViewModel() {
             "DEFAULT_OUTPUT_FILE_NAME_$templateType",
             "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}"
         )!!
-        var outputFile = File("$userSelectedOutputFileName.csv")
+        var outputFile = File(userSelectedOutputFileName)
 
         if (!outputFile.exists()) {
             outputFile.createNewFile()
@@ -172,7 +172,7 @@ class ScoutingViewModel : ViewModel() {
             // change the output file name 👍
             contentResolver.openInputStream(outputFile.toUri())?.use {
                 if (it.reader().readLines()[0] != csvHeaderRow) {
-                    outputFile = File("$userSelectedOutputFileName-${UUID.randomUUID()}.csv")
+                    outputFile = File("${userSelectedOutputFileName.removeSuffix(".csv")}-${UUID.randomUUID()}.csv")
                     outputFile.createNewFile()
                 }
             }

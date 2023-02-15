@@ -11,10 +11,12 @@ import com.google.gson.Gson
 import com.scouting.app.MainActivity
 import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.ScoutingType.MATCH
+import com.scouting.app.misc.ScoutingType.PIT
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
 import com.scouting.app.model.TemplateItem
+import org.json.JSONObject
 import java.io.File
 import java.util.UUID
 
@@ -32,6 +34,32 @@ class TemplateEditorViewModel : ViewModel() {
     var showingEditDialog by mutableStateOf(false)
     var currentListResource = pitListItems
     var currentEditItemIndex by mutableStateOf(0)
+
+    fun importExistingTemplate(fileContents: String) {
+        val isMatchTemplate = JSONObject(fileContents).getBoolean("isMatchTemplate")
+        val deserializedTemplate = fileContents.let {
+            Gson().fromJson(it, if (isMatchTemplate) TemplateFormatMatch::class.java else TemplateFormatPit::class.java)
+        }
+        if (isMatchTemplate) {
+            deserializedTemplate as TemplateFormatMatch
+            currentTemplateType = MATCH
+            autoListItems.apply {
+                clear()
+                addAll(deserializedTemplate.autoTemplateItems)
+            }
+            teleListItems.apply {
+                clear()
+                addAll(deserializedTemplate.teleTemplateItems)
+            }
+        } else {
+            deserializedTemplate as TemplateFormatPit
+            currentTemplateType = PIT
+            pitListItems.apply {
+                clear()
+                addAll(deserializedTemplate.templateItems)
+            }
+        }
+    }
 
     /**
      * Create either a TemplateFormatMatch or Pit object holding all of the

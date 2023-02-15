@@ -1,8 +1,10 @@
 package com.scouting.app
 
+import abhishekti7.unicorn.filepicker.UnicornFilePicker
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +15,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -23,8 +26,9 @@ import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.misc.RequestCode.COMPETITION_SCHEDULE_FILE_PICK
 import com.scouting.app.misc.RequestCode.MATCH_TEMPLATE_FILE_PICK
-import com.scouting.app.misc.RequestCode.PIT_SCOUTING_SCHEUDLE_FILE_PICK
+import com.scouting.app.misc.RequestCode.PIT_SCOUTING_SCHEDULE_FILE_PICK
 import com.scouting.app.misc.RequestCode.PIT_TEMPLATE_FILE_PICK
+import com.scouting.app.misc.RequestCode.TEMPLATE_EDITOR_IMPORT_FILE_PICK
 import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
@@ -38,6 +42,7 @@ import com.scouting.app.view.template.EditCSVOrderView
 import com.scouting.app.view.template.TemplateEditorView
 import com.scouting.app.view.template.TemplateSaveView
 import com.scouting.app.viewmodel.SettingsViewModel
+import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.tencent.mmkv.MMKV
 import java.io.File
 
@@ -91,6 +96,9 @@ class MainActivity : ComponentActivity() {
                         navController = navigationController,
                         type = it.arguments?.getString("type", "match")!!
                     )
+                }
+                composable(NavDestination.TemplateEditor) {
+                    TemplateEditorView(navigationController)
                 }
                 composable(NavDestination.EditCSVOrder) {
                     EditCSVOrderView(navigationController)
@@ -147,27 +155,65 @@ class MainActivity : ComponentActivity() {
         requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
+    /**
+     * Use the UnicornFilePicker library to open a file picker, allowing the
+     * user to choose a competition schedule, match template, etc.
+     *
+     * @param context - Requires the MainActivity context to start an activity
+     * @param code - The code that will be sent with the Intent, to be later
+     * decoded in onActivityResult (MainActivity) that is used to determine what
+     * to do with the returned data
+     * @param type - The file type to be shown in the file picker. Some examples:
+     * "csv", "json", or "apk"
+     */
+    fun requestFilePicker(code: Int, type: String) {
+        UnicornFilePicker.from(this)
+            .addConfigBuilder()
+            .selectMultipleFiles(false)
+            .setRootDirectory(Environment.getExternalStorageDirectory().absolutePath)
+            .showHiddenFiles(false)
+            .addItemDivider(true)
+            .setFilters(arrayOf(type))
+            .theme(R.style.FilePickerTheme)
+            .build()
+            .forResult(code)
+    }
+
     @Deprecated("")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode == RESULT_OK) {
             resultData?.let { data ->
-                getViewModel(SettingsViewModel::class.java).apply {
-                    when (requestCode) {
-                        MATCH_TEMPLATE_FILE_PICK, PIT_TEMPLATE_FILE_PICK -> {
-                            processTemplateFilePickerResult(
-                                filePath = data.getStringArrayListExtra("filePaths")!![0],
-                                context = this@MainActivity,
-                                matchTemplate = requestCode == MATCH_TEMPLATE_FILE_PICK
-                            )
-                        }
-                        COMPETITION_SCHEDULE_FILE_PICK, PIT_SCOUTING_SCHEUDLE_FILE_PICK -> {
-                            processScheduleFilePickerResult(
-                                filePath = data.getStringArrayListExtra("filePaths")!![0],
-                                context = this@MainActivity,
-                                matchSchedule = requestCode == COMPETITION_SCHEDULE_FILE_PICK
-                            )
-                        }
+                val settingsViewModel = getViewModel(SettingsViewModel::class.java)
+                val templateEditorViewModel = getViewModel(TemplateEditorViewModel::class.java)
+                when (requestCode) {
+                    MATCH_TEMPLATE_FILE_PICK, PIT_TEMPLATE_FILE_PICK -> {
+                        settingsViewModel.processTemplateFilePickerResult(
+                            filePath = data.getStringArrayListExtra("filePaths")!![0],
+                            context = this@MainActivity,
+                            matchTemplate = requestCode == MATCH_TEMPLATE_FILE_PICK
+                        )
+                    }
+
+                    COMPETITION_SCHEDULE_FILE_PICK, PIT_SCOUTING_SCHEDULE_FILE_PICK -> {
+                        settingsViewModel.processScheduleFilePickerResult(
+                            filePath = data.getStringArrayListExtra("filePaths")!![0],
+                            context = this@MainActivity,
+                            matchSchedule = requestCode == COMPETITION_SCHEDULE_FILE_PICK
+                        )
+                    }
+
+                    TEMPLATE_EDITOR_IMPORT_FILE_PICK -> {
+                        templateEditorViewModel.importExistingTemplate(
+                            contentResolver.openInputStream(
+                                File(data.getStringArrayListExtra("filePaths")!![0]).toUri()
+                            )!!.use {
+                                val contents = it.reader().readText()
+                                it.close()
+                                return@use contents
+                            }
+                        )
+                        navigationController.navigate(NavDestination.TemplateEditor)
                     }
                 }
             }
