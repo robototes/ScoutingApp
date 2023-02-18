@@ -128,8 +128,13 @@ class ScoutingScheduleManager {
      * Increment the match number counter and save this with MMKV
      */
     fun moveToNextMatch() {
-        currentMatchScoutingIteration++
-        MMKV.defaultMMKV().encode("COMPETITION_SCHEDULE_CURRENT_ITERATION", currentMatchScoutingIteration)
+        if (currentMatchScoutingIteration < currentCompetitionScheduleCSV.size - 1) {
+            currentMatchScoutingIteration++
+            MMKV.defaultMMKV().encode("COMPETITION_SCHEDULE_CURRENT_ITERATION", currentMatchScoutingIteration)
+        } else {
+            resetManagerMatch()
+            MMKV.defaultMMKV().encode("COMPETITION_MODE", false)
+        }
     }
 
     /**
@@ -147,8 +152,13 @@ class ScoutingScheduleManager {
      * on and save this to MMKV
      */
     fun moveToNextPit() {
-        currentPitScoutingIteration++
-        MMKV.defaultMMKV().encode("PIT_SCHEDULE_CURRENT_ITERATION", currentPitScoutingIteration)
+        if (currentPitScoutingIteration < currentPitScheduleCSV.size - 1) {
+            currentPitScoutingIteration++
+            MMKV.defaultMMKV().encode("PIT_SCHEDULE_CURRENT_ITERATION", currentPitScoutingIteration)
+        } else {
+            currentPitScoutingIteration = 0
+            MMKV.defaultMMKV().encode("PIT_SCOUTING_MODE", false)
+        }
     }
 
 }

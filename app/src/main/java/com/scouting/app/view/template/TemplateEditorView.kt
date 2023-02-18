@@ -65,7 +65,7 @@ fun TemplateEditorView(navController: NavController, type: String? = null) {
         ) {
             Column {
                 TemplateEditorHeader(
-                    type = viewModel.currentTemplateType.name,
+                    type = viewModel.currentTemplateType,
                     viewModel = viewModel,
                     navController = navController,
                     pagerState = pagerState
@@ -114,7 +114,7 @@ fun TemplateEditorView(navController: NavController, type: String? = null) {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun TemplateEditorHeader(
-    type: String,
+    type: ScoutingType,
     viewModel: TemplateEditorViewModel,
     navController: NavController,
     pagerState: PagerState
@@ -130,7 +130,7 @@ fun TemplateEditorHeader(
             navController.navigate(NavDestination.EditCSVOrder)
         }
     )
-    if (type != "pit") {
+    if (type != ScoutingType.PIT) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
