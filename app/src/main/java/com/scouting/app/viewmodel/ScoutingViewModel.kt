@@ -1,6 +1,7 @@
 package com.scouting.app.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +17,9 @@ import com.scouting.app.misc.AllianceType
 import com.scouting.app.misc.AllianceType.RED
 import com.scouting.app.misc.FilePaths
 import com.scouting.app.misc.MatchStage.AUTO
+import com.scouting.app.misc.MatchStage.TELEOP
 import com.scouting.app.misc.ScoutingScheduleManager
+import com.scouting.app.misc.ScoutingType.MATCH
 import com.scouting.app.misc.ScoutingType.PIT
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
@@ -250,6 +253,30 @@ class ScoutingViewModel : ViewModel() {
             if (newValue.toInt() < currentCompetitionScheduleCSV.size) {
                 jumpToMatch(newValue.toInt())
                 currentTeamNumberMonitoring = TextFieldValue(getCurrentTeam())
+            }
+        }
+    }
+
+    /**
+     * Reset all values in the current match stage to their default values
+     */
+    fun clearCurrentData() {
+        val listToDealWith = if (scoutingType == MATCH) {
+            if (currentMatchStage == TELEOP) {
+                teleListItems
+            } else {
+                autoListItems
+            }
+        } else {
+            pitListItems
+        }
+        listToDealWith.forEach { item ->
+            item.apply {
+                itemValueBoolean = mutableStateOf(false)
+                itemValueString = mutableStateOf("")
+                itemValueInt = mutableStateOf(0)
+                itemValue2Int = mutableStateOf(0)
+                itemValue3Int = mutableStateOf(0)
             }
         }
     }

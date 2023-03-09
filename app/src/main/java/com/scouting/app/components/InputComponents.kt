@@ -86,9 +86,10 @@ fun CounterBar(
     onValueChange: (Int) -> Unit,
     incrementStep: Int = 1,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    startValue: Int = 0
 ) {
-    var temporaryCount by remember { mutableStateOf(0) }
+    var temporaryCount by remember { mutableStateOf(startValue) }
     Box {
         Row(
             modifier = modifier
@@ -153,7 +154,7 @@ fun TriButtonBlock(
     onValueChange: (Int) -> Unit,
     initialSelection: Int = 0,
     enabled: Boolean = true,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var currentSelection by remember { mutableStateOf(initialSelection) }
     Column(
@@ -209,7 +210,8 @@ fun LabeledCounter(
     onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     counterModifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    startValue: Int = 0
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -224,7 +226,8 @@ fun LabeledCounter(
             onValueChange = onValueChange,
             incrementStep = incrementStep,
             modifier = counterModifier,
-            enabled = enabled
+            enabled = enabled,
+            startValue = startValue
         )
     }
 }
@@ -238,7 +241,10 @@ fun LabeledTriCounter(
     onValueChange2: (Int) -> Unit,
     onValueChange3: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    startValueOne: Int = 0,
+    startValueTwo: Int = 0,
+    startValueThree: Int = 0
 ) {
     Row(
         modifier = modifier
@@ -246,6 +252,7 @@ fun LabeledTriCounter(
             .padding(horizontal = 10.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
+        val startValueList = listOf(startValueOne, startValueTwo, startValueThree)
         val onValueChangeItems = listOf(onValueChange1, onValueChange2, onValueChange3)
         val textItems = listOf(text1, text2, text3)
         onValueChangeItems.forEachIndexed { index, item ->
@@ -262,7 +269,11 @@ fun LabeledTriCounter(
                     modifier = Modifier.padding(bottom = 15.dp),
                     textAlign = TextAlign.Center
                 )
-                CounterBar(onValueChange = item, enabled = enabled)
+                CounterBar(
+                    onValueChange = item,
+                    enabled = enabled,
+                    startValue = startValueList[index]
+                )
             }
         }
     }
@@ -336,7 +347,8 @@ fun LabeledRatingBar(
     values: Int,
     onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    startValue: Int = 0
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -347,7 +359,12 @@ fun LabeledRatingBar(
             text = text,
             style = MaterialTheme.typography.headlineSmall
         )
-        RatingBar(values = values, onValueChange = onValueChange, enabled = enabled)
+        RatingBar(
+            values = values,
+            onValueChange = onValueChange,
+            enabled = enabled,
+            startingSelectedIndex = startValue
+        )
     }
 }
 

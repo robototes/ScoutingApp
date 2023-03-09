@@ -1,6 +1,8 @@
 package com.scouting.app.view.scouting
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,6 +42,7 @@ import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LabeledCounter
 import com.scouting.app.components.LabeledRatingBar
 import com.scouting.app.components.LabeledTriCounter
+import com.scouting.app.components.MediumButton
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.components.TriButtonBlock
@@ -50,11 +53,13 @@ import com.scouting.app.misc.ScoutingType
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateItem
 import com.scouting.app.theme.AffirmativeGreen
+import com.scouting.app.theme.PrimaryBlue
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.theme.SecondaryPurple
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.ScoutingViewModel
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
     val viewModel = LocalContext.current.getViewModel(ScoutingViewModel::class.java)
@@ -75,7 +80,7 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                     stringResource(id = R.string.in_match_header_match_number_format),
                                     viewModel.currentMatchMonitoring.text
                                 ),
-                                style = MaterialTheme.typography.headlineLarge
+                                style = MaterialTheme.typography.displaySmall
                             )
                             Text(
                                 text = String.format(
@@ -110,16 +115,18 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                     }
                                 )
                             ) {
-                                Text(
-                                    text = viewModel.currentMatchStage.name,
-                                    style = MaterialTheme.typography.headlineMedium
-                                            + TextStyle(fontWeight = FontWeight.SemiBold),
-                                    modifier = Modifier.padding(
-                                        horizontal = 15.dp,
-                                        vertical = 10.dp
-                                    ),
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
+                                AnimatedContent(targetState = viewModel.currentMatchStage.name) {
+                                    Text(
+                                        text = it,
+                                        style = MaterialTheme.typography.headlineMedium
+                                                + TextStyle(fontWeight = FontWeight.SemiBold),
+                                        modifier = Modifier.padding(
+                                            horizontal = 15.dp,
+                                            vertical = 10.dp
+                                        ),
+                                        color = MaterialTheme.colorScheme.onBackground
+                                    )
+                                }
                             }
                             Row {
                                 if (viewModel.scoutingType == ScoutingType.MATCH) {
@@ -217,13 +224,22 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                     // it so that the value of say, a counter is not persisted through
                     // match stage changes, confusing the user and messing up our data
                     AnimatedVisibility(visible = viewModel.currentMatchStage == MatchStage.AUTO) {
-                        ScoutingTemplateLoadView(list = viewModel.autoListItems)
+                        ScoutingTemplateLoadView(
+                            list = viewModel.autoListItems,
+                            viewModel = viewModel
+                        )
                     }
                     AnimatedVisibility(visible = viewModel.currentMatchStage == MatchStage.TELEOP) {
-                        ScoutingTemplateLoadView(list = viewModel.teleListItems)
+                        ScoutingTemplateLoadView(
+                            list = viewModel.teleListItems,
+                            viewModel = viewModel
+                        )
                     }
                 } else {
-                    ScoutingTemplateLoadView(list = viewModel.pitListItems)
+                    ScoutingTemplateLoadView(
+                        list = viewModel.pitListItems,
+                        viewModel = viewModel
+                    )
                 }
             }
         }
@@ -231,7 +247,10 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
 }
 
 @Composable
-fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
+fun ScoutingTemplateLoadView(
+    list: SnapshotStateList<TemplateItem>,
+    viewModel: ScoutingViewModel
+) {
     LazyColumn(
         modifier = Modifier.padding(top = 20.dp),
         verticalArrangement = Arrangement.spacedBy(45.dp)
@@ -239,19 +258,24 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
         itemsIndexed(list) { _, item ->
             when (item.type) {
                 TemplateTypes.SCORE_BAR -> {
-                    item.itemValueInt = remember { mutableStateOf(0) }
+                    if (item.itemValueInt == null) {
+                        item.itemValueInt = remember { mutableStateOf(0) }
+                    }
                     LabeledCounter(
                         text = item.text,
                         onValueChange = {
                             item.itemValueInt!!.value = it
                         },
                         incrementStep = 1,
-                        modifier = Modifier.padding(horizontal = 30.dp)
+                        modifier = Modifier.padding(horizontal = 30.dp),
+                        startValue = item.itemValueInt!!.value
                     )
                 }
 
                 TemplateTypes.CHECK_BOX -> {
-                    item.itemValueBoolean = remember { mutableStateOf(false) }
+                    if (item.itemValueBoolean == null) {
+                        item.itemValueBoolean = remember { mutableStateOf(false) }
+                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -284,8 +308,12 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                 }
 
                 TemplateTypes.TEXT_FIELD -> {
-                    var tempItemState by remember { mutableStateOf(TextFieldValue()) }
-                    item.itemValueString = remember { mutableStateOf("") }
+                    if (item.itemValueString == null) {
+                        item.itemValueString = remember { mutableStateOf("") }
+                    }
+                    var tempItemState by remember {
+                        mutableStateOf(TextFieldValue(item.itemValueString!!.value))
+                    }
                     BasicInputField(
                         icon = painterResource(id = R.drawable.ic_text_format_center),
                         contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
@@ -303,19 +331,24 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                 }
 
                 TemplateTypes.RATING_BAR -> {
-                    item.itemValueInt = remember { mutableStateOf(0) }
+                    if (item.itemValueInt == null) {
+                        item.itemValueInt = remember { mutableStateOf(0) }
+                    }
                     LabeledRatingBar(
                         text = item.text,
                         values = 5,
                         onValueChange = { item.itemValueInt!!.value = it },
-                        modifier = Modifier.padding(horizontal = 30.dp)
+                        modifier = Modifier.padding(horizontal = 30.dp),
+                        startValue = item.itemValueInt!!.value
                     )
                 }
 
                 TemplateTypes.TRI_SCORING -> {
-                    item.itemValueInt = remember { mutableStateOf(0) }
-                    item.itemValue2Int = remember { mutableStateOf(0) }
-                    item.itemValue3Int = remember { mutableStateOf(0) }
+                    if (item.itemValueInt == null) { // If one is null then the rest will be too
+                        item.itemValueInt = remember { mutableStateOf(0) }
+                        item.itemValue2Int = remember { mutableStateOf(0) }
+                        item.itemValue3Int = remember { mutableStateOf(0) }
+                    }
                     LabeledTriCounter(
                         text1 = item.text,
                         text2 = item.text2.toString(),
@@ -327,7 +360,9 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                 }
 
                 TemplateTypes.TRI_BUTTON -> {
-                    item.itemValueInt = remember { mutableStateOf(0) }
+                    if (item.itemValueInt == null) {
+                        item.itemValueInt = remember { mutableStateOf(0) }
+                    }
                     TriButtonBlock(
                         headerText = item.text,
                         buttonLabelOne = item.text2.toString(),
@@ -343,6 +378,21 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                         )
                     )
                 }
+            }
+        }
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                SmallButton(
+                    text = stringResource(id = R.string.in_match_clear_data_button_label),
+                    icon = painterResource(id = R.drawable.ic_trash_can),
+                    onClick = {
+                        viewModel.clearCurrentData()
+                    },
+                    color = PrimaryBlue
+                )
             }
         }
     }

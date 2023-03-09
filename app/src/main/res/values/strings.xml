@@ -130,7 +130,7 @@
     <string name="in_pit_scouting_end_button_text">Finish scouting</string>
     <string name="in_match_scouting_end_button_text_short">DONE</string>
 
-    <string name="in_match_header_match_number_format">Qualification #%1$s</string>
+    <string name="in_match_header_match_number_format">Match #%1$s</string>
     <string name="in_match_header_team_number_format">Monitoring team %1$s</string>
     <string name="in_match_header_alliance_red">Red alliance</string>
     <string name="in_match_header_alliance_blue">Blue alliance</string>
@@ -138,6 +138,7 @@
     <string name="in_match_stage_teleoperated_label">TELEOP</string>
     <string name="in_match_stage_move_on">Move to TELEOP</string>
     <string name="in_match_stage_finish_scout_text">Finish match</string>
+    <string name="in_match_clear_data_button_label">Clear data</string>
 
     <string name="finish_match_header_title">Finalize data</string>
     <string name="finish_match_name_confirmation">Enter your name</string>
