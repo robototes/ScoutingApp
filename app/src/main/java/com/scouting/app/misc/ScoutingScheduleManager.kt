@@ -1,5 +1,6 @@
 package com.scouting.app.misc
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -95,9 +96,8 @@ class ScoutingScheduleManager {
         monitoringTeamPositionIndex = 0
         currentMatchScoutingIteration = 0
         MMKV.defaultMMKV().apply {
-            if (decodeString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE") {
-                monitoringTeamPositionIndex += 2
-            }
+            monitoringTeamPositionIndex =
+                if (decodeString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE") 2 else -1
             monitoringTeamPositionIndex += decodeInt("DEVICE_ROBOT_POSITION", 0)
         }
     }
