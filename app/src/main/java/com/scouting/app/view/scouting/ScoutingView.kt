@@ -156,7 +156,7 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                                             ""
                                         }
                                     } else {
-                                           stringResource(id = R.string.in_match_stage_finish_scout_text)
+                                        stringResource(id = R.string.in_match_stage_finish_scout_text)
                                     },
                                     icon = viewModel.let {
                                         if (it.scoutingType == ScoutingType.PIT || it.currentMatchStage == MatchStage.AUTO) {
@@ -378,21 +378,6 @@ fun ScoutingTemplateLoadView(
                         )
                     )
                 }
-            }
-        }
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                SmallButton(
-                    text = stringResource(id = R.string.in_match_clear_data_button_label),
-                    icon = painterResource(id = R.drawable.ic_trash_can),
-                    onClick = {
-                        viewModel.clearCurrentData()
-                    },
-                    color = PrimaryBlue
-                )
             }
         }
     }
