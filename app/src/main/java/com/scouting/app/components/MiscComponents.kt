@@ -1,7 +1,11 @@
 package com.scouting.app.components
 
+import android.graphics.BitmapFactory
+import android.util.Base64
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,15 +24,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.scouting.app.R
 import com.scouting.app.theme.NeutralGrayMedium
 
 @Composable
@@ -161,4 +169,32 @@ fun SettingsDivider(modifier: Modifier) {
             .height(3.dp)
             .background(MaterialTheme.colorScheme.onBackground.copy(0.15F))
     ) {}
+}
+
+@Composable
+fun EncodedImageComponent(
+    base64Image: String,
+    modifier: Modifier,
+    editMode: Boolean
+) {
+    if (base64Image.isNotBlank()) {
+        val decodedImage = Base64.decode(base64Image, Base64.DEFAULT)
+        Image(
+            contentDescription = null,
+            bitmap = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.size)
+                .asImageBitmap(),
+            modifier = modifier.clip(MaterialTheme.shapes.large)
+        )
+    } else if (editMode && base64Image.isBlank()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 20.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.template_edit_image_edit_hint_text),
+                Modifier.align(Alignment.Center)
+            )
+        }
+    }
 }

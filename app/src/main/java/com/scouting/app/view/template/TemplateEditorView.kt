@@ -28,6 +28,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.DottedRoundBox
+import com.scouting.app.components.EncodedImageComponent
 import com.scouting.app.components.LabeledCounter
 import com.scouting.app.components.LabeledRatingBar
 import com.scouting.app.components.LabeledTriCounter
@@ -106,7 +107,10 @@ fun TemplateEditorView(navController: NavController, type: String? = null) {
                     )
                 }
             }
-            EditTemplateDialog(viewModel = viewModel)
+            EditTemplateDialog(
+                viewModel = viewModel,
+                context = navController.context
+            )
         }
     }
 }
@@ -323,6 +327,14 @@ fun ListItemFromType(item: TemplateItem) {
                 onValueChange = {},
                 enabled = false,
                 modifier = Modifier.padding(start = 30.dp, end = 15.dp, bottom = 10.dp)
+            )
+        }
+
+        TemplateTypes.IMAGE -> {
+            EncodedImageComponent(
+                base64Image = item.text,
+                modifier = Modifier.padding(30.dp),
+                editMode = true
             )
         }
     }

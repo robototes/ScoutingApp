@@ -1,5 +1,10 @@
 package com.scouting.app.viewmodel
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Base64
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -17,8 +22,10 @@ import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
 import com.scouting.app.model.TemplateItem
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.UUID
+
 
 class TemplateEditorViewModel : ViewModel() {
 
@@ -159,6 +166,20 @@ class TemplateEditorViewModel : ViewModel() {
         teleListItems.clear()
         pitListItems.clear()
         finalFileName = TextFieldValue()
+    }
+
+    /**
+     * Takes a user-selected image and converts it to a Base64-encoded string,
+     * to be saved in the JSON file
+     *
+     * @param filePath - path to image that the user selected
+     */
+    fun importImageToCurrentIndex(filePath: Uri) {
+        val bitmap = BitmapFactory.decodeFile(filePath.path)
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream)
+        val encodedImage = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+        currentListResource[currentEditItemIndex].text = encodedImage
     }
 
 }

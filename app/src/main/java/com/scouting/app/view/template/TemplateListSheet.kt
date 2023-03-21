@@ -233,5 +233,34 @@ fun TemplateListSheet(
                 modifier = Modifier.padding(horizontal = 30.dp, vertical = 20.dp)
             )
         }
+        BorderedCard(
+            modifier = Modifier
+                .padding(bottom = 20.dp)
+                .clickable {
+                    viewModel.currentListResource.add(
+                        TemplateItem(
+                            id = UUID
+                                .randomUUID()
+                                .toString(),
+                            text = "",
+                            type = TemplateTypes.IMAGE,
+                            saveKey = ""
+                        )
+                    )
+                    coroutineScope.launch { sheetState.hide() }
+                }
+        ) {
+            // probably want to polish this further in the future
+            Row(
+                modifier = Modifier.padding(horizontal = 30.dp, vertical = 20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(id = R.string.template_edit_image_item_title),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
+        }
     }
 }

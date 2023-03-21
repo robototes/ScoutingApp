@@ -99,10 +99,13 @@
     <string name="template_edit_csv_item_counter_prefix">Counter</string>
     <string name="template_edit_csv_item_rating_bar_prefix">Rating bar</string>
     <string name="template_edit_csv_item_tri_button_prefix">Tri-button</string>
+    <string name="template_edit_image_item_title">Image component</string>
     <string name="template_edit_csv_type_string">String</string>
     <string name="template_edit_csv_type_int">Integer</string>
     <string name="template_edit_csv_type_boolean">Boolean</string>
     <string name="template_edit_csv_save_header_move_on_button">Finalize template</string>
+    <string name="template_edit_image_edit_hint_text">Tap to choose an image</string>
+    <string name="template_edit_image_button_label">Choose an image</string>
     <string name="template_edit_save_fail_toast">Failed to export template, please add a file name first!</string>
     <string name="template_edit_save_success_toast">Successfully exported template!</string>
 

@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
+import com.scouting.app.components.EncodedImageComponent
 import com.scouting.app.components.LabeledCounter
 import com.scouting.app.components.LabeledRatingBar
 import com.scouting.app.components.LabeledTriCounter
@@ -224,22 +225,13 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
                     // it so that the value of say, a counter is not persisted through
                     // match stage changes, confusing the user and messing up our data
                     AnimatedVisibility(visible = viewModel.currentMatchStage == MatchStage.AUTO) {
-                        ScoutingTemplateLoadView(
-                            list = viewModel.autoListItems,
-                            viewModel = viewModel
-                        )
+                        ScoutingTemplateLoadView(viewModel.autoListItems)
                     }
                     AnimatedVisibility(visible = viewModel.currentMatchStage == MatchStage.TELEOP) {
-                        ScoutingTemplateLoadView(
-                            list = viewModel.teleListItems,
-                            viewModel = viewModel
-                        )
+                        ScoutingTemplateLoadView(viewModel.teleListItems)
                     }
                 } else {
-                    ScoutingTemplateLoadView(
-                        list = viewModel.pitListItems,
-                        viewModel = viewModel
-                    )
+                    ScoutingTemplateLoadView(viewModel.pitListItems)
                 }
             }
         }
@@ -247,13 +239,11 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
 }
 
 @Composable
-fun ScoutingTemplateLoadView(
-    list: SnapshotStateList<TemplateItem>,
-    viewModel: ScoutingViewModel
-) {
+fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
     LazyColumn(
         modifier = Modifier.padding(top = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(45.dp)
+        verticalArrangement = Arrangement.spacedBy(45.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         itemsIndexed(list) { _, item ->
             when (item.type) {
@@ -376,6 +366,14 @@ fun ScoutingTemplateLoadView(
                             start = 30.dp,
                             end = 30.dp,
                         )
+                    )
+                }
+
+                TemplateTypes.IMAGE -> {
+                    EncodedImageComponent(
+                        base64Image = item.text,
+                        modifier = Modifier.padding(horizontal = 30.dp),
+                        editMode = false
                     )
                 }
             }

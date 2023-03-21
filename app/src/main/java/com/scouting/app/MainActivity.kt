@@ -28,6 +28,7 @@ import com.scouting.app.misc.RequestCode.COMPETITION_SCHEDULE_FILE_PICK
 import com.scouting.app.misc.RequestCode.MATCH_TEMPLATE_FILE_PICK
 import com.scouting.app.misc.RequestCode.PIT_SCOUTING_SCHEDULE_FILE_PICK
 import com.scouting.app.misc.RequestCode.PIT_TEMPLATE_FILE_PICK
+import com.scouting.app.misc.RequestCode.TEMPLATE_EDITOR_IMAGE_FILE_PICK
 import com.scouting.app.misc.RequestCode.TEMPLATE_EDITOR_IMPORT_FILE_PICK
 import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.theme.ScoutingTheme
@@ -166,14 +167,14 @@ class MainActivity : ComponentActivity() {
      * @param type - The file type to be shown in the file picker. Some examples:
      * "csv", "json", or "apk"
      */
-    fun requestFilePicker(code: Int, type: String) {
+    fun requestFilePicker(code: Int, vararg type: String) {
         UnicornFilePicker.from(this)
             .addConfigBuilder()
             .selectMultipleFiles(false)
             .setRootDirectory(Environment.getExternalStorageDirectory().absolutePath)
             .showHiddenFiles(false)
             .addItemDivider(true)
-            .setFilters(arrayOf(type))
+            .setFilters(type)
             .theme(R.style.FilePickerTheme)
             .build()
             .forResult(code)
@@ -205,7 +206,7 @@ class MainActivity : ComponentActivity() {
 
                     TEMPLATE_EDITOR_IMPORT_FILE_PICK -> {
                         templateEditorViewModel.importExistingTemplate(
-                            contentResolver.openInputStream(
+                            fileContents = contentResolver.openInputStream(
                                 File(data.getStringArrayListExtra("filePaths")!![0]).toUri()
                             )!!.use {
                                 val contents = it.reader().readText()
@@ -214,6 +215,12 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                         navigationController.navigate(NavDestination.TemplateEditor)
+                    }
+
+                    TEMPLATE_EDITOR_IMAGE_FILE_PICK -> {
+                        templateEditorViewModel.importImageToCurrentIndex(
+                            filePath = File(data.getStringArrayListExtra("filePaths")!![0]).toUri()
+                        )
                     }
                 }
             }

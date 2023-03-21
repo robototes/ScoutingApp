@@ -88,7 +88,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                     onClick = {
                                         context.requestFilePicker(
                                             code = RequestCode.COMPETITION_SCHEDULE_FILE_PICK,
-                                            type = "csv"
+                                            type = arrayOf("csv")
                                         )
                                     },
                                     color = NeutralGrayLight,
@@ -126,7 +126,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                 onClick = {
                                     context.requestFilePicker(
                                         code = RequestCode.PIT_SCOUTING_SCHEDULE_FILE_PICK,
-                                        type = "csv"
+                                        type = arrayOf("csv")
                                     )
                                 },
                                 color = NeutralGrayLight,
@@ -210,7 +210,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                 onClick = {
                                     context.requestFilePicker(
                                         code = RequestCode.MATCH_TEMPLATE_FILE_PICK,
-                                        type = "json"
+                                        type = arrayOf("json")
                                     )
                                 },
                                 color = NeutralGrayLight
@@ -243,7 +243,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                                 onClick = {
                                     context.requestFilePicker(
                                         code = RequestCode.PIT_TEMPLATE_FILE_PICK,
-                                        type = "json"
+                                        type = arrayOf("json")
                                     )
                                 },
                                 color = NeutralGrayLight

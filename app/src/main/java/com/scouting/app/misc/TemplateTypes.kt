@@ -7,5 +7,6 @@ enum class TemplateTypes {
     TEXT_FIELD,
     PLAIN_TEXT,
     TRI_SCORING,
-    TRI_BUTTON
+    TRI_BUTTON,
+    IMAGE
 }

@@ -1,5 +1,6 @@
 package com.scouting.app.view.template
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,15 +18,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.DialogScaffold
+import com.scouting.app.components.LargeButton
 import com.scouting.app.components.SmallButton
+import com.scouting.app.misc.RequestCode
 import com.scouting.app.misc.TemplateTypes
+import com.scouting.app.theme.NeutralGrayDark
+import com.scouting.app.theme.NeutralGrayMedium
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 
 @Composable
-fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
+fun EditTemplateDialog(viewModel: TemplateEditorViewModel, context: Context) {
     if (viewModel.showingEditDialog) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_edit_pen),
@@ -36,8 +42,7 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
             }
         ) {
             if (viewModel.currentListResource.size > viewModel.currentEditItemIndex) {
-                val currentEditItem =
-                    viewModel.let { it.currentListResource[it.currentEditItemIndex] }
+                val currentEditItem = viewModel.let { it.currentListResource[it.currentEditItemIndex] }
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -65,22 +70,24 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     var textFieldValueSaveKey3 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey3.toString()))
                     }
-                    BasicInputField(
-                        icon = painterResource(id = R.drawable.ic_text_format_center),
-                        contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
-                        hint = if (currentEditItem.type == TemplateTypes.TRI_BUTTON) {
-                            stringResource(id = R.string.template_editor_edit_dialog_field_special_hint)
-                        } else {
-                            stringResource(id = R.string.template_editor_edit_dialog_field_hint)
-                        },
-                        textFieldValue = textFieldValueLabel,
-                        onValueChange = {
-                            textFieldValueLabel = it
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 30.dp, vertical = 10.dp)
-                    )
+                    if (currentEditItem.type != TemplateTypes.IMAGE) {
+                        BasicInputField(
+                            icon = painterResource(id = R.drawable.ic_text_format_center),
+                            contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
+                            hint = if (currentEditItem.type == TemplateTypes.TRI_BUTTON) {
+                                stringResource(id = R.string.template_editor_edit_dialog_field_special_hint)
+                            } else {
+                                stringResource(id = R.string.template_editor_edit_dialog_field_hint)
+                            },
+                            textFieldValue = textFieldValueLabel,
+                            onValueChange = {
+                                textFieldValueLabel = it
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 30.dp, vertical = 10.dp)
+                        )
+                    }
                     if (currentEditItem.type == TemplateTypes.TRI_SCORING ||
                         currentEditItem.type == TemplateTypes.TRI_BUTTON
                     ) {
@@ -124,7 +131,7 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                         )
                     }
                     // Plain text has no user input, thus nothing to save
-                    if (currentEditItem.type != TemplateTypes.PLAIN_TEXT) {
+                    if (currentEditItem.type != TemplateTypes.PLAIN_TEXT && currentEditItem.type != TemplateTypes.IMAGE) {
                         BasicInputField(
                             icon = painterResource(id = R.drawable.ic_save_file),
                             contentDescription = stringResource(id = R.string.ic_save_file_content_desc),
@@ -164,6 +171,20 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                                 .padding(horizontal = 30.dp, vertical = 10.dp)
                         )
                     }
+                    if (currentEditItem.type == TemplateTypes.IMAGE) {
+                        LargeButton(
+                            text = stringResource(id = R.string.template_edit_image_edit_hint_text),
+                            onClick = {
+                                (context as MainActivity).requestFilePicker(
+                                    code = RequestCode.TEMPLATE_EDITOR_IMAGE_FILE_PICK,
+                                    type = arrayOf("png", "jpeg", "jpg")
+                                )
+                            },
+                            color = NeutralGrayMedium,
+                            colorBorder = NeutralGrayDark,
+                            modifier = Modifier.padding(horizontal = 20.dp)
+                        )
+                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -176,14 +197,16 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                             contentDescription = stringResource(id = R.string.ic_checkmark_outline_content_desc),
                             onClick = {
                                 viewModel.apply {
-                                    currentListResource[currentEditItemIndex].apply {
-                                        text = textFieldValueLabel.text
-                                        text2 = textFieldValueLabel2.text
-                                        text3 = textFieldValueLabel3.text
-                                        text4 = textFieldValueLabel4.text
-                                        saveKey = textFieldValueSaveKey.text
-                                        saveKey2 = textFieldValueSaveKey2.text
-                                        saveKey3 = textFieldValueSaveKey3.text
+                                    if (currentEditItem.type != TemplateTypes.IMAGE) {
+                                        currentListResource[currentEditItemIndex].apply {
+                                            text = textFieldValueLabel.text
+                                            text2 = textFieldValueLabel2.text
+                                            text3 = textFieldValueLabel3.text
+                                            text4 = textFieldValueLabel4.text
+                                            saveKey = textFieldValueSaveKey.text
+                                            saveKey2 = textFieldValueSaveKey2.text
+                                            saveKey3 = textFieldValueSaveKey3.text
+                                        }
                                     }
                                     showingEditDialog = false
                                 }
