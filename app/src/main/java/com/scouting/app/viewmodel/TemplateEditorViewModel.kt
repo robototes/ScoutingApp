@@ -112,7 +112,7 @@ class TemplateEditorViewModel : ViewModel() {
         } else {
             pitListItems
         }.forEach {
-            if (it.type != TemplateTypes.PLAIN_TEXT) {
+            if (it.type != TemplateTypes.PLAIN_TEXT && it.type != TemplateTypes.IMAGE) {
                 if (it.saveKey.isBlank()) {
                     it.saveKey = UUID.randomUUID().toString().substring(0, 8)
                 }
