@@ -30,6 +30,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
+fun String.quoteForCSV(): String {
+    val ret = replace("\"", "\"\"")
+    if (ret.contains(',')) {
+        return "\"$ret\""
+    }
+    return ret
+}
+
 class ScoutingViewModel : ViewModel() {
 
     var autoListItems = mutableStateListOf<TemplateItem>()
@@ -153,9 +161,9 @@ class ScoutingViewModel : ViewModel() {
         },${currentTeamNumberMonitoring.text},"
 
         // Append ordered, user-inputted match data
-        csvRowDraft += saveKeyOrderList!!.map { key ->
-            itemList.findItemValueWithKey(key)
-        }.joinToString(",")
+        csvRowDraft += saveKeyOrderList!!.joinToString(",") { key ->
+            itemList.findItemValueWithKey(key).toString().quoteForCSV()
+        }
 
         var userSelectedOutputFileName = preferences.decodeString(
             "DEFAULT_OUTPUT_FILE_NAME_$templateType",
