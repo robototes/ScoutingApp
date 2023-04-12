@@ -1,7 +1,5 @@
 package com.scouting.app.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +26,7 @@ import com.scouting.app.model.TemplateItem
 import com.tencent.mmkv.MMKV
 import java.io.File
 import java.io.FileOutputStream
-import java.util.UUID
+import java.util.*
 
 fun String.quoteForCSV(): String {
     val ret = replace("\"", "\"\"")

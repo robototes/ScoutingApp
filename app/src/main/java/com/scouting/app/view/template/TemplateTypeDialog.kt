@@ -16,8 +16,6 @@ import com.scouting.app.misc.NavDestination
 import com.scouting.app.misc.RequestCode
 import com.scouting.app.theme.NeutralGrayDark
 import com.scouting.app.theme.NeutralGrayMedium
-import com.scouting.app.theme.SecondaryPurple
-import com.scouting.app.theme.SecondaryPurpleDark
 import com.scouting.app.viewmodel.HomePageViewModel
 
 @Composable

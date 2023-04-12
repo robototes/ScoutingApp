@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -24,7 +23,7 @@ import com.scouting.app.model.TemplateItem
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 
 class TemplateEditorViewModel : ViewModel() {

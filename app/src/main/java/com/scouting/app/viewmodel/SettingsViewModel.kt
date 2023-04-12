@@ -1,7 +1,5 @@
 package com.scouting.app.viewmodel
 
-import abhishekti7.unicorn.filepicker.UnicornFilePicker
-import android.os.Environment
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
