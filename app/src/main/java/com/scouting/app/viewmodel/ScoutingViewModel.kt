@@ -165,11 +165,10 @@ class ScoutingViewModel : ViewModel() {
             itemList.findItemValueWithKey(key).toString().quoteForCSV()
         }
 
-        var userSelectedOutputFileName = preferences.decodeString(
+        val userSelectedOutputFileName = preferences.decodeString(
             "DEFAULT_OUTPUT_FILE_NAME_$templateType",
-            "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}"
+            "${FilePaths.DATA_DIRECTORY}/output-${templateType.toLowerCase(Locale.current)}.csv"
         )!!
-        if (scoutingType == PIT) userSelectedOutputFileName += ".csv"
         var outputFile = File(userSelectedOutputFileName)
 
         if (!outputFile.exists()) {
