@@ -316,7 +316,10 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                         text3 = item.text3.toString(),
                         onValueChange1 = { item.itemValueInt!!.value = it },
                         onValueChange2 = { item.itemValue2Int!!.value = it },
-                        onValueChange3 = { item.itemValue3Int!!.value = it }
+                        onValueChange3 = { item.itemValue3Int!!.value = it },
+                        startValueOne = item.itemValueInt!!.value,
+                        startValueTwo = item.itemValue2Int!!.value,
+                        startValueThree = item.itemValue3Int!!.value
                     )
                 }
 
@@ -332,6 +335,7 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                         onValueChange = {
                             item.itemValueInt!!.value = it
                         },
+                        initialSelection = item.itemValueInt!!.value,
                         modifier = Modifier.padding(
                             bottom = 10.dp,
                             start = 30.dp,
