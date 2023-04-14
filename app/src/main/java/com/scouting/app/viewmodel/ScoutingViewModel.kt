@@ -1,5 +1,6 @@
 package com.scouting.app.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -220,27 +221,33 @@ class ScoutingViewModel : ViewModel() {
      */
     private fun List<TemplateItem>.findItemValueWithKey(key: String): Any? {
         var foundItem: Any? = null
-        forEachIndexed { _, item ->
-            when (key) {
-                item.saveKey -> {
-                    foundItem = when (item.type) {
-                        TemplateTypes.CHECK_BOX -> item.itemValueBoolean!!.value
-                        TemplateTypes.TEXT_FIELD -> item.itemValueString!!.value
-                        else /* SCORE_BAR, RATING_BAR, TRI_BUTTON OR TRI_SCORING */ -> item.itemValueInt!!.value
+        forEachIndexed { index, item ->
+            try {
+                when (key) {
+                    item.saveKey -> {
+                        foundItem = when (item.type) {
+                            TemplateTypes.CHECK_BOX -> item.itemValueBoolean!!.value
+                            TemplateTypes.TEXT_FIELD -> item.itemValueString!!.value
+                            else /* SCORE_BAR, RATING_BAR, TRI_BUTTON OR TRI_SCORING */ -> item.itemValueInt!!.value
+                        }
+                        return@forEachIndexed
                     }
-                    return@forEachIndexed
-                }
-                // We know that the only component that uses saveKey2 and saveKey3
-                // is the TRI_SCORING component, which is always an integer value
-                item.saveKey2 -> {
-                    foundItem = item.itemValue2Int!!.value
-                    return@forEachIndexed
-                }
+                    // We know that the only component that uses saveKey2 and saveKey3
+                    // is the TRI_SCORING component, which is always an integer value
+                    item.saveKey2 -> {
+                        foundItem = item.itemValue2Int!!.value
+                        return@forEachIndexed
+                    }
 
-                item.saveKey3 -> {
-                    foundItem = item.itemValue3Int!!.value
-                    return@forEachIndexed
+                    item.saveKey3 -> {
+                        foundItem = item.itemValue3Int!!.value
+                        return@forEachIndexed
+                    }
                 }
+            } catch (e: java.lang.NullPointerException) {
+                Log.e("ScoutingApp", "NPE saving item $item at index $index! Using null", e)
+                foundItem = null
+                return@forEachIndexed
             }
         }
         return foundItem
