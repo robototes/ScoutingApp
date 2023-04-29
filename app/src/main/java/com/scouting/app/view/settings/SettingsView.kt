@@ -80,44 +80,6 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                     )
                     SettingsDivider(modifier = Modifier.padding(top = 50.dp))
                     SettingsPreference(
-                        title = stringResource(id = R.string.settings_load_pit_schedule_title),
-                        endContent = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                MediumButton(
-                                    text = viewModel.pitScheduleFileName,
-                                    onClick = {
-                                        context.requestFilePicker(
-                                            code = RequestCode.PIT_SCOUTING_SCHEDULE_FILE_PICK,
-                                            type = arrayOf("csv")
-                                        )
-                                    },
-                                    color = NeutralGrayLight,
-                                    modifier = Modifier.padding(start = 10.dp)
-                                )
-                                AnimatedVisibility(visible = viewModel.pitScheduleFileName != "NONE") {
-                                    IconButton(
-                                        onClick = {
-                                            preferences.apply {
-                                                encode("PIT_SCOUTING_MODE", false)
-                                                encode("PIT_SCHEDULE_FILE_NAME", "NONE")
-                                            }
-                                            viewModel.apply {
-                                                pitScoutingMode = false
-                                                pitScheduleFileName = "NONE"
-                                            }
-                                        }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.ic_trash_can),
-                                            contentDescription = stringResource(id = R.string.ic_trash_can_content_desc)
-                                        )
-                                    }
-                                }
-                            }
-                        },
-                        modifier = Modifier.padding(top = 50.dp)
-                    )
-                    SettingsPreference(
                         title = stringResource(id = R.string.settings_load_competition_schedule_title),
                         endContent = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -156,34 +118,44 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                         },
                         modifier = Modifier.padding(top = 50.dp)
                     )
-                    AnimatedVisibility(visible = viewModel.pitScheduleFileName != "NONE") {
-                        SettingsPreference(
-                            title = stringResource(id = R.string.settings_pit_scouting_mode_title),
-                            endContent = {
-                                Switch(
-                                    checked = viewModel.pitScoutingMode,
-                                    onCheckedChange = {
-                                        viewModel.apply {
-                                            scheduledScoutingModeType = ScoutingType.PIT
-                                            showingScheduledScoutingModeDialog = true
-                                        }
-                                    },
-                                    colors = SwitchDefaults.colors(
-                                        uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(
-                                            0.2F
+                    SettingsPreference(
+                        title = stringResource(id = R.string.settings_load_pit_schedule_title),
+                        endContent = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                MediumButton(
+                                    text = viewModel.pitScheduleFileName,
+                                    onClick = {
+                                        context.requestFilePicker(
+                                            code = RequestCode.PIT_SCOUTING_SCHEDULE_FILE_PICK,
+                                            type = arrayOf("csv")
                                         )
-                                    )
+                                    },
+                                    color = NeutralGrayLight,
+                                    modifier = Modifier.padding(start = 10.dp)
                                 )
-                            },
-                            modifier = Modifier.padding(top = 50.dp),
-                            onClickAction = {
-                                viewModel.apply {
-                                    scheduledScoutingModeType = ScoutingType.PIT
-                                    showingScheduledScoutingModeDialog = true
+                                AnimatedVisibility(visible = viewModel.pitScheduleFileName != "NONE") {
+                                    IconButton(
+                                        onClick = {
+                                            preferences.apply {
+                                                encode("PIT_SCOUTING_MODE", false)
+                                                encode("PIT_SCHEDULE_FILE_NAME", "NONE")
+                                            }
+                                            viewModel.apply {
+                                                pitScoutingMode = false
+                                                pitScheduleFileName = "NONE"
+                                            }
+                                        }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_trash_can),
+                                            contentDescription = stringResource(id = R.string.ic_trash_can_content_desc)
+                                        )
+                                    }
                                 }
                             }
-                        )
-                    }
+                        },
+                        modifier = Modifier.padding(top = 50.dp)
+                    )
                     AnimatedVisibility(visible = viewModel.competitionScheduleFileName != "NONE") {
                         SettingsPreference(
                             title = stringResource(id = R.string.settings_competition_mode_toggle_title),
@@ -207,6 +179,34 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                             onClickAction = {
                                 viewModel.apply {
                                     scheduledScoutingModeType = ScoutingType.MATCH
+                                    showingScheduledScoutingModeDialog = true
+                                }
+                            }
+                        )
+                    }
+                    AnimatedVisibility(visible = viewModel.pitScheduleFileName != "NONE") {
+                        SettingsPreference(
+                            title = stringResource(id = R.string.settings_pit_scouting_mode_title),
+                            endContent = {
+                                Switch(
+                                    checked = viewModel.pitScoutingMode,
+                                    onCheckedChange = {
+                                        viewModel.apply {
+                                            scheduledScoutingModeType = ScoutingType.PIT
+                                            showingScheduledScoutingModeDialog = true
+                                        }
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(
+                                            0.2F
+                                        )
+                                    )
+                                )
+                            },
+                            modifier = Modifier.padding(top = 50.dp),
+                            onClickAction = {
+                                viewModel.apply {
+                                    scheduledScoutingModeType = ScoutingType.PIT
                                     showingScheduledScoutingModeDialog = true
                                 }
                             }
