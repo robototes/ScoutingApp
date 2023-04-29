@@ -12,6 +12,7 @@ class ScoutingScheduleManager {
 
     // Follows the format red 1, red 2, red 3, blue 1, blue 2, blue 3
     val currentCompetitionScheduleCSV = mutableListOf<List<String>>()
+
     // Follows the format teamNumber, teamName
     private val currentPitScheduleCSV = mutableListOf<List<String>>()
 
@@ -36,7 +37,9 @@ class ScoutingScheduleManager {
         } else {
             currentPitScheduleCSV
         }
-        if (matchSchedule) { resetManagerMatch() }
+        if (matchSchedule) {
+            resetManagerMatch()
+        }
         currentListResource.clear()
         context.contentResolver.openInputStream(scheduleFile.toUri())?.use {
             it.reader().readLines().forEach { item ->
@@ -68,7 +71,9 @@ class ScoutingScheduleManager {
         }
         val cachedSchedule = preferences.decodeString("${type}_SCHEDULE_CACHED", "")!!
         if (cachedSchedule.isNotBlank()) {
-            if (matchSchedule) { resetManagerMatch() }
+            if (matchSchedule) {
+                resetManagerMatch()
+            }
             currentListResource.clear()
             cachedSchedule.split("%").forEach {
                 currentListResource.add(it.removeSurrounding("[", "]").split(", "))
@@ -116,7 +121,7 @@ class ScoutingScheduleManager {
      *
      * @return Triple holding the team number as first and team name as second
      */
-    fun getCurrentPitInfo() : Pair<String, String> {
+    fun getCurrentPitInfo(): Pair<String, String> {
         val item = currentPitScheduleCSV[currentPitScoutingIteration]
         return Pair(item[0], item[1])
     }
@@ -124,7 +129,7 @@ class ScoutingScheduleManager {
     /**
      * Return how many pits the device has left to scout based on the schedule
      */
-    fun getPitsLeftToScout() : Int = currentPitScheduleCSV.size - currentPitScoutingIteration
+    fun getPitsLeftToScout(): Int = currentPitScheduleCSV.size - currentPitScoutingIteration
 
     /**
      * Increment the match number counter and save this with MMKV

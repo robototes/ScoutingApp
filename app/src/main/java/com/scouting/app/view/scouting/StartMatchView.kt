@@ -8,12 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,16 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.scouting.app.MainActivity
 import com.scouting.app.R
-import com.scouting.app.components.BasicInputField
-import com.scouting.app.components.LargeButton
-import com.scouting.app.components.LargeHeaderBar
-import com.scouting.app.components.RatingBar
-import com.scouting.app.components.SpacedRow
-import com.scouting.app.misc.AllianceType
-import com.scouting.app.misc.MatchStage
-import com.scouting.app.misc.NavDestination
-import com.scouting.app.misc.ScoutingScheduleManager
-import com.scouting.app.misc.ScoutingType
+import com.scouting.app.components.*
+import com.scouting.app.misc.*
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
@@ -121,7 +108,8 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
                         if (MMKV.defaultMMKV().decodeString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")!!
-                                .isEmpty()) {
+                                .isEmpty()
+                        ) {
                             viewModel.showingNoTemplateDialog = true
                         } else if (
                             viewModel.currentMatchMonitoring.text.isBlank() ||

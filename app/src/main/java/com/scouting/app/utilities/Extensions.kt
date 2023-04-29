@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.zIndex
 
 @Composable
-fun Modifier.longPressEffect(offset: Float?) : Modifier = this.composed {
+fun Modifier.longPressEffect(offset: Float?): Modifier = this.composed {
     Modifier
         .zIndex(offset?.let { 1f } ?: 0f)
         .graphicsLayer {

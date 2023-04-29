@@ -26,16 +26,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.scouting.app.R
-import com.scouting.app.components.BasicInputField
-import com.scouting.app.components.DottedRoundBox
-import com.scouting.app.components.EncodedImageComponent
-import com.scouting.app.components.LabeledCounter
-import com.scouting.app.components.LabeledRatingBar
-import com.scouting.app.components.LabeledTriCounter
-import com.scouting.app.components.MediumHeaderBar
-import com.scouting.app.components.SmallButton
-import com.scouting.app.components.TabLayout
-import com.scouting.app.components.TriButtonBlock
+import com.scouting.app.components.*
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.misc.ScoutingType
 import com.scouting.app.misc.TemplateTypes

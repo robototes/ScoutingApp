@@ -112,7 +112,7 @@ class SettingsViewModel : ViewModel() {
      * @return - a Boolean value telling whether the template is or isn't
      * a match template
      */
-    private fun checkIfTemplateIsMatch(filePath: String) : Boolean {
+    private fun checkIfTemplateIsMatch(filePath: String): Boolean {
         return File(filePath).bufferedReader().use {
             // Read as JSONObject instead of serializing because match and
             // pit templates are different and would cause a crash if fed into
@@ -153,7 +153,9 @@ class SettingsViewModel : ViewModel() {
         }
         scoutingScheduleManager.apply {
             loadScheduleFromFile(filePath, context, matchSchedule)
-            if (matchSchedule) { resetManagerMatch() }
+            if (matchSchedule) {
+                resetManagerMatch()
+            }
         }
     }
 

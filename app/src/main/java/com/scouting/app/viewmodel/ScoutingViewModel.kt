@@ -106,8 +106,10 @@ class ScoutingViewModel : ViewModel() {
      */
     fun populateMatchDataIfCompetition() {
         if (preferences.decodeBool("COMPETITION_MODE", false)) {
-            currentAllianceMonitoring = AllianceType.valueOf(preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED")!!)
-            currentMatchMonitoring = TextFieldValue((scoutingScheduleManager.currentMatchScoutingIteration + 1).toString())
+            currentAllianceMonitoring =
+                AllianceType.valueOf(preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED")!!)
+            currentMatchMonitoring =
+                TextFieldValue((scoutingScheduleManager.currentMatchScoutingIteration + 1).toString())
             currentTeamNumberMonitoring = TextFieldValue(scoutingScheduleManager.getCurrentTeam())
         } else {
             currentMatchMonitoring = TextFieldValue()
@@ -155,8 +157,11 @@ class ScoutingViewModel : ViewModel() {
         // Add device name, scout name, match number and team number
         // OR if pit scouting add team name in place of match number
         csvRowDraft += "$tabletName,${scoutName.text},${
-            if (scoutingType == PIT) { currentTeamNameMonitoring.text } 
-            else { currentMatchMonitoring.text }
+            if (scoutingType == PIT) {
+                currentTeamNameMonitoring.text
+            } else {
+                currentMatchMonitoring.text
+            }
         },${currentTeamNumberMonitoring.text},"
 
         // Append ordered, user-inputted match data

@@ -18,14 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.scouting.app.R
-import com.scouting.app.components.BasicInputField
-import com.scouting.app.components.BorderedCard
-import com.scouting.app.components.LabeledCounter
-import com.scouting.app.components.LabeledRatingBar
-import com.scouting.app.components.LabeledTriCounter
-import com.scouting.app.components.SheetHandle
-import com.scouting.app.components.SpacedRow
-import com.scouting.app.components.TriButtonBlock
+import com.scouting.app.components.*
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateItem
 import com.scouting.app.viewmodel.TemplateEditorViewModel

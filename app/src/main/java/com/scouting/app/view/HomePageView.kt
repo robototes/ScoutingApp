@@ -1,25 +1,8 @@
 package com.scouting.app.view
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -150,9 +133,10 @@ fun HomePageView(navController: NavController, scoutingScheduleManager: Scouting
                     )
                     if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
                         Card(
-                            shape =  MaterialTheme.shapes.large,
+                            shape = MaterialTheme.shapes.large,
                             colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                            modifier = Modifier.padding(top = 25.dp)
+                            modifier = Modifier
+                                .padding(top = 25.dp)
                                 .border(
                                     width = 2.dp,
                                     shape = MaterialTheme.shapes.large,
