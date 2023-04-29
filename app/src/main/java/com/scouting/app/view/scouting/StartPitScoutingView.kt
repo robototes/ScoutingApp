@@ -8,8 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,16 +28,16 @@ import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.ScoutingViewModel
-import com.tencent.mmkv.MMKV
 
 @Composable
 fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(ScoutingViewModel::class.java)
+    var loadingFailed by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
         viewModel.apply {
             scoutingType = ScoutingType.PIT
-            loadTemplateItems()
+            loadingFailed = loadTemplateItems()
             this.scoutingScheduleManager = scoutingScheduleManager
             populatePitDataIfScheduled()
         }
@@ -85,9 +84,7 @@ fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: 
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
-                        if (MMKV.defaultMMKV()
-                                .decodeString("DEFAULT_TEMPLATE_FILE_PATH_PIT", "")!!.isEmpty()
-                        ) {
+                        if (loadingFailed) {
                             viewModel.showingNoTemplateDialog = true
                         } else if (
                             viewModel.currentTeamNameMonitoring.text.isBlank() ||

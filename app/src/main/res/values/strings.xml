@@ -110,7 +110,7 @@
     <string name="template_edit_save_success_toast">Successfully exported template!</string>
 
     <string name="start_scouting_dialog_no_template_title">No template found</string>
-    <string name="start_scouting_dialog_no_template_subtitle">There currently isn\'t a default template selected. Before proceeding, you must choose a template in the settings menu.</string>
+    <string name="start_scouting_dialog_no_template_subtitle">There currently isn\'t a default template selected, or the selected template doesn\'t exist. Before proceeding, you must choose a template in the settings menu.</string>
     <string name="start_scouting_dialog_no_template_neutral_button_text">Settings</string>
     <string name="start_scouting_dialog_no_template_positive_button_text">Got it!</string>
 

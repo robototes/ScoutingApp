@@ -30,10 +30,11 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(ScoutingViewModel::class.java)
     var managedMatch by remember { mutableStateOf(false) }
+    var loadingFailed by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
         viewModel.apply {
             scoutingType = ScoutingType.MATCH
-            loadTemplateItems()
+            loadingFailed = loadTemplateItems()
             this.scoutingScheduleManager = scoutingScheduleManager
             populateMatchDataIfCompetition()
             managedMatch = MMKV.defaultMMKV().decodeBool("COMPETITION_MODE", false)
@@ -107,9 +108,7 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
-                        if (MMKV.defaultMMKV().decodeString("DEFAULT_TEMPLATE_FILE_PATH_MATCH", "")!!
-                                .isEmpty()
-                        ) {
+                        if (loadingFailed) {
                             viewModel.showingNoTemplateDialog = true
                         } else if (
                             viewModel.currentMatchMonitoring.text.isBlank() ||

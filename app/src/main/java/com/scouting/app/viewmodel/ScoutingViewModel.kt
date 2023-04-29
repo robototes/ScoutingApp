@@ -61,42 +61,45 @@ class ScoutingViewModel : ViewModel() {
      * Deserialize template items from user-selected and created JSON template
      * to list variables stored in the ViewModel, to later be interpreted and
      * laid out accordingly by the view
+     *
+     * @return True if the loading failed (e.g., no template file), false if successful
      */
-    fun loadTemplateItems() {
+    fun loadTemplateItems(): Boolean {
         val templateType = if (scoutingType == PIT) "PIT" else "MATCH"
-        val defaultTemplate = preferences.decodeString("DEFAULT_TEMPLATE_FILE_PATH_$templateType", "")
-        if (defaultTemplate?.isNotBlank() == true) {
-            File(defaultTemplate).bufferedReader().use { file ->
-                val serializedTemplate = Gson().fromJson(
-                    file.readText(),
-                    if (scoutingType == PIT) {
-                        TemplateFormatPit::class.java
-                    } else {
-                        TemplateFormatMatch::class.java
-                    }
-                )
-                file.close()
-                if (scoutingType == PIT) {
-                    serializedTemplate as TemplateFormatPit
-                    pitListItems.apply {
-                        clear()
-                        addAll(serializedTemplate.templateItems)
-                    }
-                    saveKeyOrderList = serializedTemplate.saveOrderByKey
-                } else {
-                    serializedTemplate as TemplateFormatMatch
-                    autoListItems.apply {
-                        clear()
-                        addAll(serializedTemplate.autoTemplateItems)
-                    }
-                    teleListItems.apply {
-                        clear()
-                        addAll(serializedTemplate.teleTemplateItems)
-                    }
-                    saveKeyOrderList = serializedTemplate.saveOrderByKey
-                }
-            }
+        val defaultTemplate = preferences.decodeString("DEFAULT_TEMPLATE_FILE_PATH_$templateType", "") ?: return true
+        val templateFile = File(defaultTemplate)
+        if (defaultTemplate.isBlank() || !templateFile.exists()) {
+            return true
         }
+        val fileText = templateFile.readText()
+        val serializedTemplate = Gson().fromJson(
+            fileText,
+            if (scoutingType == PIT) {
+                TemplateFormatPit::class.java
+            } else {
+                TemplateFormatMatch::class.java
+            }
+        )
+        if (scoutingType == PIT) {
+            serializedTemplate as TemplateFormatPit
+            pitListItems.apply {
+                clear()
+                addAll(serializedTemplate.templateItems)
+            }
+            saveKeyOrderList = serializedTemplate.saveOrderByKey
+        } else {
+            serializedTemplate as TemplateFormatMatch
+            autoListItems.apply {
+                clear()
+                addAll(serializedTemplate.autoTemplateItems)
+            }
+            teleListItems.apply {
+                clear()
+                addAll(serializedTemplate.teleTemplateItems)
+            }
+            saveKeyOrderList = serializedTemplate.saveOrderByKey
+        }
+        return false
     }
 
     /**
