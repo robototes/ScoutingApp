@@ -40,6 +40,7 @@ fun NoTemplateDialog(viewModel: ScoutingViewModel, navController: NavController)
                         icon = painterResource(id = R.drawable.ic_settings),
                         contentDescription = stringResource(id = R.string.ic_settings_content_desc),
                         onClick = {
+                            viewModel.showingNoTemplateDialog = false
                             navController.navigate(NavDestination.Settings)
                         },
                         color = MaterialTheme.colorScheme.tertiary
