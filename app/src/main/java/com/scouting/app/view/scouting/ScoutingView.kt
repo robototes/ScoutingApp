@@ -211,6 +211,35 @@ fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
 
 @Composable
 fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
+    LaunchedEffect(true) {
+        for (item in list) {
+            when (item.type) {
+                TemplateTypes.SCORE_BAR, TemplateTypes.RATING_BAR, TemplateTypes.TRI_BUTTON -> {
+                    if (item.itemValueInt == null) {
+                        item.itemValueInt = mutableStateOf(0)
+                    }
+                }
+                TemplateTypes.CHECK_BOX -> {
+                    if (item.itemValueBoolean == null) {
+                        item.itemValueBoolean = mutableStateOf(false)
+                    }
+                }
+                TemplateTypes.TEXT_FIELD -> {
+                    if (item.itemValueString == null) {
+                        item.itemValueString = mutableStateOf("")
+                    }
+                }
+                TemplateTypes.TRI_SCORING -> {
+                    if (item.itemValueInt == null) { // If one is null then the rest will be too
+                        item.itemValueInt = mutableStateOf(0)
+                        item.itemValue2Int = mutableStateOf(0)
+                        item.itemValue3Int = mutableStateOf(0)
+                    }
+                }
+                TemplateTypes.IMAGE, TemplateTypes.PLAIN_TEXT -> {}
+            }
+        }
+    }
     LazyColumn(
         modifier = Modifier.padding(top = 20.dp),
         verticalArrangement = Arrangement.spacedBy(45.dp),
