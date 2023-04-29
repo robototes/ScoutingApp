@@ -33,11 +33,8 @@ import com.scouting.app.viewmodel.ScoutingViewModel
 fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
     val context = navController.context as MainActivity
     val viewModel = context.getViewModel(ScoutingViewModel::class.java)
-    var loadingFailed by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
         viewModel.apply {
-            scoutingType = ScoutingType.PIT
-            loadingFailed = loadTemplateItems()
             this.scoutingScheduleManager = scoutingScheduleManager
             populatePitDataIfScheduled()
         }
@@ -84,6 +81,11 @@ fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: 
                     icon = painterResource(id = R.drawable.ic_arrow_forward),
                     contentDescription = stringResource(id = R.string.ic_arrow_forward_content_desc),
                     onClick = {
+                        var loadingFailed: Boolean
+                        viewModel.apply {
+                            scoutingType = ScoutingType.PIT
+                            loadingFailed = loadTemplateItems()
+                        }
                         if (loadingFailed) {
                             viewModel.showingNoTemplateDialog = true
                         } else if (
