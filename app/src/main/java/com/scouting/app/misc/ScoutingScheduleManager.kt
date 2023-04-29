@@ -15,10 +15,6 @@ class ScoutingScheduleManager {
     // Follows the format teamNumber, teamName
     private val currentPitScheduleCSV = mutableListOf<List<String>>()
 
-    // The index inside of the list of teams participating in each match
-    // 0 corresponds to red/blue 1, an index of 2 would go to red/blue 3, etc.
-    private var monitoringTeamPositionIndex = 0
-
     var currentMatchScoutingIteration by mutableStateOf(0)
     var currentPitScoutingIteration by mutableStateOf(0)
 
@@ -92,12 +88,19 @@ class ScoutingScheduleManager {
      * and setting the monitoringTeamPositionIndex based on the set device position
      */
     fun resetManagerMatch() {
-        monitoringTeamPositionIndex = 0
         currentMatchScoutingIteration = 0
         MMKV.defaultMMKV().apply {
-            monitoringTeamPositionIndex =
-                if (decodeString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE") 2 else -1
-            monitoringTeamPositionIndex += decodeInt("DEVICE_ROBOT_POSITION", 0)
+        }
+    }
+
+    /**
+     * The index inside of the list of teams participating in each match
+     */
+    private fun getMonitoringTeamIndex(): Int {
+        MMKV.defaultMMKV().apply {
+            var index = if (decodeString("DEVICE_ALLIANCE_POSITION", "RED") == "BLUE") 3 else 0
+            index += decodeInt("DEVICE_ROBOT_POSITION", 1) - 1
+            return index
         }
     }
 
@@ -106,7 +109,7 @@ class ScoutingScheduleManager {
      * and the current match number
      */
     fun getCurrentTeam(): String =
-        currentCompetitionScheduleCSV[currentMatchScoutingIteration][monitoringTeamPositionIndex]
+        currentCompetitionScheduleCSV[currentMatchScoutingIteration][getMonitoringTeamIndex()]
 
     /**
      * Fetch information about the current pit being scouted

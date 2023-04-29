@@ -28,7 +28,10 @@ fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavControl
             contentDescription = stringResource(id = R.string.ic_machine_learning_content_desc),
             title = stringResource(id = R.string.settings_tablet_configuration_title),
             onDismissRequest = {
-                viewModel.showingDevicePositionDialog = false
+                viewModel.apply {
+                    showingDevicePositionDialog = false
+                    applyDevicePositionChange()
+                }
             }
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
