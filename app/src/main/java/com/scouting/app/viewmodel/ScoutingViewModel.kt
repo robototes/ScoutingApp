@@ -189,17 +189,17 @@ class ScoutingViewModel : ViewModel() {
         }
 
         if (outputFile.exists()) {
-            lateinit var previousFileText: String
-            // Check first line to determine whether there is a labeled save key row already there
+            var outputIsEmpty: Boolean
             contentResolver.openInputStream(outputFile.toUri()).use {
-                previousFileText = it!!.reader().readText()
+                outputIsEmpty = it!!.reader().readText().isEmpty()
                 it.close()
             }
-            FileOutputStream(outputFile).use { outputStream ->
+            FileOutputStream(outputFile, true).use { outputStream ->
                 outputStream.bufferedWriter().use {
-                    // If the file is newly created, add the save keys as the first row, then the
-                    // data as the rest of the file's contents
-                    it.write("${previousFileText.ifEmpty { csvHeaderRow }}\n$csvRowDraft")
+                    if (outputIsEmpty) {
+                        it.appendLine(csvHeaderRow)
+                    }
+                    it.appendLine(csvRowDraft)
                 }
                 outputStream.close()
             }
