@@ -85,6 +85,7 @@
     <string name="template_save_header_title">Finalize your\ntemplate</string>
     <string name="template_save_file_name_input_hint">Template file name</string>
     <string name="template_save_path_disclaimer_placeholder">Template will be saved to ~/Documents/scouting/templates</string>
+    <string name="template_save_set_default_template_title">Set template as default?</string>
     <string name="template_save_button_preview_text">Preview template</string>
     <string name="template_save_button_export_text">Export to JSON</string>
 

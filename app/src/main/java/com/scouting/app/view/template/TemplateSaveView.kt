@@ -2,10 +2,9 @@ package com.scouting.app.view.template
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,6 +23,7 @@ import com.scouting.app.viewmodel.TemplateEditorViewModel
 @Composable
 fun TemplateSaveView(navController: NavController) {
     val viewModel = navController.context.getViewModel(TemplateEditorViewModel::class.java)
+    var setAsDefaultTemplate by remember { mutableStateOf(false) }
     ScoutingTheme {
         Surface {
             Column(modifier = Modifier.fillMaxSize()) {
@@ -52,6 +52,26 @@ fun TemplateSaveView(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 30.dp, end = 45.dp, top = 40.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.template_save_set_default_template_title),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Switch(
+                        checked = setAsDefaultTemplate,
+                        onCheckedChange = { value -> setAsDefaultTemplate = value },
+                        colors = SwitchDefaults.colors(
+                            uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(
+                                0.2F
+                            )
+                        )
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 30.dp, end = 45.dp, top = 40.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
                     MediumButton(
@@ -67,7 +87,7 @@ fun TemplateSaveView(navController: NavController) {
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
-                                    viewModel.writeTemplateToFile(context as MainActivity)
+                                    viewModel.writeTemplateToFile(context as MainActivity, setAsDefaultTemplate)
                                     navigate(NavDestination.HomePage)
                                     Toast.makeText(
                                         context,
