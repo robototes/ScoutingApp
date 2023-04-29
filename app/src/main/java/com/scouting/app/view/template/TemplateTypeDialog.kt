@@ -60,6 +60,7 @@ fun TemplateTypeDialog(viewModel: HomePageViewModel, navController: NavControlle
                             code = RequestCode.TEMPLATE_EDITOR_IMPORT_FILE_PICK,
                             type = arrayOf("json")
                         )
+                        viewModel.showingTemplateTypeDialog = false
                     },
                     color = NeutralGrayMedium,
                     colorBorder = NeutralGrayDark
