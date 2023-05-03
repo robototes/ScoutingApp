@@ -24,18 +24,11 @@ import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
 import com.scouting.app.model.TemplateItem
+import com.scouting.app.utilities.quoteForCSV
 import com.tencent.mmkv.MMKV
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-
-fun String.quoteForCSV(): String {
-    val ret = replace("\"", "\"\"")
-    if (ret.contains(',')) {
-        return "\"$ret\""
-    }
-    return ret
-}
 
 class ScoutingViewModel : ViewModel() {
 
