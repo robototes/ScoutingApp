@@ -21,6 +21,7 @@ import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
+import com.scouting.app.utilities.returnTo
 import com.scouting.app.viewmodel.ScoutingViewModel
 
 @Composable
@@ -67,7 +68,7 @@ fun FinishScoutingView(navController: NavController) {
                                 ).show()
                             } else {
                                 viewModel.saveScoutingDataToFile(context)
-                                navController.navigate(NavDestination.HomePage)
+                                navController.returnTo(NavDestination.HomePage)
                             }
                         },
                         color = AffirmativeGreen

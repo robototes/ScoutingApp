@@ -18,6 +18,7 @@ import com.scouting.app.components.MediumButton
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.utilities.getViewModel
+import com.scouting.app.utilities.returnTo
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 
 @Composable
@@ -88,7 +89,7 @@ fun TemplateSaveView(navController: NavController) {
                                     ).show()
                                 } else {
                                     viewModel.writeTemplateToFile(context as MainActivity, setAsDefaultTemplate)
-                                    navigate(NavDestination.HomePage)
+                                    returnTo(NavDestination.HomePage)
                                     Toast.makeText(
                                         context,
                                         context.getString(R.string.template_edit_save_success_toast),

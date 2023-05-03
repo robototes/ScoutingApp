@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import androidx.navigation.navOptions
 
 @Composable
 fun Modifier.longPressEffect(offset: Float?): Modifier = this.composed {
@@ -18,3 +20,5 @@ fun Modifier.longPressEffect(offset: Float?): Modifier = this.composed {
             }
         }
 }
+
+fun NavController.returnTo(route: String) = navigate(route, navOptions { popUpTo(route) { inclusive = true } })
