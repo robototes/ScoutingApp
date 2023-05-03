@@ -9,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -27,13 +26,13 @@ import com.scouting.app.theme.PrimaryBlue
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasicInputField(
+    modifier: Modifier = Modifier,
     icon: Painter? = null,
     contentDescription: String? = null,
     hint: String,
     enabled: Boolean = true,
     textFieldValue: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
-    modifier: Modifier = Modifier,
     textAlign: TextAlign? = TextAlign.Start,
     numberKeyboard: Boolean = false
 ) {
@@ -84,8 +83,8 @@ fun BasicInputField(
 @Composable
 fun CounterBar(
     onValueChange: (Int) -> Unit,
-    incrementStep: Int = 1,
     modifier: Modifier = Modifier,
+    incrementStep: Int = 1,
     enabled: Boolean = true,
     startValue: Int = 0
 ) {
@@ -151,10 +150,10 @@ fun TriButtonBlock(
     buttonLabelOne: String,
     buttonLabelTwo: String,
     buttonLabelThree: String,
+    modifier: Modifier = Modifier,
     onValueChange: (Int) -> Unit,
     initialSelection: Int = 0,
     enabled: Boolean = true,
-    modifier: Modifier = Modifier,
 ) {
     var currentSelection by remember { mutableStateOf(initialSelection) }
     Column(
@@ -206,10 +205,10 @@ fun TriButtonBlock(
 @Composable
 fun LabeledCounter(
     text: String,
-    incrementStep: Int = 1,
-    onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     counterModifier: Modifier = Modifier,
+    incrementStep: Int = 1,
+    onValueChange: (Int) -> Unit,
     enabled: Boolean = true,
     startValue: Int = 0
 ) {
@@ -313,13 +312,9 @@ fun RatingBar(
                 elevation = CardDefaults.cardElevation(0.dp),
                 modifier = Modifier
                     .padding(start = 10.dp)
-                    .composed {
-                        if (enabled) {
-                            clickable {
-                                currentlySelected = index
-                                onValueChange.invoke(index + 1)
-                            }
-                        } else Modifier
+                    .clickable(enabled = enabled) {
+                        currentlySelected = index
+                        onValueChange.invoke(index + 1)
                     }
             ) {
                 Row(horizontalArrangement = Arrangement.Center) {
@@ -371,12 +366,12 @@ fun LabeledRatingBar(
 @Composable
 fun SettingsPreference(
     title: String,
+    modifier: Modifier = Modifier,
     subtitle: String? = null,
     icon: Painter? = null,
     contentDescription: String? = null,
     onClickAction: (() -> Unit) = {},
     endContent: (@Composable () -> Unit)? = null,
-    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier

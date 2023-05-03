@@ -18,11 +18,11 @@ import com.scouting.app.R
 @Composable
 fun LargeButton(
     text: String,
+    modifier: Modifier = Modifier,
     icon: Painter? = null,
     contentDescription: String? = null,
     onClick: () -> Unit,
     color: Color,
-    modifier: Modifier = Modifier,
     colorBorder: Color
 ) {
     Button(
@@ -65,10 +65,10 @@ fun LargeButton(
 @Composable
 fun MediumButton(
     text: String,
+    modifier: Modifier = Modifier,
     icon: Painter? = null,
     contentDescription: String? = null,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     color: Color
 ) {
     Button(
@@ -103,10 +103,10 @@ fun MediumButton(
 @Composable
 fun SmallButton(
     text: String,
+    modifier: Modifier = Modifier,
     icon: Painter? = null,
     contentDescription: String? = null,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     color: Color,
     outlineStyle: Boolean? = false
 ) {

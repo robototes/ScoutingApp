@@ -160,7 +160,6 @@ class MainActivity : ComponentActivity() {
      * Use the UnicornFilePicker library to open a file picker, allowing the
      * user to choose a competition schedule, match template, etc.
      *
-     * @param context - Requires the MainActivity context to start an activity
      * @param code - The code that will be sent with the Intent, to be later
      * decoded in onActivityResult (MainActivity) that is used to determine what
      * to do with the returned data
