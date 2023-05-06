@@ -97,7 +97,7 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                             stringResource(id = R.string.start_match_alliance_label_blue)
                         ),
                         allianceSelectionColor = true,
-                        startingSelectedIndex = if (viewModel.currentAllianceMonitoring == AllianceType.RED) 1 else 2
+                        startingSelectedIndex = if (viewModel.currentAllianceMonitoring == AllianceType.RED) 0 else 1
                     )
                 }
                 LargeButton(

@@ -289,7 +289,7 @@ fun RatingBar(
     enabled: Boolean = true,
     startingSelectedIndex: Int = 0
 ) {
-    var currentlySelected by remember { mutableStateOf(startingSelectedIndex - 1) }
+    var currentlySelected by remember { mutableStateOf(startingSelectedIndex) }
     Row(modifier = modifier) {
         repeat(values) { index ->
             Card(
