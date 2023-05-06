@@ -22,6 +22,7 @@ import com.scouting.app.theme.ErrorRed
 import com.scouting.app.theme.NeutralGrayLight
 import com.scouting.app.theme.NeutralGrayMedium
 import com.scouting.app.theme.PrimaryBlue
+import com.scouting.app.utilities.rememberInitial
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +89,7 @@ fun CounterBar(
     enabled: Boolean = true,
     startValue: Int = 0
 ) {
-    var temporaryCount by remember { mutableStateOf(startValue) }
+    var temporaryCount by rememberInitial(startValue)
     Box {
         Row(
             modifier = modifier
@@ -155,7 +156,7 @@ fun TriButtonBlock(
     initialSelection: Int = 0,
     enabled: Boolean = true,
 ) {
-    var currentSelection by remember { mutableStateOf(initialSelection) }
+    var currentSelection by rememberInitial(initialSelection)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -289,7 +290,7 @@ fun RatingBar(
     enabled: Boolean = true,
     startingSelectedIndex: Int = 0
 ) {
-    var currentlySelected by remember { mutableStateOf(startingSelectedIndex) }
+    var currentlySelected by rememberInitial(startingSelectedIndex)
     Row(modifier = modifier) {
         repeat(values) { index ->
             Card(
