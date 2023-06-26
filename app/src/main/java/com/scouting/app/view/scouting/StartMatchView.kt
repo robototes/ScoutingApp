@@ -86,17 +86,13 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
                     )
                     RatingBar(
                         values = 2,
-                        onValueChange = { value ->
-                            viewModel.currentAllianceMonitoring = when (value) {
-                                1 -> AllianceType.RED
-                                else -> AllianceType.BLUE
-                            }
-                        },
+                        onValueChange = {},
                         customTextValues = listOf(
                             stringResource(id = R.string.start_match_alliance_label_red),
                             stringResource(id = R.string.start_match_alliance_label_blue)
                         ),
                         allianceSelectionColor = true,
+                        enabled = false,
                         startingSelectedIndex = if (viewModel.currentAllianceMonitoring == AllianceType.RED) 0 else 1
                     )
                 }
