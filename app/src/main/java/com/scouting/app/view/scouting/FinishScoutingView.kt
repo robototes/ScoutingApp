@@ -11,7 +11,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LargeHeaderBar
@@ -20,14 +19,13 @@ import com.scouting.app.components.SpacedRow
 import com.scouting.app.misc.NavDestination
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme
-import com.scouting.app.utilities.getViewModel
+import com.scouting.app.utilities.composableContext
 import com.scouting.app.utilities.returnTo
 import com.scouting.app.viewmodel.ScoutingViewModel
 
 @Composable
-fun FinishScoutingView(navController: NavController) {
-    val context = navController.context as MainActivity
-    val viewModel = context.getViewModel(ScoutingViewModel::class.java)
+fun FinishScoutingView(navController: NavController, viewModel: ScoutingViewModel) {
+    val context = composableContext
     ScoutingTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column {

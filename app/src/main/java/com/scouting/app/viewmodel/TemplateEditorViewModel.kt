@@ -20,7 +20,6 @@ import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateFormatMatch
 import com.scouting.app.model.TemplateFormatPit
 import com.scouting.app.model.TemplateItem
-import com.scouting.app.utilities.getViewModel
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -76,7 +75,11 @@ class TemplateEditorViewModel : ViewModel() {
      * @param context - MainActivity context needed to use ContentResolver
      * to write to a file efficiently
      */
-    fun writeTemplateToFile(context: MainActivity, setTemplateAsDefault: Boolean = false) {
+    fun writeTemplateToFile(
+        context: MainActivity,
+        settingsViewModel: SettingsViewModel,
+        setTemplateAsDefault: Boolean = false
+    ) {
         val outputFile = File(FilePaths.TEMPLATE_DIRECTORY, processFinalFileName())
         val template: Any = if (currentTemplateType == MATCH) {
             TemplateFormatMatch(
@@ -98,7 +101,6 @@ class TemplateEditorViewModel : ViewModel() {
             it.close()
         }
         if (setTemplateAsDefault) {
-            val settingsViewModel = context.getViewModel(SettingsViewModel::class.java)
             settingsViewModel.processTemplateFilePickerResult(outputFile.path, context, currentTemplateType == MATCH)
         }
         resetInstanceData()

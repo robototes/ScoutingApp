@@ -12,7 +12,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -27,7 +26,6 @@ import com.scouting.app.misc.NavDestination
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.theme.NeutralGrayMedium
 import com.scouting.app.theme.ScoutingTheme
-import com.scouting.app.utilities.getViewModel
 import com.scouting.app.utilities.longPressEffect
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
@@ -36,8 +34,7 @@ import org.burnoutcrew.reorderable.rememberReorderState
 import org.burnoutcrew.reorderable.reorderable
 
 @Composable
-fun EditCSVOrderView(navController: NavController) {
-    val viewModel = LocalContext.current.getViewModel(TemplateEditorViewModel::class.java)
+fun EditCSVOrderView(navController: NavController, viewModel: TemplateEditorViewModel) {
     val listReorderState = rememberReorderState()
     ScoutingTheme {
         Surface(modifier = Modifier.fillMaxSize()) {

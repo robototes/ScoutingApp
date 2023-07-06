@@ -31,7 +31,6 @@ import com.scouting.app.misc.NavDestination
 import com.scouting.app.misc.ScoutingType
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.model.TemplateItem
-import com.scouting.app.utilities.getViewModel
 import com.scouting.app.utilities.longPressEffect
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 import kotlinx.coroutines.launch
@@ -42,8 +41,7 @@ import org.burnoutcrew.reorderable.reorderable
 
 @Composable
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
-fun TemplateEditorView(navController: NavController, type: String? = null) {
-    val viewModel = navController.context.getViewModel(TemplateEditorViewModel::class.java)
+fun TemplateEditorView(navController: NavController, viewModel: TemplateEditorViewModel, type: String? = null) {
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val pagerState = rememberPagerState(initialPage = 0)
     type?.let { viewModel.currentTemplateType = ScoutingType.valueOf(it) }
@@ -99,8 +97,7 @@ fun TemplateEditorView(navController: NavController, type: String? = null) {
                 }
             }
             EditTemplateDialog(
-                viewModel = viewModel,
-                context = navController.context
+                viewModel = viewModel
             )
         }
     }

@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.MediumButton
@@ -25,14 +24,17 @@ import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.misc.ScoutingType
 import com.scouting.app.theme.NeutralGrayLight
 import com.scouting.app.theme.ScoutingTheme
-import com.scouting.app.utilities.getViewModel
+import com.scouting.app.utilities.composableContext
 import com.scouting.app.viewmodel.SettingsViewModel
 import com.tencent.mmkv.MMKV
 
 @Composable
-fun SettingsView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
-    val context = navController.context as MainActivity
-    val viewModel = context.getViewModel(SettingsViewModel::class.java)
+fun SettingsView(
+    navController: NavController,
+    scoutingScheduleManager: ScoutingScheduleManager,
+    viewModel: SettingsViewModel
+) {
+    val context = composableContext
     val preferences = MMKV.defaultMMKV()
     LaunchedEffect(true) {
         viewModel.apply {
@@ -272,7 +274,7 @@ fun SettingsView(navController: NavController, scoutingScheduleManager: Scouting
                 }
             }
             FileNameDialog(viewModel)
-            DevicePositionDialog(viewModel, navController)
+            DevicePositionDialog(viewModel)
             CompetitionModeDialog(viewModel)
         }
     }

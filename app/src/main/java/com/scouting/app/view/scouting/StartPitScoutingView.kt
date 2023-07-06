@@ -8,13 +8,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.LargeButton
@@ -26,13 +26,16 @@ import com.scouting.app.misc.ScoutingType
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
-import com.scouting.app.utilities.getViewModel
+import com.scouting.app.utilities.composableContext
 import com.scouting.app.viewmodel.ScoutingViewModel
 
 @Composable
-fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
-    val context = navController.context as MainActivity
-    val viewModel = context.getViewModel(ScoutingViewModel::class.java)
+fun StartPitScoutingView(
+    navController: NavController,
+    scoutingScheduleManager: ScoutingScheduleManager,
+    viewModel: ScoutingViewModel
+) {
+    val context = composableContext
     LaunchedEffect(true) {
         viewModel.apply {
             this.scoutingScheduleManager = scoutingScheduleManager
@@ -108,5 +111,5 @@ fun StartPitScoutingView(navController: NavController, scoutingScheduleManager: 
             }
         }
     }
-    NoTemplateDialog(viewModel, navController)
+    NoTemplateDialog(navController, viewModel)
 }

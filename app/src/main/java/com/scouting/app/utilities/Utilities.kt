@@ -1,18 +1,16 @@
 package com.scouting.app.utilities
 
-import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
+import com.scouting.app.MainActivity
 
 /**
  * Returns a [MutableState] that will be initialized with [value] during the first composition and when a different
@@ -21,8 +19,7 @@ import androidx.navigation.navOptions
 @Composable
 fun <T> rememberInitial(value: T) = remember(value) { mutableStateOf(value) }
 
-fun <T : ViewModel> Context.getViewModel(type: Class<T>): T =
-    ViewModelProvider(this as ComponentActivity)[type]
+val composableContext @Composable get() = LocalContext.current as MainActivity
 
 fun Modifier.longPressEffect(offset: Float?): Modifier =
     this

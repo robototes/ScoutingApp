@@ -18,7 +18,7 @@ import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.viewmodel.ScoutingViewModel
 
 @Composable
-fun NoTemplateDialog(viewModel: ScoutingViewModel, navController: NavController) {
+fun NoTemplateDialog(navController: NavController, viewModel: ScoutingViewModel) {
     if (viewModel.showingNoTemplateDialog) {
         ScoutingTheme {
             DialogScaffold(

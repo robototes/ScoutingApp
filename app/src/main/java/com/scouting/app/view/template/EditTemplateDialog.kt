@@ -1,6 +1,5 @@
 package com.scouting.app.view.template
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
@@ -10,7 +9,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.BasicInputField
 import com.scouting.app.components.DialogScaffold
@@ -20,10 +18,12 @@ import com.scouting.app.misc.RequestCode
 import com.scouting.app.misc.TemplateTypes
 import com.scouting.app.theme.NeutralGrayDark
 import com.scouting.app.theme.NeutralGrayMedium
+import com.scouting.app.utilities.composableContext
 import com.scouting.app.viewmodel.TemplateEditorViewModel
 
 @Composable
-fun EditTemplateDialog(viewModel: TemplateEditorViewModel, context: Context) {
+fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
+    val context = composableContext
     if (viewModel.showingEditDialog) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_edit_pen),
@@ -167,7 +167,7 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel, context: Context) {
                         LargeButton(
                             text = stringResource(id = R.string.template_edit_image_edit_hint_text),
                             onClick = {
-                                (context as MainActivity).requestFilePicker(
+                                context.requestFilePicker(
                                     code = RequestCode.TEMPLATE_EDITOR_IMAGE_FILE_PICK,
                                     type = arrayOf("png", "jpeg", "jpg")
                                 )

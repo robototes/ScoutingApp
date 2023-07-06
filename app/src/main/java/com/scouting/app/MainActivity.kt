@@ -30,9 +30,7 @@ import com.scouting.app.misc.RequestCode.PIT_SCOUTING_SCHEDULE_FILE_PICK
 import com.scouting.app.misc.RequestCode.PIT_TEMPLATE_FILE_PICK
 import com.scouting.app.misc.RequestCode.TEMPLATE_EDITOR_IMAGE_FILE_PICK
 import com.scouting.app.misc.RequestCode.TEMPLATE_EDITOR_IMPORT_FILE_PICK
-import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.theme.ScoutingTheme
-import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.HomePageView
 import com.scouting.app.view.scouting.FinishScoutingView
 import com.scouting.app.view.scouting.ScoutingView
@@ -42,8 +40,6 @@ import com.scouting.app.view.settings.SettingsView
 import com.scouting.app.view.template.EditCSVOrderView
 import com.scouting.app.view.template.TemplateEditorView
 import com.scouting.app.view.template.TemplateSaveView
-import com.scouting.app.viewmodel.SettingsViewModel
-import com.scouting.app.viewmodel.TemplateEditorViewModel
 import com.tencent.mmkv.MMKV
 import java.io.File
 
@@ -51,13 +47,14 @@ import java.io.File
 class MainActivity : ComponentActivity() {
 
     private lateinit var navigationController: NavHostController
-    private val scoutingScheduleManager = ScoutingScheduleManager()
+    lateinit var appContainer: AppContainer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MMKV.initialize(this)
         configureStorage()
-        scoutingScheduleManager.apply {
+        appContainer = AppContainer()
+        appContainer.scheduleManager.apply {
             loadCachedSchedule(true)
             loadCachedSchedule(false)
         }
@@ -72,6 +69,11 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class)
     fun NavigationHost() {
         navigationController = rememberAnimatedNavController()
+        val scheduleManager = appContainer.scheduleManager
+        val homePageViewModel = appContainer.homePageViewModel
+        val scoutingViewModel = appContainer.scoutingViewModel
+        val settingsViewModel = appContainer.settingsViewModel
+        val templateEditorViewModel = appContainer.templateEditorViewModel
         AnimatedNavHost(
             navController = navigationController,
             startDestination = NavDestination.HomePage,
@@ -87,7 +89,7 @@ class MainActivity : ComponentActivity() {
             },
             builder = {
                 composable(NavDestination.HomePage) {
-                    HomePageView(navigationController, scoutingScheduleManager)
+                    HomePageView(navigationController, scheduleManager, homePageViewModel, settingsViewModel)
                 }
                 composable(
                     route = "${NavDestination.TemplateEditor}/{type}",
@@ -95,23 +97,24 @@ class MainActivity : ComponentActivity() {
                 ) {
                     TemplateEditorView(
                         navController = navigationController,
+                        viewModel = templateEditorViewModel,
                         type = it.arguments?.getString("type", "match")!!
                     )
                 }
                 composable(NavDestination.TemplateEditor) {
-                    TemplateEditorView(navigationController)
+                    TemplateEditorView(navigationController, templateEditorViewModel)
                 }
                 composable(NavDestination.EditCSVOrder) {
-                    EditCSVOrderView(navigationController)
+                    EditCSVOrderView(navigationController, templateEditorViewModel)
                 }
                 composable(NavDestination.TemplateSave) {
-                    TemplateSaveView(navigationController)
+                    TemplateSaveView(navigationController, templateEditorViewModel, settingsViewModel)
                 }
                 composable(NavDestination.StartMatchScouting) {
-                    StartMatchView(navigationController, scoutingScheduleManager)
+                    StartMatchView(navigationController, scheduleManager, scoutingViewModel)
                 }
                 composable(NavDestination.StartPitScouting) {
-                    StartPitScoutingView(navigationController, scoutingScheduleManager)
+                    StartPitScoutingView(navigationController, scheduleManager, scoutingViewModel)
                 }
                 composable(
                     route = "${NavDestination.Scouting}/{type}",
@@ -119,14 +122,15 @@ class MainActivity : ComponentActivity() {
                 ) {
                     ScoutingView(
                         navController = navigationController,
+                        viewModel = scoutingViewModel,
                         scoutingMatch = it.arguments?.getBoolean("type", true) ?: false
                     )
                 }
                 composable(NavDestination.Settings) {
-                    SettingsView(navigationController, scoutingScheduleManager)
+                    SettingsView(navigationController, scheduleManager, settingsViewModel)
                 }
                 composable(NavDestination.FinishScouting) {
-                    FinishScoutingView(navigationController)
+                    FinishScoutingView(navigationController, scoutingViewModel)
                 }
             }
         )
@@ -184,8 +188,8 @@ class MainActivity : ComponentActivity() {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode == RESULT_OK) {
             resultData?.let { data ->
-                val settingsViewModel = getViewModel(SettingsViewModel::class.java)
-                val templateEditorViewModel = getViewModel(TemplateEditorViewModel::class.java)
+                val settingsViewModel = appContainer.settingsViewModel
+                val templateEditorViewModel = appContainer.templateEditorViewModel
                 when (requestCode) {
                     MATCH_TEMPLATE_FILE_PICK, PIT_TEMPLATE_FILE_PICK -> {
                         settingsViewModel.processTemplateFilePickerResult(

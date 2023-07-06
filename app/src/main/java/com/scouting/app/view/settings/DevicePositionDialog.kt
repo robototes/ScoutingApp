@@ -9,19 +9,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.DialogScaffold
 import com.scouting.app.components.RatingBar
 import com.scouting.app.components.SmallButton
 import com.scouting.app.components.SpacedRow
 import com.scouting.app.misc.AllianceType
+import com.scouting.app.utilities.composableContext
 import com.scouting.app.viewmodel.SettingsViewModel
 
 @Composable
-fun DevicePositionDialog(viewModel: SettingsViewModel, navController: NavController) {
-    val context = navController.context as MainActivity
+fun DevicePositionDialog(viewModel: SettingsViewModel) {
+    val context = composableContext
     if (viewModel.showingDevicePositionDialog) {
         DialogScaffold(
             icon = painterResource(id = R.drawable.ic_machine_learning),

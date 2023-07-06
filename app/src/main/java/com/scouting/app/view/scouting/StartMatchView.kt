@@ -14,21 +14,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.*
 import com.scouting.app.misc.*
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ScoutingTheme
-import com.scouting.app.utilities.getViewModel
+import com.scouting.app.utilities.composableContext
 import com.scouting.app.viewmodel.ScoutingViewModel
 import com.tencent.mmkv.MMKV
 
 @Composable
-fun StartMatchView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
-    val context = navController.context as MainActivity
-    val viewModel = context.getViewModel(ScoutingViewModel::class.java)
+fun StartMatchView(
+    navController: NavController,
+    scoutingScheduleManager: ScoutingScheduleManager,
+    viewModel: ScoutingViewModel
+) {
+    val context = composableContext
     var managedMatch by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
         viewModel.apply {
@@ -129,5 +131,5 @@ fun StartMatchView(navController: NavController, scoutingScheduleManager: Scouti
             }
         }
     }
-    NoTemplateDialog(viewModel, navController)
+    NoTemplateDialog(navController, viewModel)
 }

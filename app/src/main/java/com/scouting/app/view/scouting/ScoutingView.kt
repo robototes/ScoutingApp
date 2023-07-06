@@ -13,7 +13,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -28,13 +27,11 @@ import com.scouting.app.model.TemplateItem
 import com.scouting.app.theme.AffirmativeGreen
 import com.scouting.app.theme.ScoutingTheme
 import com.scouting.app.theme.SecondaryPurple
-import com.scouting.app.utilities.getViewModel
 import com.scouting.app.viewmodel.ScoutingViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ScoutingView(navController: NavController, scoutingMatch: Boolean) {
-    val viewModel = LocalContext.current.getViewModel(ScoutingViewModel::class.java)
+fun ScoutingView(navController: NavController, viewModel: ScoutingViewModel, scoutingMatch: Boolean) {
     ScoutingTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column {

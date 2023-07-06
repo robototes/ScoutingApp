@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.scouting.app.MainActivity
 import com.scouting.app.R
 import com.scouting.app.components.LargeButton
 import com.scouting.app.misc.AllianceType
@@ -27,7 +26,6 @@ import com.scouting.app.misc.ScoutingScheduleManager
 import com.scouting.app.theme.AffirmativeGreenDark
 import com.scouting.app.theme.ErrorRedDark
 import com.scouting.app.theme.SecondaryPurpleDark
-import com.scouting.app.utilities.getViewModel
 import com.scouting.app.view.settings.DevicePositionDialog
 import com.scouting.app.view.template.TemplateTypeDialog
 import com.scouting.app.viewmodel.HomePageViewModel
@@ -35,11 +33,12 @@ import com.scouting.app.viewmodel.SettingsViewModel
 import com.tencent.mmkv.MMKV
 
 @Composable
-fun HomePageView(navController: NavController, scoutingScheduleManager: ScoutingScheduleManager) {
-    val context = navController.context as MainActivity
-    val viewModel = context.getViewModel(HomePageViewModel::class.java)
-    val settingsViewModel =
-        context.getViewModel(SettingsViewModel::class.java) // might be bad practice lolz
+fun HomePageView(
+    navController: NavController,
+    scoutingScheduleManager: ScoutingScheduleManager,
+    viewModel: HomePageViewModel,
+    settingsViewModel: SettingsViewModel
+) {
     val preferences = MMKV.defaultMMKV()
     LaunchedEffect(true) {
         settingsViewModel.loadSavedPreferences()
@@ -203,10 +202,9 @@ fun HomePageView(navController: NavController, scoutingScheduleManager: Scouting
                 }
             }
         }
-        TemplateTypeDialog(viewModel, navController)
+        TemplateTypeDialog(navController, viewModel)
         DevicePositionDialog(
-            viewModel = settingsViewModel,
-            navController = navController
+            viewModel = settingsViewModel
         )
     }
 }
