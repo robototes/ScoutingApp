@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.scouting.app.BuildConfig
 import com.scouting.app.R
 import com.scouting.app.components.LargeHeaderBar
 import com.scouting.app.components.MediumButton
@@ -270,6 +271,14 @@ fun SettingsView(
                             )
                         },
                         modifier = Modifier.padding(top = 50.dp)
+                    )
+                    SettingsDivider(modifier = Modifier.padding(top = 50.dp))
+                    SettingsPreference(
+                        title = stringResource(id = R.string.settings_commit_hash_title),
+                        endContent = {
+                            Text(text = BuildConfig.GIT_COMMIT_HASH)
+                        },
+                        modifier = Modifier.padding(top = 50.dp, bottom = 15.dp)
                     )
                 }
             }

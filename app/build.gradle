@@ -4,6 +4,24 @@ plugins {
     id 'kotlin-kapt'
 }
 
+def getGitCommitHash = {
+    def hashOutput = new ByteArrayOutputStream()
+    def changedFilesOutput = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'log', '-1', '--format=%h', 'HEAD'
+        standardOutput = hashOutput
+    }
+    exec {
+        commandLine 'git', 'diff-index', '--name-only', 'HEAD'
+        standardOutput = changedFilesOutput
+    }
+    def hash = hashOutput.toString().trim()
+    if (changedFilesOutput.toString().blank) {
+        return hash
+    }
+    return hash + '-dirty'
+}
+
 android {
     compileSdk 33
 
@@ -43,6 +61,14 @@ android {
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    buildTypes {
+        debug {
+            buildConfigField "String", "GIT_COMMIT_HASH", "\"${getGitCommitHash()}\""
+        }
+        release {
+            buildConfigField "String", "GIT_COMMIT_HASH", "\"${getGitCommitHash()}\""
         }
     }
 }

@@ -173,5 +173,6 @@
     <string name="settings_competition_mode_dialog_positive_button_label">Yes</string>
     <string name="settings_competition_mode_dialog_negative_button_label">No, go back</string>
     <string name="settings_pick_incorrect_template_toast_text">Error! You must choose the correct type of template!</string>
+    <string name="settings_commit_hash_title">Commit hash</string>
 
 </resources>
