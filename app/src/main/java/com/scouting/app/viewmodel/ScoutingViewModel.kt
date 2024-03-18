@@ -96,14 +96,15 @@ class ScoutingViewModel : ViewModel() {
     }
 
     /**
-     * Reset text fields when in the StartMatchView, either as blank or if a
-     * competition schedule has been loaded, with the according team number,
-     * match number and alliance according to the set device position
+     * Update the fields in StartMatchView. If a competition schedule is
+     * enabled, match number and team number are set according to the set
+     * device position, otherwise they are set to blank. Alliance color is
+     * always set.
      */
-    fun populateMatchDataIfCompetition() {
+    fun populateMatchData() {
+        currentAllianceMonitoring =
+            AllianceType.valueOf(preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED")!!)
         if (preferences.decodeBool("COMPETITION_MODE", false)) {
-            currentAllianceMonitoring =
-                AllianceType.valueOf(preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED")!!)
             currentMatchMonitoring =
                 TextFieldValue((scoutingScheduleManager.currentMatchScoutingIteration + 1).toString())
             currentTeamNumberMonitoring = TextFieldValue(scoutingScheduleManager.getCurrentTeam())

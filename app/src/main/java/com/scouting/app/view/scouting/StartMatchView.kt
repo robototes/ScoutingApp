@@ -35,7 +35,7 @@ fun StartMatchView(
     LaunchedEffect(true) {
         viewModel.apply {
             this.scoutingScheduleManager = scoutingScheduleManager
-            populateMatchDataIfCompetition()
+            populateMatchData()
         }
         managedMatch = MMKV.defaultMMKV().decodeBool("COMPETITION_MODE", false)
     }
