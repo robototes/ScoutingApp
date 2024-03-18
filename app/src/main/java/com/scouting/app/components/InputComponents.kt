@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -104,23 +105,6 @@ fun CounterBar(
         ) {
             IconButton(
                 onClick = {
-                    temporaryCount += incrementStep
-                    onValueChange.invoke(temporaryCount)
-                },
-                modifier = Modifier.padding(start = 5.dp),
-                enabled = enabled,
-                colors = IconButtonDefaults.iconButtonColors(
-                    disabledContentColor = MaterialTheme.colorScheme.onBackground
-                )
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_add_circle),
-                    contentDescription = stringResource(id = R.string.ic_add_circle_content_desc),
-                    modifier = Modifier.size(30.dp)
-                )
-            }
-            IconButton(
-                onClick = {
                     temporaryCount -= incrementStep
                     onValueChange.invoke(temporaryCount)
                 },
@@ -133,7 +117,26 @@ fun CounterBar(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_subtract_circle),
                     contentDescription = stringResource(id = R.string.ic_subtract_circle_content_desc),
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(30.dp),
+                    tint = colorResource(id = R.color.minus)
+                )
+            }
+            IconButton(
+                onClick = {
+                    temporaryCount += incrementStep
+                    onValueChange.invoke(temporaryCount)
+                },
+                modifier = Modifier.padding(start = 5.dp),
+                enabled = enabled,
+                colors = IconButtonDefaults.iconButtonColors(
+                    disabledContentColor = MaterialTheme.colorScheme.onBackground
+                )
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_add_circle),
+                    contentDescription = stringResource(id = R.string.ic_add_circle_content_desc),
+                    modifier = Modifier.size(30.dp),
+                    tint = colorResource(id = R.color.plus)
                 )
             }
         }
