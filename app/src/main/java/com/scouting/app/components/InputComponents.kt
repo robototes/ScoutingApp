@@ -108,7 +108,7 @@ fun CounterBar(
                     temporaryCount -= incrementStep
                     onValueChange.invoke(temporaryCount)
                 },
-                modifier = Modifier.padding(end = 5.dp),
+                modifier = Modifier.padding(start = 5.dp),
                 enabled = enabled,
                 colors = IconButtonDefaults.iconButtonColors(
                     disabledContentColor = MaterialTheme.colorScheme.onBackground
@@ -126,7 +126,7 @@ fun CounterBar(
                     temporaryCount += incrementStep
                     onValueChange.invoke(temporaryCount)
                 },
-                modifier = Modifier.padding(start = 5.dp),
+                modifier = Modifier.padding(end = 5.dp),
                 enabled = enabled,
                 colors = IconButtonDefaults.iconButtonColors(
                     disabledContentColor = MaterialTheme.colorScheme.onBackground
