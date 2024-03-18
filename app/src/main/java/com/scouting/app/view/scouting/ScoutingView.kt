@@ -211,7 +211,12 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
     LaunchedEffect(true) {
         for (item in list) {
             when (item.type) {
-                TemplateTypes.SCORE_BAR, TemplateTypes.RATING_BAR, TemplateTypes.TRI_BUTTON -> {
+                TemplateTypes.RATING_BAR -> {
+                    if (item.itemValueInt == null) {
+                        item.itemValueInt = mutableStateOf(1)
+                    }
+                }
+                TemplateTypes.SCORE_BAR, TemplateTypes.TRI_BUTTON -> {
                     if (item.itemValueInt == null) {
                         item.itemValueInt = mutableStateOf(0)
                     }
@@ -319,14 +324,14 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
 
                 TemplateTypes.RATING_BAR -> {
                     if (item.itemValueInt == null) {
-                        item.itemValueInt = remember { mutableStateOf(0) }
+                        item.itemValueInt = remember { mutableStateOf(1) }
                     }
                     LabeledRatingBar(
                         text = item.text,
                         values = 5,
                         onValueChange = { item.itemValueInt!!.value = it },
                         modifier = Modifier.padding(horizontal = 30.dp),
-                        startValue = item.itemValueInt!!.value
+                        startValue = item.itemValueInt!!.value - 1
                     )
                 }
 
