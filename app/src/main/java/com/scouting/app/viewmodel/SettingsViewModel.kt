@@ -24,6 +24,8 @@ class SettingsViewModel : ViewModel() {
     var defaultPitTemplateFileName by mutableStateOf("NONE")
     var defaultPitOutputFileName by mutableStateOf(TextFieldValue("output-pit.csv"))
 
+    var matchType by mutableStateOf(TextFieldValue("NONE"))
+
     var competitionScheduleFileName by mutableStateOf("NONE")
     var pitScheduleFileName by mutableStateOf("NONE")
     var deviceAlliancePosition by mutableStateOf(RED)
@@ -35,6 +37,7 @@ class SettingsViewModel : ViewModel() {
     var scheduledScoutingModeType by mutableStateOf(MATCH)
 
     var showingFileNameDialog by mutableStateOf(false)
+    var showingMatchTypeDialog by mutableStateOf(false)
     var showingDevicePositionDialog by mutableStateOf(false)
     var showingScheduledScoutingModeDialog by mutableStateOf(false)
 
@@ -62,6 +65,9 @@ class SettingsViewModel : ViewModel() {
             )
             defaultPitOutputFileName = TextFieldValue(
                 File(decodeString("DEFAULT_OUTPUT_FILE_NAME_PIT", "output-pit.csv")!!).name
+            )
+            matchType = TextFieldValue(
+                decodeString("MATCH_TYPE", matchType.text)!!
             )
             competitionMode = decodeBool("COMPETITION_MODE", false)
             pitScoutingMode = decodeBool("PIT_SCOUTING_MODE", false)
@@ -179,6 +185,20 @@ class SettingsViewModel : ViewModel() {
             "DEFAULT_OUTPUT_FILE_NAME_${fileNameEditingType.name}",
             FilePaths.DATA_DIRECTORY.plus("/${processDefaultOutputFileName(fileName)}")
         )
+    }
+
+    /**
+     * Save the new match type to MMKV
+     */
+    fun applyMatchTypeChange(matchType: String) {
+        preferences.encode("MATCH_TYPE", matchType)
+    }
+
+    /**
+     * Resets the matchType to what's on MMKV
+     */
+    fun restoreMatchType() {
+        matchType = TextFieldValue(preferences.decodeString("MATCH_TYPE", "NONE")!!)
     }
 
     /**

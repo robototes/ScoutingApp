@@ -137,9 +137,8 @@ class ScoutingViewModel : ViewModel() {
      * template.
      */
     fun saveScoutingDataToFile(context: MainActivity) {
-        var csvRowDraft = ""
+        val csvRowDraft = StringBuilder()
         val templateType = if (scoutingType == PIT) "PIT" else "MATCH"
-        val specialColumnName = if (scoutingType == PIT) "name" else "match"
         val contentResolver = context.contentResolver
         val itemList = if (scoutingType == PIT) {
             pitListItems
@@ -149,22 +148,26 @@ class ScoutingViewModel : ViewModel() {
 
         val tabletName = preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED") + "-" +
                 preferences.decodeInt("DEVICE_ROBOT_POSITION", 1).toString()
-        val csvHeaderRow = "device,scout,$specialColumnName,team," + saveKeyOrderList!!.joinToString(",")
+        val matchType = preferences.decodeString("MATCH_TYPE", "NONE")
+        val csvHeaderRow = if (scoutingType == PIT) {
+            "device,scout,name,team," + saveKeyOrderList!!.joinToString(",")
+        } else {
+            "device,scout,match,match-type,team," + saveKeyOrderList!!.joinToString(",")
+        }
 
-        // Add device name, scout name, match number and team number
-        // OR if pit scouting add team name in place of match number
-        csvRowDraft += "$tabletName,${scoutName.text},${
+        csvRowDraft.append(
             if (scoutingType == PIT) {
-                currentTeamNameMonitoring.text
+                "$tabletName,${scoutName.text},${currentTeamNameMonitoring.text},${currentTeamNumberMonitoring.text},"
             } else {
-                currentMatchMonitoring.text
+                "$tabletName,${scoutName.text},${currentMatchMonitoring.text},$matchType,${currentTeamNumberMonitoring.text},"
             }
-        },${currentTeamNumberMonitoring.text},"
+        )
+
 
         // Append ordered, user-inputted match data
-        csvRowDraft += saveKeyOrderList!!.joinToString(",") { key ->
+        csvRowDraft.append(saveKeyOrderList!!.joinToString(",") { key ->
             itemList.findItemValueWithKey(key).toString().quoteForCSV()
-        }
+        })
 
         val userSelectedOutputFileName = preferences.decodeString(
             "DEFAULT_OUTPUT_FILE_NAME_$templateType",

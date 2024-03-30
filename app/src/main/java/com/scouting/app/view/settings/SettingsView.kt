@@ -239,6 +239,21 @@ fun SettingsView(
                         },
                         modifier = Modifier.padding(top = 50.dp)
                     )
+                    SettingsPreference(
+                        title = stringResource(id = R.string.settings_choose_match_type_title),
+                        endContent = {
+                            MediumButton(
+                                text = viewModel.matchType.text,
+                                onClick = {
+                                    viewModel.apply {
+                                        showingMatchTypeDialog = true
+                                    }
+                                },
+                                color = NeutralGrayLight
+                            )
+                        },
+                        modifier = Modifier.padding(top = 50.dp)
+                    )
                     SettingsDivider(modifier = Modifier.padding(vertical = 50.dp))
                     SettingsPreference(
                         title = stringResource(id = R.string.settings_choose_default_template_pit_title),
@@ -283,6 +298,7 @@ fun SettingsView(
                 }
             }
             FileNameDialog(viewModel)
+            MatchTypeDialog(viewModel)
             DevicePositionDialog(viewModel)
             CompetitionModeDialog(viewModel)
         }

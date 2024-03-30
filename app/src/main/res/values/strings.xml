@@ -157,6 +157,9 @@
     <string name="settings_choose_default_pit_output_location_title">Pit output file name</string>
     <string name="settings_choose_default_output_location_dialog_input_hint">File name</string>
     <string name="settings_choose_default_output_location_dialog_title">Default output file name</string>
+    <string name="settings_choose_match_type_title">Match type</string>
+    <string name="settings_choose_match_type_dialog_input_title">Match type</string>
+    <string name="settings_choose_match_type_dialog_title">Match type</string>
     <string name="settings_tablet_configuration_title">Device position</string>
     <string name="settings_load_competition_schedule_title">Competition schedule</string>
     <string name="settings_load_pit_schedule_title">Pit scouting schedule</string>
