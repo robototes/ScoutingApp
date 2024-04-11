@@ -46,9 +46,20 @@ class ScoutingViewModel : ViewModel() {
     var scoutName by mutableStateOf(TextFieldValue())
 
     var showingNoTemplateDialog by mutableStateOf(false)
+    var showingSelectPitDialog by mutableStateOf(false)
 
     lateinit var scoutingScheduleManager: ScoutingScheduleManager
     private val preferences = MMKV.defaultMMKV()
+
+    /**
+     * Indicate whether match scouting is currently using a schedule
+     */
+    fun usingMatchSchedule(): Boolean = preferences.decodeBool("COMPETITION_MODE", false)
+
+    /**
+     * Indicate whether pit scouting is currently using a schedule
+     */
+    fun usingPitSchedule(): Boolean = preferences.decodeBool("PIT_SCOUTING_MODE", false)
 
     /**
      * Deserialize template items from user-selected and created JSON template
@@ -104,7 +115,7 @@ class ScoutingViewModel : ViewModel() {
     fun populateMatchData() {
         currentAllianceMonitoring =
             AllianceType.valueOf(preferences.decodeString("DEVICE_ALLIANCE_POSITION", "RED")!!)
-        if (preferences.decodeBool("COMPETITION_MODE", false)) {
+        if (usingMatchSchedule()) {
             currentMatchMonitoring =
                 TextFieldValue((scoutingScheduleManager.currentMatchScoutingIteration + 1).toString())
             currentTeamNumberMonitoring = TextFieldValue(scoutingScheduleManager.getCurrentTeam())
@@ -120,7 +131,7 @@ class ScoutingViewModel : ViewModel() {
      * scouting mode is disabled.
      */
     fun populatePitDataIfScheduled() {
-        if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
+        if (usingPitSchedule()) {
             val teamInfo = scoutingScheduleManager.getCurrentPitInfo()
             currentTeamNameMonitoring = TextFieldValue(teamInfo.second)
             currentTeamNumberMonitoring = TextFieldValue(teamInfo.first)
@@ -211,11 +222,11 @@ class ScoutingViewModel : ViewModel() {
         }
 
         if (scoutingType == PIT) {
-            if (preferences.decodeBool("PIT_SCOUTING_MODE", false)) {
+            if (usingPitSchedule()) {
                 scoutingScheduleManager.moveToNextPit()
             }
         } else {
-            if (preferences.decodeBool("COMPETITION_MODE", false)) {
+            if (usingMatchSchedule()) {
                 scoutingScheduleManager.moveToNextMatch()
             }
         }
