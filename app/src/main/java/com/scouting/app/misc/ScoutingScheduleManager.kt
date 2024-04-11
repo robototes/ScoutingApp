@@ -14,7 +14,7 @@ class ScoutingScheduleManager {
     val currentCompetitionScheduleCSV = mutableListOf<List<String>>()
 
     // Follows the format teamNumber, teamName
-    private val currentPitScheduleCSV = mutableListOf<List<String>>()
+    val currentPitScheduleCSV = mutableListOf<List<String>>()
 
     var currentMatchScoutingIteration by mutableStateOf(0)
     var currentPitScoutingIteration by mutableStateOf(0)
@@ -152,6 +152,32 @@ class ScoutingScheduleManager {
      */
     fun jumpToMatch(number: Int) {
         currentMatchScoutingIteration = number - 1
+        MMKV.defaultMMKV().encode("COMPETITION_SCHEDULE_CURRENT_ITERATION", currentMatchScoutingIteration)
+    }
+
+    /**
+     * Indicate if there is a pit to scout before the current one
+     */
+    fun hasPrevPit(): Boolean = currentPitScoutingIteration > 0
+
+    /**
+     * Indicate if there is a pit to scout after the current one
+     */
+    fun hasNextPit(): Boolean = currentPitScoutingIteration < currentPitScheduleCSV.size - 1
+
+    /**
+     * Decrement the current row of the pit scouting schedule we're
+     * on and save this to MMKV
+     */
+    fun moveToPrevPit() {
+        if (currentPitScoutingIteration > 0) {
+            currentPitScoutingIteration--
+            MMKV.defaultMMKV().encode("PIT_SCHEDULE_CURRENT_ITERATION", currentPitScoutingIteration)
+        } else {
+            // currentPitScoutingIteration *should* be 0, but still set to 0 in case of negatives somehow
+            currentPitScoutingIteration = 0
+            MMKV.defaultMMKV().encode("PIT_SCOUTING_MODE", false)
+        }
     }
 
     /**
@@ -168,4 +194,13 @@ class ScoutingScheduleManager {
         }
     }
 
+    /**
+     * Move to the specified pit index
+     *
+     * @param index The 0's based index in the pit list
+     */
+    fun jumpToPit(index: Int) {
+        currentPitScoutingIteration = index
+        MMKV.defaultMMKV().encode("PIT_SCHEDULE_CURRENT_ITERATION", currentPitScoutingIteration)
+    }
 }
