@@ -19,6 +19,7 @@ import com.scouting.app.R
 fun LargeButton(
     text: String,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     icon: Painter? = null,
     contentDescription: String? = null,
     onClick: () -> Unit,
@@ -35,6 +36,7 @@ fun LargeButton(
                 color = colorBorder,
                 shape = MaterialTheme.shapes.large
             ),
+        enabled = enabled,
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         elevation = ButtonDefaults.buttonElevation(0.dp),
@@ -66,6 +68,7 @@ fun LargeButton(
 fun MediumButton(
     text: String,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     icon: Painter? = null,
     contentDescription: String? = null,
     onClick: () -> Unit,
@@ -75,6 +78,7 @@ fun MediumButton(
         modifier = modifier
             .height(55.dp)
             .clip(MaterialTheme.shapes.medium),
+        enabled = enabled,
         onClick = onClick,
         shape = MaterialTheme.shapes.medium,
         elevation = ButtonDefaults.buttonElevation(0.dp),
@@ -104,6 +108,7 @@ fun MediumButton(
 fun SmallButton(
     text: String,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     icon: Painter? = null,
     contentDescription: String? = null,
     onClick: () -> Unit,
@@ -119,6 +124,7 @@ fun SmallButton(
                 color = color,
                 shape = MaterialTheme.shapes.medium
             ),
+        enabled = enabled,
         shape = MaterialTheme.shapes.medium,
         onClick = onClick,
         elevation = ButtonDefaults.buttonElevation(0.dp),
