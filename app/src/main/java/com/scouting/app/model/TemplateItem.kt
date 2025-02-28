@@ -16,9 +16,11 @@ data class TemplateItem(
     var itemValueInt: MutableState<Int>? = null,
     var itemValue2Int: MutableState<Int>? = null,
     var itemValue3Int: MutableState<Int>? = null,
+    var itemValue4Int: MutableState<Int>? = null,
     var itemValueBoolean: MutableState<Boolean>? = null,
     var itemValueString: MutableState<String>? = null,
     var saveKey: String,
     var saveKey2: String? = null,
-    var saveKey3: String? = null
+    var saveKey3: String? = null,
+    var saveKey4: String? = null
 )
