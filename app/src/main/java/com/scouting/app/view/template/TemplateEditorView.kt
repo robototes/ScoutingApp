@@ -306,12 +306,39 @@ fun ListItemFromType(item: TemplateItem) {
             )
         }
 
+        TemplateTypes.QUAD_SCORING -> {
+            LabeledQuadCounter(
+                text1 = item.text,
+                text2 = item.text2.toString(),
+                text3 = item.text3.toString(),
+                text4 = item.text4.toString(),
+                onValueChange1 = {},
+                onValueChange2 = {},
+                onValueChange3 = {},
+                onValueChange4 = {},
+                enabled = false
+            )
+        }
+
         TemplateTypes.TRI_BUTTON -> {
             TriButtonBlock(
                 headerText = item.text,
                 buttonLabelOne = item.text2.toString(),
                 buttonLabelTwo = item.text3.toString(),
                 buttonLabelThree = item.text4.toString(),
+                onValueChange = {},
+                enabled = false,
+                modifier = Modifier.padding(start = 30.dp, end = 15.dp, bottom = 10.dp)
+            )
+        }
+
+        TemplateTypes.QUAD_BUTTON -> {
+            QuadButtonBlock(
+                headerText = item.text,
+                buttonLabelOne = item.text2.toString(),
+                buttonLabelTwo = item.text3.toString(),
+                buttonLabelThree = item.text4.toString(),
+                buttonLabelFour = item.text5.toString(),
                 onValueChange = {},
                 enabled = false,
                 modifier = Modifier.padding(start = 30.dp, end = 15.dp, bottom = 10.dp)
