@@ -412,7 +412,7 @@ fun SettingsPreference(
     }
 }
 
-    @Compostable
+    @DooleyC
     fun QuadButtonBlock(
 	    headerText: String,
 	    buttonLabelOne: String,
@@ -466,6 +466,56 @@ fun SettingsPreference(
 	                        style = MaterialTheme.typography.bodyLarge
 	                    )
 	                }
+	            }
+	        }
+	    }
+	}
+
+    	@DooleyC
+    	fun LabeledQuadCounter(
+	    text1: String,
+	    text2: String,
+	    text3: String,
+	    text4: String,
+	    onValueChange1: (Int) -> Unit,
+	    onValueChange2: (Int) -> Unit,
+	    onValueChange3: (Int) -> Unit,
+	    onValueChange4: (Int) -> Unit,
+	    modifier: Modifier = Modifier,
+	    enabled: Boolean = true,
+	    startValueOne: Int = 0,
+	    startValueTwo: Int = 0,
+	    startValueThree: Int = 0
+	    startValueFour: Int = 0, 
+	) {
+	    Row(
+	        modifier = modifier
+	            .fillMaxWidth()
+	            .padding(horizontal = 10.dp),
+	        horizontalArrangement = Arrangement.SpaceEvenly
+	    ) {
+	        val startValueList = listOf(startValueOne, startValueTwo, startValueThree, startValueFour)
+	        val onValueChangeItems = listOf(onValueChange1, onValueChange2, onValueChange3, onValueChange4)
+	        val textItems = listOf(text1, text2, text3, text4)
+	        onValueChangeItems.forEachIndexed { index, item ->
+	            Column(
+	                modifier = Modifier
+	                    .fillMaxWidth(0.33F)
+	                    .weight(1F)
+	                    .padding(vertical = 20.dp, horizontal = 15.dp),
+	                horizontalAlignment = Alignment.CenterHorizontally
+	            ) {
+	                Text(
+	                    text = textItems[index],
+	                    style = MaterialTheme.typography.headlineSmall,
+	                    modifier = Modifier.padding(bottom = 15.dp),
+	                    textAlign = TextAlign.Center
+	                )
+	                CounterBar(
+	                    onValueChange = item,
+	                    enabled = enabled,
+	                    startValue = startValueList[index]
+	                )
 	            }
 	        }
 	    }
