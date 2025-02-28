@@ -412,7 +412,7 @@ fun SettingsPreference(
     }
 }
 
-@DooleyC
+@Compostable
 fun QuadButtonBlock(
 	headerText: String,
 	buttonLabelOne: String,
