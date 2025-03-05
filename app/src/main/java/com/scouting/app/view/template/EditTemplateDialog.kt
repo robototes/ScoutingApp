@@ -230,3 +230,4 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                         )
                     }
                 }
+            }
