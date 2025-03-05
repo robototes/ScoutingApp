@@ -216,7 +216,7 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                         item.itemValueInt = mutableStateOf(1)
                     }
                 }
-                TemplateTypes.SCORE_BAR, TemplateTypes.TRI_BUTTON -> {
+                TemplateTypes.SCORE_BAR, TemplateTypes.TRI_BUTTON, TemplateTypes.QUAD_BUTTON -> {
                     if (item.itemValueInt == null) {
                         item.itemValueInt = mutableStateOf(0)
                     }
@@ -384,7 +384,7 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                         buttonLabelOne = item.text2.toString(),
                         buttonLabelTwo = item.text3.toString(),
                         buttonLabelThree = item.text4.toString(),
-                        buttonLabelFour = item.text5.toString(),
+                        buttonLabelFour = item.text5.toString(), //need to resolve reference
                         onValueChange = {
                             item.itemValueInt!!.value = it
                         },
