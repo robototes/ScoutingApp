@@ -375,6 +375,28 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                     )
                 }
 
+                TemplateTypes.QUAD_BUTTON -> {
+                    if (item.itemValueInt == null) {
+                        item.itemValueInt = remember { mutableStateOf(0) }
+                    }
+                    QuadButtonBlock(
+                        headerText = item.text,
+                        buttonLabelOne = item.text2.toString(),
+                        buttonLabelTwo = item.text3.toString(),
+                        buttonLabelThree = item.text4.toString(),
+                        buttonLabelFour = item.text5.toString()
+                        onValueChange = {
+                            item.itemValueInt!!.value = it
+                        },
+                        initialSelection = item.itemValueInt!!.value,
+                        modifier = Modifier.padding(
+                            bottom = 10.dp,
+                            start = 30.dp,
+                            end = 30.dp,
+                        )
+                    )
+                }
+
                 TemplateTypes.IMAGE -> {
                     EncodedImageComponent(
                         base64Image = item.text,
