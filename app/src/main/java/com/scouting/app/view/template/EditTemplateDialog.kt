@@ -247,9 +247,3 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                             color = MaterialTheme.colorScheme.tertiary
                         )
                     }
-                }
-            }
-        }
-    }
-}
-        }
