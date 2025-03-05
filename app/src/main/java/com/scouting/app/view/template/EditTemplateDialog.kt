@@ -52,6 +52,9 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     }
                     var textFieldValueLabel4 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.text4.toString()))
+
+                    var textFieldValueLabel5 by remember {
+                        mutableStateOf(TextFieldValue(currentEditItem.text5.toString()))
                     }
                     var textFieldValueSaveKey by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey))
@@ -61,6 +64,12 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     }
                     var textFieldValueSaveKey3 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey3.toString()))
+                        
+                    var textFieldValueSaveKey4 by remember {
+                        mutableStateOf(TextFieldValue(currentEditItem.saveKey4.toString()))
+
+                    var textFieldValueSaveKey5 by remember {
+                        mutableStateOf(TextFieldValue(currentEditItem.saveKey5.toString()))
                     }
                     if (currentEditItem.type != TemplateTypes.IMAGE) {
                         BasicInputField(
