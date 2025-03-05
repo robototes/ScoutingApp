@@ -412,61 +412,61 @@ fun SettingsPreference(
     }
 }
 
-@Compostable
+@Composable
 fun QuadButtonBlock(
-	headerText: String,
-	buttonLabelOne: String,
-	buttonLabelTwo: String,
-	buttonLabelThree: String,
-	buttonLabelFour: String,
-	modifier: Modifier = Modifier,
-	onValueChange: (Int) -> Unit,
-	initialSelection: Int = 0,
-	enabled: Boolean = true,
+    headerText: String,
+    buttonLabelOne: String,
+    buttonLabelTwo: String,
+    buttonLabelThree: String,
+    buttonLabelFour: String,
+    modifier: Modifier = Modifier,
+    onValueChange: (Int) -> Unit,
+    initialSelection: Int = 0,
+    enabled: Boolean = true,
 ) {
-	var currentSelection by rememberInitial(initialSelection)
-	Column(
-	modifier = Modifier
-	        .fillMaxWidth()
-	        .then(modifier)
-	) {
-	Text(
-	        text = headerText,
-	        style = MaterialTheme.typography.headlineSmall,
-	        modifier = Modifier.padding(bottom = 20.dp)
-	)
-	Row(
-		modifier = Modifier.fillMaxWidth(),
-	        horizontalArrangement = Arrangement.SpaceBetween,
-	        verticalAlignment = Alignment.CenterVertically
-	) {
-	        listOf(buttonLabelOne, buttonLabelTwo, buttonLabelThree, buttonLabelFour).forEachIndexed { index, item ->
-	        val color = if (currentSelection == index) {
-	                MaterialTheme.colorScheme.primary
-	        } else {
-	                NeutralGrayLight
-	        }
-	        Button(
-	                onClick = {
-	                currentSelection = index
-	                onValueChange.invoke(index)
-	                },
-	                modifier = Modifier.height(55.dp),
-	                shape = MaterialTheme.shapes.medium,
-	                elevation = ButtonDefaults.buttonElevation(0.dp),
-	                colors = ButtonDefaults.buttonColors(
-	                containerColor = color,
-	                disabledContainerColor = color,
-	                disabledContentColor = MaterialTheme.colorScheme.onBackground
-	                ),
-	                enabled = enabled,
-	        ) {
-	                Text(
-	                text = item,
-	                style = MaterialTheme.typography.bodyLarge
-	                )
-	        }
-	        }
-	}
-	}
+    var currentSelection by rememberInitial(initialSelection)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
+    ) {
+        Text(
+            text = headerText,
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            listOf(buttonLabelOne, buttonLabelTwo, buttonLabelThree, buttonLabelFour).forEachIndexed { index, item ->
+                val color = if (currentSelection == index) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    NeutralGrayLight
+                }
+                Button(
+                    onClick = {
+                        currentSelection = index
+                        onValueChange.invoke(index)
+                    },
+                    modifier = Modifier.height(55.dp),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = ButtonDefaults.buttonElevation(0.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = color,
+                        disabledContainerColor = color,
+                        disabledContentColor = MaterialTheme.colorScheme.onBackground
+                    ),
+                    enabled = enabled,
+                ) {
+                    Text(
+                        text = item,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            }
+        }
+    }
 }
