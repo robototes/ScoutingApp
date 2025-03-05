@@ -122,6 +122,20 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                                 .padding(horizontal = 30.dp, vertical = 10.dp)
                         )
                     }
+                     if (currentEditItem.type == TemplateTypes.QUAD_BUTTON) {
+                        BasicInputField(
+                            icon = painterResource(id = R.drawable.ic_text_format_center),
+                            contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
+                            hint = stringResource(id = R.string.template_editor_edit_dialog_field_4_hint),
+                            textFieldValue = textFieldValueLabel4,
+                            onValueChange = {
+                                textFieldValueLabel4 = it
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 30.dp, vertical = 10.dp)
+                        )
+                    }
                     // Plain text has no user input, thus nothing to save
                     if (currentEditItem.type != TemplateTypes.PLAIN_TEXT && currentEditItem.type != TemplateTypes.IMAGE) {
                         BasicInputField(
