@@ -149,6 +149,7 @@ fun EditCSVOrderView(navController: NavController, viewModel: TemplateEditorView
                                                 TemplateTypes.SCORE_BAR,
                                                 TemplateTypes.RATING_BAR,
                                                 TemplateTypes.TRI_BUTTON -> stringResource(id = R.string.template_edit_csv_type_int)
+                                                TemplateTypes.QUAD_BUTTON -> stringResource(id = R.string.template_edit_csv_type_int)
 
                                                 else -> stringResource(id = R.string.template_edit_csv_type_boolean)
                                             },
@@ -177,6 +178,7 @@ fun EditCSVOrderView(navController: NavController, viewModel: TemplateEditorView
                                                 TemplateTypes.TRI_SCORING -> stringResource(id = R.string.template_edit_csv_item_tri_scoring_prefix)
                                                 TemplateTypes.CHECK_BOX -> stringResource(id = R.string.template_edit_csv_item_checkbox_prefix)
                                                 TemplateTypes.TRI_BUTTON -> stringResource(id = R.string.template_edit_csv_item_tri_button_prefix)
+                                                TemplateTypes.QUAD_BUTTON -> stringResource(id = R.strring.template_edit_csv_item_quad_button_prefix)
                                                 TemplateTypes.RATING_BAR -> stringResource(id = R.string.template_edit_csv_item_rating_bar_prefix)
                                                 else -> stringResource(id = R.string.template_edit_csv_item_counter_prefix)
                                             },
