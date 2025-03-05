@@ -90,7 +90,8 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                         )
                     }
                     if (currentEditItem.type == TemplateTypes.TRI_SCORING ||
-                        currentEditItem.type == TemplateTypes.TRI_BUTTON
+                        currentEditItem.type == TemplateTypes.TRI_BUTTON ||
+                        currentEditItem.type == TemplateTypes.QUAD_BUTTON
                     ) {
                         BasicInputField(
                             icon = painterResource(id = R.drawable.ic_text_format_center),
@@ -125,6 +126,20 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                             textFieldValue = textFieldValueLabel4,
                             onValueChange = {
                                 textFieldValueLabel4 = it
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 30.dp, vertical = 10.dp)
+                        )
+                    }
+                    if (currentEditItem.type == TemplateTypes.QUAD_BUTTON) {
+                        BasicInputField(
+                            icon = painterResource(id = R.drawable.ic_text_format_center),
+                            contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
+                            hint = stringResource(id = R.string.template_editor_edit_dialog_field_5_hint),
+                            textFieldValue = textFieldValueLabel5,
+                            onValueChange = {
+                                textFieldValueLabel5 = it
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -204,9 +219,12 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                                             text2 = textFieldValueLabel2.text
                                             text3 = textFieldValueLabel3.text
                                             text4 = textFieldValueLabel4.text
+                                            text5 = textFieldValueLabel5.text
                                             saveKey = textFieldValueSaveKey.text
                                             saveKey2 = textFieldValueSaveKey2.text
                                             saveKey3 = textFieldValueSaveKey3.text
+                                            saveKey4 = textFieldValueSaveKey4.text
+                                            saveKey5 = textFieldValueSaveKey5.text
                                         }
                                     }
                                     showingEditDialog = false
