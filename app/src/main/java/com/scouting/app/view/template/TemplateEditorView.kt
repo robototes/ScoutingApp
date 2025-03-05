@@ -318,6 +318,19 @@ fun ListItemFromType(item: TemplateItem) {
             )
         }
 
+        TemplateTypes.QUAD_BUTTON -> {
+            QuadButtonBlock(
+                headerText = item.text,
+                buttonLabelOne = item.text2.toString(),
+                buttonLabelTwo = item.text3.toString(),
+                buttonLabelThree = item.text4.toString(),
+                buttonLabelThree = item.text5.toString(),
+                onValueChange = {},
+                enabled = false,
+                modifier = Modifier.padding(start = 30.dp, end = 15.dp, bottom = 10.dp)
+            )
+        }
+
         TemplateTypes.IMAGE -> {
             EncodedImageComponent(
                 base64Image = item.text,
