@@ -384,7 +384,7 @@ fun ScoutingTemplateLoadView(list: SnapshotStateList<TemplateItem>) {
                         buttonLabelOne = item.text2.toString(),
                         buttonLabelTwo = item.text3.toString(),
                         buttonLabelThree = item.text4.toString(),
-                        buttonLabelFour = item.text5.toString()
+                        buttonLabelFour = item.text5.toString(),
                         onValueChange = {
                             item.itemValueInt!!.value = it
                         },
