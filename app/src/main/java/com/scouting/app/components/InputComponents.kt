@@ -368,51 +368,6 @@ fun LabeledRatingBar(
 }
 
 @Composable
-fun SettingsPreference(
-    title: String,
-    modifier: Modifier = Modifier,
-    subtitle: String? = null,
-    icon: Painter? = null,
-    contentDescription: String? = null,
-    onClickAction: (() -> Unit) = {},
-    endContent: (@Composable () -> Unit)? = null,
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClickAction.invoke() }
-            .padding(horizontal = 30.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(end = 10.dp)
-        ) {
-            icon?.let {
-                Icon(
-                    painter = it,
-                    contentDescription = contentDescription
-                )
-            }
-            Column {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                subtitle?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
-        }
-        endContent?.invoke()
-    }
-}
-
-@Composable
 fun QuadButtonBlock(
     headerText: String,
     buttonLabelOne: String,
@@ -468,5 +423,50 @@ fun QuadButtonBlock(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SettingsPreference(
+    title: String,
+    modifier: Modifier = Modifier,
+    subtitle: String? = null,
+    icon: Painter? = null,
+    contentDescription: String? = null,
+    onClickAction: (() -> Unit) = {},
+    endContent: (@Composable () -> Unit)? = null,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClickAction.invoke() }
+            .padding(horizontal = 30.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(end = 10.dp)
+        ) {
+            icon?.let {
+                Icon(
+                    painter = it,
+                    contentDescription = contentDescription
+                )
+            }
+            Column {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                subtitle?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+        }
+        endContent?.invoke()
     }
 }
