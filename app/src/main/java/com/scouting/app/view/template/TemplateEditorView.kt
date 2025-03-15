@@ -324,7 +324,7 @@ fun ListItemFromType(item: TemplateItem) {
                 buttonLabelOne = item.text2.toString(),
                 buttonLabelTwo = item.text3.toString(),
                 buttonLabelThree = item.text4.toString(),
-                buttonLabelThree = item.text5.toString(),
+                buttonLabelFour = item.text5.toString(),
                 onValueChange = {},
                 enabled = false,
                 modifier = Modifier.padding(start = 30.dp, end = 15.dp, bottom = 10.dp)

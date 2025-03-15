@@ -79,6 +79,7 @@
     <string name="template_editor_edit_dialog_field_2_hint">Second label text</string>
     <string name="template_editor_edit_dialog_field_3_hint">Third label text</string>
     <string name="template_editor_edit_dialog_field_4_hint">Fourth label text</string>
+    <string name="template_editor_edit_dialog_field_5_hint">Fifth label text</string>
     <string name="template_editor_edit_dialog_close_button">Save changes</string>
     <string name="template_editor_edit_dialog_discard_button">Delete item</string>
 

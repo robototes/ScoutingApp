@@ -52,6 +52,7 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     }
                     var textFieldValueLabel4 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.text4.toString()))
+                    }
 
                     var textFieldValueLabel5 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.text5.toString()))
@@ -64,9 +65,11 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     }
                     var textFieldValueSaveKey3 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey3.toString()))
-                        
+                    }
+
                     var textFieldValueSaveKey4 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey4.toString()))
+                    }
 
                     var textFieldValueSaveKey5 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey5.toString()))
@@ -247,3 +250,8 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                             color = MaterialTheme.colorScheme.tertiary
                         )
                     }
+                }
+            }
+        }
+    }
+}
