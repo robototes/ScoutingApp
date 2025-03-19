@@ -236,6 +236,39 @@ fun TemplateListSheet(
                                 .randomUUID()
                                 .toString(),
                             text = "",
+                            text2 = "",
+                            text3 = "",
+                            text4 = "",
+                            text5 = "",
+                            type = TemplateTypes.QUAD_BUTTON,
+                            saveKey = ""
+                        )
+                    )
+                    coroutineScope.launch { sheetState.hide() }
+                }
+        ) {
+            val buttonLabel = stringResource(id = R.string.template_editor_tri_button_format_text)
+            QuadButtonBlock(
+                headerText = stringResource(id = R.string.template_editor_quad_button_label),
+                buttonLabelOne = "$buttonLabel 1",
+                buttonLabelTwo = "$buttonLabel 2",
+                buttonLabelThree = "$buttonLabel 3",
+                buttonLabelFour = "$buttonLabel 4",
+                onValueChange = {},
+                enabled = false,
+                modifier = Modifier.padding(horizontal = 30.dp, vertical = 20.dp)
+            )
+        }
+        BorderedCard(
+            modifier = Modifier
+                .padding(bottom = 20.dp)
+                .clickable {
+                    viewModel.currentListResource.add(
+                        TemplateItem(
+                            id = UUID
+                                .randomUUID()
+                                .toString(),
+                            text = "",
                             type = TemplateTypes.IMAGE,
                             saveKey = ""
                         )

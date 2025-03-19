@@ -53,7 +53,6 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     var textFieldValueLabel4 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.text4.toString()))
                     }
-
                     var textFieldValueLabel5 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.text5.toString()))
                     }
@@ -66,11 +65,9 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                     var textFieldValueSaveKey3 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey3.toString()))
                     }
-
                     var textFieldValueSaveKey4 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey4.toString()))
                     }
-
                     var textFieldValueSaveKey5 by remember {
                         mutableStateOf(TextFieldValue(currentEditItem.saveKey5.toString()))
                     }
@@ -121,7 +118,9 @@ fun EditTemplateDialog(viewModel: TemplateEditorViewModel) {
                                 .padding(horizontal = 30.dp, vertical = 10.dp)
                         )
                     }
-                    if (currentEditItem.type == TemplateTypes.TRI_BUTTON) {
+                    if (currentEditItem.type == TemplateTypes.TRI_BUTTON ||
+                        currentEditItem.type == TemplateTypes.QUAD_BUTTON
+                        ) {
                         BasicInputField(
                             icon = painterResource(id = R.drawable.ic_text_format_center),
                             contentDescription = stringResource(id = R.string.ic_text_format_center_content_desc),
