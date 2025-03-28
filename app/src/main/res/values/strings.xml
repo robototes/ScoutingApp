@@ -69,6 +69,9 @@
     <string name="template_editor_label_3_preview">View</string>
     <string name="template_editor_tri_button_label">Triple button</string>
     <string name="template_editor_tri_button_format_text">Button</string>
+    <string name="template_editor_quad_button_label">Quad button</string>
+    <string name="template_editor_quad_button_format_text">Button</string>
+
 
     <string name="template_editor_edit_dialog_header">Edit item</string>
     <string name="template_editor_edit_dialog_save_key_hint">Save key (CSV column label)</string>
@@ -79,6 +82,7 @@
     <string name="template_editor_edit_dialog_field_2_hint">Second label text</string>
     <string name="template_editor_edit_dialog_field_3_hint">Third label text</string>
     <string name="template_editor_edit_dialog_field_4_hint">Fourth label text</string>
+    <string name="template_editor_edit_dialog_field_5_hint">Fifth label text</string>
     <string name="template_editor_edit_dialog_close_button">Save changes</string>
     <string name="template_editor_edit_dialog_discard_button">Delete item</string>
 

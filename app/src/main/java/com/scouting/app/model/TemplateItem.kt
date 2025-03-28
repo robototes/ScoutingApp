@@ -10,6 +10,7 @@ data class TemplateItem(
     var text2: String? = null,
     var text3: String? = null,
     var text4: String? = null,
+    var text5: String? = null,
     var type: TemplateTypes,
     // The type of the item will always be non null so by using the type
     // we can determine which of these values we know will not be null
@@ -17,10 +18,12 @@ data class TemplateItem(
     var itemValue2Int: MutableState<Int>? = null,
     var itemValue3Int: MutableState<Int>? = null,
     var itemValue4Int: MutableState<Int>? = null,
+    var itemValue5Int: MutableState<Int>? = null,
     var itemValueBoolean: MutableState<Boolean>? = null,
     var itemValueString: MutableState<String>? = null,
     var saveKey: String,
     var saveKey2: String? = null,
     var saveKey3: String? = null,
-    var saveKey4: String? = null
+    var saveKey4: String? = null,
+    var saveKey5: String? = null
 )
