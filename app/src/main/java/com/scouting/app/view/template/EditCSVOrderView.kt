@@ -167,7 +167,7 @@ fun EditCSVOrderView(navController: NavController, viewModel: TemplateEditorView
                                     ) {
                                         Text(
                                             text = stringResource(id = R.string.template_edit_csv_item_type_prefix),
-                                            style = MaterialTheme.typography.bodyLa rge + TextStyle(
+                                            style = MaterialTheme.typography.bodyLarge + TextStyle(
                                                 fontWeight = FontWeight.SemiBold
                                             ),
                                             modifier = Modifier.padding(end = 10.dp)
